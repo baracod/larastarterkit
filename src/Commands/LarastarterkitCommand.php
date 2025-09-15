@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Baracod\Larastarterkit\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LarastarterkitCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'larastarterkit';
 
     public $description = 'My command';
 
