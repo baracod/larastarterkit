@@ -2,9 +2,9 @@
 
 namespace Baracod\Larastarterkit\Tests;
 
+use Baracod\Larastarterkit\LarastarterkitServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Baracod\Larastarterkit\LarastarterkitServiceProvider;
 
 class TestCase extends Orchestra
 {

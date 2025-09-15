@@ -2,9 +2,9 @@
 
 namespace Baracod\Larastarterkit;
 
+use Baracod\Larastarterkit\Commands\LarastarterkitCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Baracod\Larastarterkit\Commands\LarastarterkitCommand;
 
 class LarastarterkitServiceProvider extends PackageServiceProvider
 {
