@@ -6,15 +6,14 @@ namespace Baracod\Larastarterkit\Generator\Backend\Model;
 
 use Illuminate\Support\Str;
 
-
 final class ModelPatcher
 {
     /**
-     * @param string   $code     Contenu complet du fichier modèle Laravel
-     * @param string[] $imports  FQCN à importer (ex: Illuminate\Database\Eloquent\Relations\HasMany)
-     * @param string[] $traits   Noms de traits OU FQCN de traits (ex: SoftDeletes ou Illuminate\Database\Eloquent\SoftDeletes)
-     * @param string[] $methods  Blocs de méthodes (code PHP complet de la méthode)
-     * @return string            Code patché
+     * @param  string  $code  Contenu complet du fichier modèle Laravel
+     * @param  string[]  $imports  FQCN à importer (ex: Illuminate\Database\Eloquent\Relations\HasMany)
+     * @param  string[]  $traits  Noms de traits OU FQCN de traits (ex: SoftDeletes ou Illuminate\Database\Eloquent\SoftDeletes)
+     * @param  string[]  $methods  Blocs de méthodes (code PHP complet de la méthode)
+     * @return string Code patché
      */
     public static function apply(string $code, array $imports = [], array $traits = [], array $methods = []): string
     {
@@ -33,8 +32,8 @@ final class ModelPatcher
         // Section top-level (entre namespace et ouverture de class) pour les imports
         $nsEnd = ($nsPos !== -1) ? self::matchEnd('/^namespace\s+[^;]+;/m', $src) : 0;
         $importsBlockStart = ($nsEnd !== -1) ? $nsEnd : 0;
-        $importsBlockLen   = max(0, $classOpenPos - $importsBlockStart);
-        $topSegment        = substr($src, $importsBlockStart, $importsBlockLen);
+        $importsBlockLen = max(0, $classOpenPos - $importsBlockStart);
+        $topSegment = substr($src, $importsBlockStart, $importsBlockLen);
 
         // 1) IMPORTS
         // Normalise: si un trait est un FQCN, on l’importe aussi et n’utilise que son short name dans la classe
@@ -49,86 +48,86 @@ final class ModelPatcher
             $s = rtrim($s, " \t\n\r\0\x0B;");
             $s = ltrim($s, '\\');
             $s = preg_replace('/\s+/', '', $s);
+
             return $s;
         };
-        $imports    = array_map($normalize, $imports);
+        $imports = array_map($normalize, $imports);
         $existingImports = array_map($normalize, $existingImports);
 
         $toAddImports = array_values(array_diff($imports, $existingImports));
-        if (!empty($toAddImports)) {
+        if (! empty($toAddImports)) {
             $newImportsText = '';
             foreach ($toAddImports as $fqcn) {
                 // Nettoyer les espaces
                 $fqcn = trim($fqcn);
 
-                if (!Str::startsWith($fqcn, 'use ')) {
-                    $fqcn = 'use ' . $fqcn;
+                if (! Str::startsWith($fqcn, 'use ')) {
+                    $fqcn = 'use '.$fqcn;
                 }
 
-                if (!Str::endsWith($fqcn, ';')) {
+                if (! Str::endsWith($fqcn, ';')) {
                     $fqcn .= ';';
                 }
 
-                $newImportsText .= $fqcn . PHP_EOL;
+                $newImportsText .= $fqcn.PHP_EOL;
             }
 
             // Point d’insertion : après le dernier import existant, sinon après le namespace, sinon tout début
             $lastImportEnd = self::matchLastEnd('/^use\s+[^;]+;/m', $topSegment);
-            $insertPos = $importsBlockStart  + ($lastImportEnd !== -1 ? $lastImportEnd : 0);
-
+            $insertPos = $importsBlockStart + ($lastImportEnd !== -1 ? $lastImportEnd : 0);
 
             // S’il n’y avait ni namespace ni imports, ajoute une ligne vide au besoin
             $prefix = ($lastImportEnd === -1 && $nsEnd !== -1) ? "\n" : '';
-            $src = substr($src, 0, $insertPos) . $prefix . "\n" .  $newImportsText . "\n" . substr($src, $insertPos);
+            $src = substr($src, 0, $insertPos).$prefix."\n".$newImportsText."\n".substr($src, $insertPos);
 
             // Ajuste classOpenPos (le code a grandi)
-            $classOpenPos += strlen($prefix . $newImportsText);
+            $classOpenPos += strlen($prefix.$newImportsText);
         }
 
         // 2) TRAITS (dans le corps de classe)
         // Localise la zone corps de classe: entre '{' d’ouverture et '}' final
         $classBodyStart = strpos($src, '{', $classOpenPos);
-        $classBodyEnd   = self::findClassClosingBrace($src, $classBodyStart);
+        $classBodyEnd = self::findClassClosingBrace($src, $classBodyStart);
         if ($classBodyStart !== false && $classBodyEnd !== -1) {
             $classBody = substr($src, $classBodyStart + 1, $classBodyEnd - ($classBodyStart + 1));
 
             // Recherche d’un "use ...;" de traits au niveau classe (pas les closures, qui sont "use (...)" sans ;)
             if (preg_match('/^\s*use\s+([^;]+);/m', $classBody, $m, PREG_OFFSET_CAPTURE)) {
-                $useBlock      = $m[0][0];
-                $useBlockStart =  (int)  $m[0][1];
-                $list          = $m[1][0]; // contenu entre 'use ' et ';'
+                $useBlock = $m[0][0];
+                $useBlockStart = (int) $m[0][1];
+                $list = $m[1][0]; // contenu entre 'use ' et ';'
 
-                $currentTraits = array_map(static fn($s) => trim($s), explode(',', $list));
+                $currentTraits = array_map(static fn ($s) => trim($s), explode(',', $list));
                 // Nettoie noms (garde le short name)
                 $currentTraits = array_map([self::class, 'shortName'], $currentTraits);
 
                 $finalTraits = $currentTraits;
                 foreach ($traitShortNames as $t) {
-                    if (!in_array($t, $finalTraits, true)) {
+                    if (! in_array($t, $finalTraits, true)) {
                         $finalTraits[] = $t;
                     }
                 }
                 // Rien à faire si rien de nouveau
                 if ($finalTraits !== $currentTraits) {
-                    $newUseBlock = 'use ' . implode(', ', $finalTraits) . ';';
+                    $newUseBlock = 'use '.implode(', ', $finalTraits).';';
                     $classBody = substr_replace($classBody, $newUseBlock, $useBlockStart, strlen($useBlock));
                 }
             } else {
                 // Aucun use de trait existant -> en insérer un après l’accolade d’ouverture
-                if (!empty($traitShortNames)) {
-                    $newUse = '    use ' . implode(', ', $traitShortNames) . ';' . "\n\n";
-                    $classBody = $newUse . $classBody;
+                if (! empty($traitShortNames)) {
+                    $newUse = '    use '.implode(', ', $traitShortNames).';'."\n\n";
+                    $classBody = $newUse.$classBody;
                 }
             }
 
             // Réécrit le corps dans $src
             $src = substr($src, 0, $classBodyStart + 1)
-                . $classBody
-                . substr($src, $classBodyEnd);
+                .$classBody
+                .substr($src, $classBodyEnd);
         }
 
         // 3) MÉTHODES (insertion avant la dernière '}' de la classe)
-        if ($classBodyStart !== false && $classBodyEnd !== -1 && !empty($methods)) {
+        if ($classBodyStart !== false && $classBodyEnd !== -1 && ! empty($methods)) {
             // Recalcule le corps après éventuelles modifs
             $classBody = substr($src, $classBodyStart + 1, $classBodyEnd - ($classBodyStart + 1));
 
@@ -144,19 +143,20 @@ final class ModelPatcher
                 // Indentation douce (4 espaces min)
                 $normalized = self::indentBlock($methodCode, 4);
                 // Toujours deux sauts de ligne avant une nouvelle méthode
-                $toAppend .= "\n\n" . $normalized . "\n";
+                $toAppend .= "\n\n".$normalized."\n";
             }
 
             if ($toAppend !== '') {
                 $src = substr($src, 0, $classBodyEnd)
-                    . rtrim($toAppend, "\n")
-                    . "\n"
-                    . substr($src, $classBodyEnd);
+                    .rtrim($toAppend, "\n")
+                    ."\n"
+                    .substr($src, $classBodyEnd);
             }
         }
 
         // Restaure l’EOL d’origine
         $src = str_replace("\n", $eol, $src);
+
         return $src;
     }
 
@@ -179,6 +179,7 @@ final class ModelPatcher
             $last = end($all[0]);
             $found = $last[1] + strlen($last[0]);
         }
+
         return $found;
     }
 
@@ -188,24 +189,31 @@ final class ModelPatcher
      */
     private static function findClassClosingBrace(string $text, int|false $openPos): int
     {
-        if ($openPos === false) return -1;
+        if ($openPos === false) {
+            return -1;
+        }
         $depth = 0;
         $len = strlen($text);
         for ($i = $openPos; $i < $len; $i++) {
             $ch = $text[$i];
-            if ($ch === '{') $depth++;
-            elseif ($ch === '}') {
+            if ($ch === '{') {
+                $depth++;
+            } elseif ($ch === '}') {
                 $depth--;
-                if ($depth === 0) return $i;
+                if ($depth === 0) {
+                    return $i;
+                }
             }
         }
+
         return -1;
     }
 
     private static function shortName(string $fqcnOrName): string
     {
-        $fqcnOrName = trim($fqcnOrName, " \\");
+        $fqcnOrName = trim($fqcnOrName, ' \\');
         $pos = strrpos($fqcnOrName, '\\');
+
         return $pos === false ? $fqcnOrName : substr($fqcnOrName, $pos + 1);
     }
 
@@ -213,8 +221,10 @@ final class ModelPatcher
     {
         $traitShortNames = [];
         foreach ($traits as $t) {
-            $t = trim($t, " \\");
-            if ($t === '') continue;
+            $t = trim($t, ' \\');
+            if ($t === '') {
+                continue;
+            }
             $short = self::shortName($t);
             $traitShortNames[] = $short;
             // Si c’est un FQCN, on l’ajoute aux imports
@@ -225,11 +235,13 @@ final class ModelPatcher
         // Unifie
         $imports = array_values(array_unique($imports));
         $traitShortNames = array_values(array_unique($traitShortNames));
+
         return [$imports, $traitShortNames];
     }
 
     /**
      * Récupère les imports top-level (entre namespace et class)
+     *
      * @return string[] liste de FQCN
      */
     private static function collectTopImports(string $segment): array
@@ -240,11 +252,13 @@ final class ModelPatcher
                 $out[] = trim($fqcn);
             }
         }
+
         return $out;
     }
 
     /**
      * Retourne les noms des méthodes trouvées dans un corps de classe.
+     *
      * @return string[]
      */
     private static function collectMethodNames(string $classBody): array
@@ -253,6 +267,7 @@ final class ModelPatcher
         if (preg_match_all('/function\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(/', $classBody, $m)) {
             $names = $m[1];
         }
+
         return $names;
     }
 
@@ -270,8 +285,9 @@ final class ModelPatcher
         $lines = explode("\n", trim($code, "\n"));
         foreach ($lines as &$l) {
             // N’indente pas les lignes vides
-            $l = ($l === '') ? '' : $indent . $l;
+            $l = ($l === '') ? '' : $indent.$l;
         }
+
         return implode("\n", $lines);
     }
 }

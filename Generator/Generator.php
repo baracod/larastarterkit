@@ -2,23 +2,26 @@
 
 namespace App\Generator;
 
-use function Laravel\Prompts\note;
-
 class Generator
 {
     private ?string $moduleName;
+
     private ?string $tableName;
+
     private ?string $modelName;
 
     private ?ModuleGenerator $module;
+
     private ?ModelGenerator $model;
+
     private ?ControllerGenerator $controller;
+
     private ?RequestGenerator $request;
+
     private ?TypeScriptGenerator $frontend;
 
-
     /*
-     
+
      -FRONTEND :
         - Type
         - Api
@@ -26,7 +29,7 @@ class Generator
         - AddOrEditComponent
         - ReadComponent
         - Index (page): la liste
-     -BACKEND : 
+     -BACKEND :
         - Model
         - Request
         - Controller
@@ -34,28 +37,26 @@ class Generator
 
     */
 
-
-
     /**
      * Constructeur de la classe Generator.
      * Initialise le générateur de module. Le module est créé s'il n'existe pas.
      *
-     * @param string $name Le nom du module.
+     * @param  string  $name  Le nom du module.
      */
-    function __construct(string $moduleName, string $tableName, string $modelName)
+    public function __construct(string $moduleName, string $tableName, string $modelName)
     {
         $this->moduleName = $moduleName;
         // L'instanciation de ModuleGenerator déclenche sa création s'il n'existe pas.
         $this->tableName = $tableName;
         $this->moduleName = $moduleName;
         $this->module = new ModuleGenerator($moduleName);
-        $this->model = new ModelGenerator($modelName,  $tableName, $moduleName);
+        $this->model = new ModelGenerator($modelName, $tableName, $moduleName);
         $this->controller = new ControllerGenerator($tableName, $modelName, $moduleName, $moduleName);
-        $this->request = new RequestGenerator($moduleName,  $tableName, $moduleName);
-        $this->frontend = new TypeScriptGenerator($moduleName,  $tableName, $modelName);
+        $this->request = new RequestGenerator($moduleName, $tableName, $moduleName);
+        $this->frontend = new TypeScriptGenerator($moduleName, $tableName, $modelName);
     }
 
-    // -BACKEND : 
+    // -BACKEND :
     //     - Model
     //     - Request
     //     - Controller
@@ -66,6 +67,7 @@ class Generator
         if ($modelName) {
             $this->model->setModelName($modelName);
         }
+
         return $this->model->generate();
     }
 }

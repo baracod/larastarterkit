@@ -19,18 +19,18 @@ class Relation
         return $this->relatedModel;
     }
 
-    static function setDataRelation(string $table, string $module, string $model)
+    public static function setDataRelation(string $table, string $module, string $model)
     {
 
         /*
-       -chercher le nom de champs terminant par id 
+       -chercher le nom de champs terminant par id
        -configurer les relation belong
             -proposer le nom de de la relation
             -field de la relation seront selection et la correspondance
-            -ajouter les clés étrangères 
+            -ajouter les clés étrangères
 
 
-        retour de la fonction : 
+        retour de la fonction :
             - 'type'       => 'belongsTo',
                 'foreignKey' => $foreignKey,      // 2e param Eloquent
                 'model'      => [

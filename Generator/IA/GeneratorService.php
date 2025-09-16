@@ -2,6 +2,4 @@
 
 namespace App\Generator\IA;
 
-class GeneratorService
-{
-}
+class GeneratorService {}

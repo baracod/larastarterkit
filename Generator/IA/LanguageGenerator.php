@@ -12,40 +12,45 @@
 
 namespace App\Generator\IA;
 
-use Illuminate\Support\Facades\Http;
-use RuntimeException;
 use App\Generator\IA\Exceptions\LanguageGeneratorException;
+use Illuminate\Support\Facades\Http;
+
 /* -------------------------------------------------------------------------- */
-/*  Service principal                                                         */
+/*  Service principal */
 /* -------------------------------------------------------------------------- */
 
 class LanguageGenerator
 {
     /* ====== Configuration par défaut ====== */
-    private const BASE_URL      = 'https://generativelanguage.googleapis.com/v1beta/models';
+    private const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+
     private const DEFAULT_MODEL = 'gemma-3-27b-it';
+
     private const DEFAULT_GENCFG = [
         // Pas de responseMimeType avec Gemma
-        'temperature'     => 0.2,
+        'temperature' => 0.2,
         'maxOutputTokens' => 1024,
     ];
 
     /* ====== Attributs ====== */
     private string $apiKey;
+
     private string $modelId;
-    private array  $genCfg;
-    private bool   $verbose = false;   // ← nouveau
+
+    private array $genCfg;
+
+    private bool $verbose = false;   // ← nouveau
 
     /* ====== Constructeur ====== */
     public function __construct(
-        ?string $apiKey  = null,
+        ?string $apiKey = null,
         ?string $modelId = null,
-        array   $genCfg  = self::DEFAULT_GENCFG,
-        bool    $verbose = false,      // ← nouveau
+        array $genCfg = self::DEFAULT_GENCFG,
+        bool $verbose = false,      // ← nouveau
     ) {
-        $this->apiKey  = $apiKey  ?? env('GEMINI_API_KEY');
+        $this->apiKey = $apiKey ?? env('GEMINI_API_KEY');
         $this->modelId = $modelId ?? self::DEFAULT_MODEL;
-        $this->genCfg  = array_merge(self::DEFAULT_GENCFG, $genCfg);
+        $this->genCfg = array_merge(self::DEFAULT_GENCFG, $genCfg);
         $this->verbose = $verbose;
 
         if (empty($this->apiKey)) {
@@ -57,20 +62,20 @@ class LanguageGenerator
     public function generateBilingualJson(
         string $entity,
         string $module,
-        array  $fields,
-        bool   $asArray = false,
+        array $fields,
+        bool $asArray = false,
     ): array|string {
         $this->step("📌 Génération JSON bilingue pour {$entity} ({$module})");
 
-        $prompt   = $this->buildPrompt($entity, $module, $fields);
+        $prompt = $this->buildPrompt($entity, $module, $fields);
         $contents = [[
-            'role'  => 'user',
+            'role' => 'user',
             'parts' => [['text' => $prompt]],
         ]];
 
-        $url     = $this->endpoint('generateContent');
+        $url = $this->endpoint('generateContent');
         $payload = [
-            'contents'         => $contents,
+            'contents' => $contents,
             'generationConfig' => $this->genCfg,
         ];
 
@@ -91,16 +96,15 @@ class LanguageGenerator
 
             $cleanJson = $this->extractJsonFromGeminiResponse($response->body());
 
-
             $this->step('🎉 JSON généré avec succès.');
 
             return $asArray
                 ? json_decode($cleanJson, true, 512, JSON_THROW_ON_ERROR)
                 : $cleanJson;
         } catch (\Throwable $e) {
-            $this->step('❌ Échec : ' . $e->getMessage());
+            $this->step('❌ Échec : '.$e->getMessage());
             throw new LanguageGeneratorException(
-                'Échec lors de la génération du JSON : ' . $e->getMessage(),
+                'Échec lors de la génération du JSON : '.$e->getMessage(),
                 (int) $e->getCode(),
                 $e
             );
@@ -125,8 +129,9 @@ class LanguageGenerator
 
     private function buildPrompt(string $entity, string $module, array $fields): string
     {
-        $fieldList = '"' . implode('","', $fields) . '"';
-        return  <<<PROMPT
+        $fieldList = '"'.implode('","', $fields).'"';
+
+        return <<<PROMPT
             Tu es un assistant IA spécialisé dans l’UX multilingue.
             Génère un JSON bilingue (fr/en) pour l’entité "{$entity}" (module "{$module}").
 
@@ -163,7 +168,7 @@ class LanguageGenerator
         $wrapped = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
         $jsonString = $wrapped['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
-        if (!$jsonString) {
+        if (! $jsonString) {
             throw new LanguageGeneratorException('Réponse inattendue : JSON manquant.');
         }
 
@@ -177,6 +182,7 @@ class LanguageGenerator
         // Validation et ré-encodage propre
         $decoded = json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         $decoded = $this->forceKeysToCamelCase($decoded); // forcer les clé en camelcase
+
         return json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
@@ -222,6 +228,7 @@ class LanguageGenerator
         $string = str_replace(['-', '_'], ' ', strtolower($string));
         $string = ucwords($string); // ex: school_name => SchoolName
         $string = str_replace(' ', '', $string);
+
         return lcfirst($string);    // SchoolName => schoolName
     }
 }

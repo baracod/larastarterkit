@@ -4,19 +4,21 @@ namespace App\Generator;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class RequestGenerator
 {
     private string $tableName;
+
     private string $modelName;
+
     private string $moduleName;
+
     private string $requestNamespace;
+
     private string $requestPath;
 
     public function __construct(string $tableName, string $modelName, ?string $moduleName = null)
     {
-
 
         $this->tableName = $tableName;
         $this->modelName = $modelName;
@@ -26,7 +28,7 @@ class RequestGenerator
             $this->requestNamespace = "Modules\\{$moduleName}\\Http\\Requests";
             $this->requestPath = base_path("Modules/{$moduleName}/app/Http/Requests/{$this->modelName}Request.php");
         } else {
-            $this->requestNamespace = "App\\Http\\Requests";
+            $this->requestNamespace = 'App\\Http\\Requests';
             $this->requestPath = app_path("Http/Requests/{$this->modelName}Request.php");
         }
     }
@@ -44,10 +46,10 @@ class RequestGenerator
         //     return false;
         // }
 
-        // Charger le stub du fichier Request 
+        // Charger le stub du fichier Request
         $stubPath = base_path('stubs/entity-generator/Request.stub');
-        if (!File::exists($stubPath)) {
-            throw new \Exception("Le fichier stub `stubs/entity-generator/Request.stub` est introuvable.");
+        if (! File::exists($stubPath)) {
+            throw new \Exception('Le fichier stub `stubs/entity-generator/Request.stub` est introuvable.');
         }
 
         $stubContent = File::get($stubPath);
@@ -63,7 +65,6 @@ class RequestGenerator
         File::ensureDirectoryExists(dirname($this->requestPath));
         File::put($this->requestPath, $requestContent);
 
-
         return true;
     }
 
@@ -71,7 +72,7 @@ class RequestGenerator
     {
         // Prépare chaque ligne sous la forme : 'champ' => 'règle1|règle2',
         $lines = array_map(
-            fn($key, $value) => "    '{$key}' => {$value},",
+            fn ($key, $value) => "    '{$key}' => {$value},",
             array_keys($rules),
             $rules
         );
@@ -89,31 +90,31 @@ class RequestGenerator
     private function generateValidationRules(): array
     {
         $columns = DB::select(
-            "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH
+            'SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH
          FROM INFORMATION_SCHEMA.COLUMNS
-         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?",
+         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?',
             [env('DB_DATABASE'), $this->tableName]
         );
 
         $foreignKeys = DB::select(
-            "SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+            'SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
          FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND REFERENCED_TABLE_NAME IS NOT NULL",
+         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND REFERENCED_TABLE_NAME IS NOT NULL',
             [env('DB_DATABASE'), $this->tableName]
         );
 
         $rules = [];
 
         foreach ($columns as $column) {
-            $field       = $column->COLUMN_NAME;
-            $dataType    = $column->DATA_TYPE;
-            $columnType  = $column->COLUMN_TYPE;
-            $isNullable  = strtoupper((string) $column->IS_NULLABLE) === 'YES';
-            $maxLength   = $column->CHARACTER_MAXIMUM_LENGTH;
+            $field = $column->COLUMN_NAME;
+            $dataType = $column->DATA_TYPE;
+            $columnType = $column->COLUMN_TYPE;
+            $isNullable = strtoupper((string) $column->IS_NULLABLE) === 'YES';
+            $maxLength = $column->CHARACTER_MAXIMUM_LENGTH;
 
             // ✅ Forcer nullable si nom = id | hash | uuid (insensible à la casse)
             $forceNullableByName = in_array(strtolower($field), ['id', 'hash', 'uuid'], true);
-            $nullable            = $isNullable || $forceNullableByName;
+            $nullable = $isNullable || $forceNullableByName;
 
             $fieldRules = [];
             $fieldRules[] = $nullable ? 'nullable' : 'required';
@@ -166,12 +167,11 @@ class RequestGenerator
             }
 
             // Conserver ton format de sortie (chaîne joinée)
-            $rules[$field] = "'" . implode('|', $fieldRules) . "'";
+            $rules[$field] = "'".implode('|', $fieldRules)."'";
         }
 
         return $rules;
     }
-
 
     protected function generateMessages(): string
     {
@@ -181,7 +181,6 @@ class RequestGenerator
 
         foreach ($rulesByColumn as $name => $ruleString) {
             $rules = is_array($ruleString) ? $ruleString : explode('|', $ruleString);
-
 
             foreach ($rules as $rule) {
                 $ruleName = strtolower(trim($rule));
