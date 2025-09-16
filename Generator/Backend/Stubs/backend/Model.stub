@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+{{ imports }}
+
+class {{ modelName }} extends Model
+{
+    use HasFactory;
+    {{ traitNames }}
+
+    protected $table = '{{ tableName }}';
+
+    protected $fillable = [
+        {{ fillable }}
+    ];
+    {{ props }}
+    {{ relations }}
+}

@@ -1,0 +1,366 @@
+<?php
+
+namespace App\Generator;
+
+
+use Illuminate\Support\Str;
+
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\table;
+use Nwidart\Modules\Laravel\Module;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\warning;
+use Illuminate\Support\Facades\Schema;
+
+use Illuminate\Support\Facades\Storage;
+use App\Generator\Backend\Model\ModelGen;
+use function Laravel\Prompts\multiselect;
+
+class Console
+{
+
+
+
+    /*
+    - Lister les modules
+    - Sélectionner un module
+    - les les models du module : nom | controller | request | frontend
+    - ajouter le model : 
+        input : - (initial) nom de la table, nom du model, nom du module
+                - (valider les champs fillable ) une  fonction qui reçoit les fillable
+                - (trouver les relations) une fonction qui reçoit les relations
+    - Execution 
+        - les attributs 
+        - Constructeur :   nom de la table, nom du model, nom du module,
+        - Initialisation des attributs 
+        - définir le fillable par default
+        - définir les relation
+            - les champs finissant par id
+            - définir les donnée de cette relation
+            - écrire le fichier du model
+            - générer les fichiers de migration
+
+    -setter et getter pour modifier les données de l'objet 
+    */
+    private $moduleName = null;
+    private $action = null;
+    private ?ModuleGenerator $moduleGen = null;
+    private ?ModelGen $modelGen = null;
+    private $moduleTables = [];
+    private $tableName = "";
+    private $modelName = "";
+    private $fillableFields = [];
+    public function main()
+    {
+        $this->setModule();
+        if ($this->moduleName !== 'deleteModule' && $this->moduleName !== 'addModule') {
+
+            $modelsOptions = [];
+
+            foreach ($this->moduleGen->getModels() as $model) {
+                $modelsOptions[$model] = $model;
+            }
+            $modelsOptions['addModel'] = '# Créer un model#';
+            $modelsOptions['deleteModel'] = '# Supprimer un model#';
+
+            $this->action  =  select(
+                label: 'Sélectionner le modèle?',
+                options: $modelsOptions,
+                default: $modelsOptions[0] ?? null,
+                scroll: 15
+
+            );
+
+            if ($this->action == 'addModel')
+                $this->createModel();
+        }
+
+        // créer un model
+
+
+
+        dd($this->moduleName);
+    }
+
+
+    public function createModel()
+    {
+        // Logique pour créer un modèle
+        if ($this->modelGen == null) {
+
+            $this->tableName =   select(
+                label: "Sélectionner la table",
+                options: $this->moduleTables,
+                scroll: 15
+            );
+
+            $this->tableName = $this->moduleTables[$this->tableName];
+
+
+            $modelName = Str::singular($this->tableName);
+            $modelName = Str::studly($this->tableName);
+
+            $modelName = text("Entrer le nom du model, par défaut c'est : { $modelName }");
+
+            $this->modelGen = new ModelGen($this->modelName, $this->tableName, $this->moduleName);
+
+            $this->fillableFields = $this->askTableColumn($this->tableName, true, true, true);
+
+            $belongToRelationIds = $this->modelGen->getBelongToFieldKeys();
+            $belongToRelationIds["#Suivant"] = "#Suivant";
+            $belongToRelation = [];
+
+            if (count($belongToRelationIds)) {
+                info("Les champs pouvant porter les relation de type belongTo : ");
+                while (true) {
+                    $field = select(
+                        label: 'Sélectionner un champ',
+                        options: $belongToRelationIds,
+                        scroll: 15
+                    );
+
+                    if ($field == "#Suivant") {
+                        break;
+                    }
+                    $belongToRelation[] = $this->buildBelongRelationData($field);
+                }
+            }
+
+            $modelData = [
+                'name' => $this->modelName,
+                'key' => Str::slug($this->modelName),
+                'tableName' => $this->tableName,
+                'moduleName' => $this->moduleName,
+                'fillable' => $this->fillableFields,
+                'relations' => $belongToRelation,
+                "backend" => [
+                    'hasController' => false,
+                    'hasRequest' => false,
+                    'hasRoute' => false,
+                    'hasPermission' => false,
+                ],
+                'frontend' => [
+                    'hasType' => false,
+                    'hasApi' => false,
+                    'hasLang' => false,
+                    'hasAddOrEditComponent' => false,
+                    'hasReadComponent' => false,
+                    'hasIndex' => false,
+                    'hasMenu' => false,
+                    'hasPermission' => false,
+                    'fields' => [],
+                    'casl' => [
+                        'create' => false,
+                        'read' => false,
+                        'update' => false,
+                        'delete' => false,
+                        'access' => false,
+                    ]
+                ],
+
+            ];
+
+            ModelGen::writeData($modelData);
+
+
+            // $this->modelGen = new ModelGenerator();
+        }
+    }
+
+    private function buildBelongRelationData($field)
+    {
+
+        // demander si c'est une relation externe au module
+        $isExternalModule = confirm("C'est une relation externe au module ?");
+        $moduleName = $this->moduleName;
+        $moduleGen = $this->moduleGen;
+        $model = '';
+        // sélectionner le module du model
+        if ($isExternalModule) {
+            $moduleName = $this->askModule(false);
+            $moduleGen = new ModuleGenerator($moduleName);
+        }
+        // sélectionner le model
+        $model = $this->askModel(false, $moduleGen);
+
+        // sélectionner le model 
+        $tableName = $this->askTable($moduleGen);
+
+        //select table key
+        $tableKeyField = $this->askTableColumn($tableName);
+        $relationName =  Str::camel($tableName);
+
+        // définir le nom de la méthode à générer avec une valeur par défaut
+        $relationName = text(
+            label: 'Entre le nom de la relation',
+            placeholder: "Par défaut sa valeur est {$relationName}"
+        );
+        return [
+            'type'       => 'belongsTo',
+            'foreignKey' => $field,      // 2e param Eloquent
+            'model'      => [
+                'name'      => $model,
+                'namespace' => "Modules\\$moduleName\Entities",
+            ],
+            'table'      => $tableName,           // redondant mais conservé si tes consumers l’attendent
+            'ownerKey'   => $tableKeyField,        // 3e param Eloquent (clé sur le modèle lié)
+            'name'       => $relationName,      // nom de la méthode à générer dans le modèle
+            'moduleName' =>  $moduleName,
+            'externalModule' => $this->moduleName != $moduleName
+        ];
+    }
+
+    /**
+     * Permet de sélectionner un module existant ou d'en créer un nouveau
+     * et initialise les propriétés liées au module sélectionné.
+     */
+    private function setModule()
+    {
+        $modules = ModuleGenerator::getModuleList();
+        $this->moduleName = $this->askModule();
+        $this->moduleGen = new ModuleGenerator($this->moduleName);
+        $this->moduleTables = $this->moduleGen->getTableList();
+    }
+
+    /**
+     * Demander à l'utilisateur de sélectionner un module
+     * d'en créer un nouveau,
+     * ou de supprimer un module existant.
+     * @param bool $managerModule précise les options d'ajout ou suppression seront dans le menu.
+     * @return string
+     */
+    private function askModule(bool $managerModule = true): string
+    {
+        $modules = ModuleGenerator::getModuleList();
+        $modules = ModuleGenerator::getModuleList();
+
+        if ($managerModule) {
+            $modules['deleteModule'] = "#Supprimer le module";
+            $modules['addModule'] = "#Créer le module";
+        }
+
+        return select(
+            label: 'Sélectionner le module?',
+            options: $modules,
+            default: $modules[0] ?? null,
+            hint: 'Le module peut être changé à tout moment.',
+            scroll: 15
+        );
+    }
+
+    /**
+     * Demander à l'utilisateur de sélectionner un model
+     * d'en créer un nouveau,
+     * ou de supprimer un model existant.
+     * @param bool $managerModel précise les options d'ajout ou suppression seront dans le menu.
+     * @param ModuleGenerator|null $moduleGen Le générateur de module à utiliser, l'attribut  $moduleGen de la classe.
+     * @return string
+     */
+    private function askModel(bool $managerModel = true, ?ModuleGenerator $moduleGen = null)
+    {
+        $modelsOptions = [];
+
+        if (!empty($moduleGen))
+            $moduleGen = $this->moduleGen;
+
+        foreach ($moduleGen->getModels() as $model) {
+            $modelsOptions[$model] = $model;
+        }
+
+        if ($managerModel) {
+            $modelsOptions['addModel'] = '#Créer un model#';
+            $modelsOptions['deleteModel'] = '#Supprimer un model#';
+        }
+
+        return select(
+            label: 'Sélectionner le modèle?',
+            options: $modelsOptions,
+            default: $modelsOptions[0] ?? null,
+            scroll: 15
+        );
+    }
+
+    /**
+     * Demander à l'utilisateur de sélectionner une table
+     * @param ModuleGenerator|null $moduleGen Le générateur de module à utiliser, l'attribut  $moduleGen de la classe.
+     * @return string
+     */
+    private function askTable(?ModuleGenerator $moduleGen = null)
+    {
+        $tablesOptions = [];
+
+        if (!empty($moduleGen))
+            $moduleGen = $this->moduleGen;
+
+        foreach ($moduleGen->getTableList() as $table) {
+            $tablesOptions[$table] = $table;
+        }
+
+        return select(
+            label: 'Sélectionner la table?',
+            options: $tablesOptions,
+            default: $tablesOptions[0] ?? null,
+            scroll: 15
+        );
+    }
+
+
+    /**
+     * Affiche une invite (Laravel Prompts) pour sélectionner une ou plusieurs colonnes d'une table.
+     *
+     * @param  string $tableName     Nom de la table cible.
+     * @param  bool   $multiSelect   true => sélection multiple (multiselect), false => sélection simple (select).
+     * @param  bool   $allSelected   Si $multiSelect=true : pré-sélectionne toutes les colonnes.
+     * @param  bool   $hiddenIdKeys  Si true, cache les clés id, created_at, updated_at et uuid.
+     * @return array<string>|string|null  Retourne un tableau de colonnes (multiselect), une colonne (select) ou null si aucune.
+     */
+    private function askTableColumn(
+        string $tableName,
+        bool $multiSelect = false,
+        bool $allSelected = false,
+        bool $hiddenIdKeys = false
+    ): array|string|null {
+        // 1) Table existante ?
+        if (! Schema::hasTable($tableName)) {
+            error("La table '{$tableName}' est introuvable.");
+            return $multiSelect ? [] : null;
+        }
+
+        // 2) Récupération & normalisation des colonnes
+        $columns = Schema::getColumnListing($tableName);
+        sort($columns, SORT_NATURAL | SORT_FLAG_CASE);
+
+        // Map value=>label pour Prompts
+        $options = array_combine($columns, $columns) ?: [];
+        if ($hiddenIdKeys) {
+            $options = array_filter($options, fn($option) => $option != 'id' &&  $option != 'created_at' &&  $option != 'updated_at' &&  $option != 'uuid');
+        }
+        if (empty($options)) {
+            warning("La table '{$tableName}' ne contient aucune colonne.");
+            return $multiSelect ? [] : null;
+        }
+
+        // 3) Sélection multiple
+        if ($multiSelect) {
+            $default = $allSelected ? array_values($options) : [];
+            return multiselect(
+                label: "Sélectionnez les colonnes de « {$tableName} »",
+                options: $options,
+                default: $default,
+                scroll: 15,
+                required: false
+            );
+        }
+
+        // 4) Sélection simple
+        return select(
+            label: "Sélectionnez la colonne de « {$tableName} »",
+            options: $options,
+            default: array_key_first($options),
+            scroll: 15
+        );
+    }
+}

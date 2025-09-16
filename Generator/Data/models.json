@@ -1,0 +1,38 @@
+[
+    {
+        "modelName": "",
+        "table": "",
+        "module": "",
+        "name": "",
+        "fillable": [],
+        "relations": [],
+        "casts": [],
+        "hasFrontend": "",
+        "key": "slug",
+        "backend": {
+            "hasController": "",
+            "hasRequest": "",
+            "hasRoute": "",
+            "hasPermission": ""
+        },
+        "frontend": {
+            "hasType": "",
+            "hasApi": "",
+            "hasLang": "",
+            "hasAddOrEditComponent": "",
+            "hasReadComponent": "",
+            "hasIndex": "",
+            "casl": {
+                "subject": "",
+                "actions": []
+            },
+            "fields": [
+                {
+                    "name": "",
+                    "componentType": "",
+                    "defaultValue": ""
+                }
+            ]
+        }
+    }
+]

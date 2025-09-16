@@ -1,0 +1,86 @@
+<script setup lang="ts">
+import { ref, defineProps, defineEmits, watch, onMounted } from 'vue';
+import { {{ modelName }}API } from '../api/{{ modelName }}';
+import type { I{{ modelName }} } from '../types/entities';
+{{ imports }}
+
+import { VDialog, VCard, VCardTitle, VCardText, VCardActions, VForm, VBtn, VSelect, VTextField, VRow, VCol } from 'vuetify/components';
+
+const { t } = useI18n();
+const { formatErrorMessages } = useTranslater()
+
+const props = defineProps<{ modelValue: boolean, item?: I{{ modelName }},  readonly: boolean  }>();
+const emit = defineEmits(['update:modelValue', 'saved']);
+
+const form = ref<I{{ modelName }}>({{ defaultValues }});
+const loading = ref(false);
+
+const errorMessage = ref<Record<string, string>>({})
+
+
+{{ relationLists }}
+
+watch(() => props.item, (newItem) => {
+  if (newItem) {
+    form.value = { ...newItem };
+  } else {
+    form.value = {{ defaultValues }};
+  }
+}, { immediate: true });
+
+onMounted(async () => {
+  {{ loadRelationLists }}
+});
+
+const save = async () => {
+  loading.value = true;
+  try {
+    if (form.value.id) {
+      await {{ modelName }}API.update(form.value.id, form.value);
+    } else {
+      await {{ modelName }}API.create(form.value);
+    }
+    emit('saved');
+    emit('update:modelValue', false);
+  } catch (error: any) {
+    errorMessage.value = formatErrorMessages(error.data.errors, '{{ moduleName }}.{{ modelNameCamelCase }}')
+  }finally {
+    loading.value = false;
+  }
+};
+</script>
+
+<template>
+  <VDialog :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)" max-width="70%">
+    <VCard>
+    <VCardTitle v-if="readonly">
+        {{ t('{{ moduleName }}.{{ modelNameCamelCase }}.title')}}
+      </VCardTitle>
+      <VCardTitle v-else>{{ item?.id ? t('action.edit') : t('action.add') }}  {{ t('{{ moduleName }}.{{ modelNameCamelCase }}.title') }}  </VCardTitle>
+      <VCardText>
+        <VForm @submit.prevent="save">
+          <VRow cols="12" class="mb-2">
+            {{ formFields }}
+          </VRow>
+          
+        </VForm>
+      </VCardText>
+       <VCardActions>
+        <VBtn
+          type="submit"
+          :loading="loading"
+          @click="save()"
+        >
+          {{ item?.id ? t('action.edit') : t('action.add') }}
+        </VBtn>
+         <VBtn
+          variant="outlined"
+          color="secondary"
+          @click="emit('update:modelValue', false)"
+        >
+          {{ t('action.cancel') }}
+        </VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
+</template>

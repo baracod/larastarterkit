@@ -1,0 +1,44 @@
+// import { ofetch as $api } from 'ofetch' // par défaut $api est une instance de ofetch exposée dans l'application
+import type { I{{ modelName }} } from '../types/entities'
+
+const baseUrl = '{{ baseUrl }}'
+
+export const {{ modelName }}API = {
+  async getAll(): Promise<I{{ modelName }}[]> {
+    return await $api<I{{ modelName }}[]>(baseUrl)
+  },
+
+  async getById(id: number): Promise<I{{ modelName }} | null> {
+    return await $api<I{{ modelName }}>(`${baseUrl}/${id}`)
+  },
+
+  async create(data: Partial<I{{ modelName }}>): Promise<I{{ modelName }}> {
+    return await $api<I{{ modelName }}>(baseUrl, {
+      method: 'POST',
+      body: data,
+    })
+  },
+
+  async update(id: number, data: Partial<I{{ modelName }}>): Promise<I{{ modelName }}> {
+    return await $api<I{{ modelName }}>(`${baseUrl}/${id}`, {
+      method: 'PUT',
+      body: data,
+    })
+  },
+
+  async delete(id: number): Promise<void> {
+    await $api(`${baseUrl}/${id}`, {
+      method: 'DELETE',
+    })
+  },
+  
+
+  async deleteMultiple(ids: Array<any>): Promise<void> {
+    await $api(`${baseUrl}/delete-multiple`, {
+      method: 'DELETE',
+      body:ids
+    })
+  },
+}
+
+export default {{ modelName }}API

@@ -1,0 +1,42 @@
+<script setup lang="ts">
+import { {{ modelName }}API } from '../../api/{{ modelName }}'
+import type { I{{ modelName }} } from '../../types/entities'
+
+
+// import { ref, onMounted } from 'vue'
+// import { VContainer, VCard, VCardTitle, VCardText, VDataTable } from 'vuetify/components'
+
+const items = ref<I{{ modelName }}[]>([])
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    items.value = await {{ modelName }}API.getAll()
+  }
+  finally {
+    loading.value = false
+  }
+})
+
+const headers = [
+  {{ headers }}
+]
+</script>
+
+<template>
+  <VContainer>
+    <VCard>
+      <VCardTitle>
+        Liste des {{ modelName }}
+      </VCardTitle>
+      <VCardText>
+        <VDataTable
+          :headers="headers"
+          :items="items"
+          :loading="loading"
+        />
+      </VCardText>
+    </VCard>
+  </VContainer>
+</template>
+

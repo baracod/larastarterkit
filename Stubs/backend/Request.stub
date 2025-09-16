@@ -1,0 +1,53 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
+class {{ modelName }}Request extends FormRequest
+{
+    /**
+     * Détermine si l'utilisateur est autorisé à faire cette requête.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    {{ errorMessages }}
+
+    /**
+     * Récupère les règles de validation qui s'appliquent à la requête.
+     */
+    public function rules(): array
+    {
+        return {{ validationRules }};
+    }
+
+     protected function failedValidation(Validator $validator)
+    {
+        $errors = [];
+
+        foreach ($validator->errors()->getMessages() as $field => $messages) {
+            $errors[$field] = collect($messages)
+                ->map(function ($message) use ($field, $validator) {
+
+                    // Extraire la règle depuis les messages en anglais
+                    foreach ($validator->failed()[$field] ?? [] as $rule => $params) {
+                        return [
+                            'key' => strtolower($rule),
+                            'message' => $message
+                        ]; // "Required", "Integer", etc.
+                    }
+                    return $message;
+                })[0];
+        }
+
+
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation failed',
+            'errors' => $errors
+        ], 422));
+    }
+}
