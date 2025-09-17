@@ -1,0 +1,18 @@
+export default
+[
+  {
+    title: 'Home-auth',
+    to: { name: 'root' },
+    icon: { icon: 'bx-home-alt' },
+  },
+  {
+    title: 'Second page -auth',
+    to: { name: 'second-page' },
+    icon: { icon: 'bx-file-blank' },
+  },
+  {
+    title: 'Posts',
+    to: { name: 'blog-posts' },
+    icon: { icon: 'bx-file-blank' },
+  },
+]

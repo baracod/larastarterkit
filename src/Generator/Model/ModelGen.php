@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Baracod\Larastarterkit\Generator\Backend\Model;
+namespace Baracod\Larastarterkit\Generator\Model;
 
 use App\Generator\Utils\GeneratorTrait;
 use Illuminate\Support\Facades\File;
@@ -17,7 +17,7 @@ use RuntimeException;
  * - Construit le code depuis le stub et l’écrit sur disque
  * - (Optionnel) Patch le parent avec hasMany quand isParentHasMany=true
  */
-final class ModelGen2
+final class ModelGen
 {
     use GeneratorTrait;
 

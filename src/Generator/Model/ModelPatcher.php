@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Baracod\Larastarterkit\Generator\Backend\Model;
+namespace Baracod\Larastarterkit\Generator\Model;
 
 use Illuminate\Support\Str;
 

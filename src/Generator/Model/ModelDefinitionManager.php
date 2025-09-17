@@ -2,23 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Baracod\Larastarterkit\Generator\Backend\Model;
-
-use App\Generator\Backend\Model\ModelGen;
-use App\Generator\ModuleGenerator;
-use App\Generator\Traits\SqlConversion;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
+namespace Baracod\Larastarterkit\Generator\Model;
+//modifier ces imports
 use Illuminate\Support\Str;
-
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
-use function Laravel\Prompts\multiselect;
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\table;
+
 use function Laravel\Prompts\text;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\table;
+
+use function Laravel\Prompts\select;
+use Illuminate\Support\Facades\File;
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\warning;
+use Illuminate\Support\Facades\Schema;
+use function Laravel\Prompts\multiselect;
+use Baracod\Larastarterkit\Generator\Model\ModelGen;
+use Baracod\Larastarterkit\Generator\Traits\SqlConversion;
+use Baracod\Larastarterkit\Generator\Module\ModuleGenerator;
 
 /**
  * Gère un fichier JSON {module, models:{...}} et fournit une UI pour créer/éditer

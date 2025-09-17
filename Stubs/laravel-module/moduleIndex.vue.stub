@@ -1,0 +1,16 @@
+<script lang="ts" setup>
+definePage({
+  meta: {
+    action: 'access',
+    subject: '$LOWER_NAME$',
+  },
+})
+
+</script>
+<template>
+  <VCard>
+    <VCardText>
+      bienvenu dans le module  $LOWER_NAME$
+    </VCardText>
+  </VCard>
+</template>

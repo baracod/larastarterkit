@@ -17,7 +17,7 @@ use RuntimeException;
  * - Construit le code depuis le stub et l’écrit sur disque
  * - (Optionnel) Patch le parent avec hasMany quand isParentHasMany=true
  */
-final class ModelGen2
+final class ModelGen
 {
     use GeneratorTrait;
 
