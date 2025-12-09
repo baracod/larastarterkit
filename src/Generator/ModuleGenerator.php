@@ -13,7 +13,10 @@ use RuntimeException;
 
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\select;
+<<<<<<< HEAD
 use function Symfony\Component\Translation\t;
+=======
+>>>>>>> origin/main
 
 /**
  * Class ModuleGenerator
@@ -69,6 +72,7 @@ class ModuleGenerator
         $this->tables = $listTables->filter(function ($table) {
             return Str::startsWith($table, Str::lower($this->moduleName).'_');
         })->values()->toArray();
+<<<<<<< HEAD
 
         // // Si le module n'existe pas, le générer automatiquement
         // if (!Module::has($name)) {
@@ -81,6 +85,20 @@ class ModuleGenerator
         // }
 
         // // Affecte le module généré ou existant à la propriété $module
+=======
+
+        // Si le module n'existe pas, le générer automatiquement
+        if (! Module::has($name)) {
+            if (select('Le module '.$name.' n\'existe pas, voulez-vous le créer ?', ['oui', 'non']) === 'non') {
+                throw new RuntimeException("Le module '{$this->moduleName}' n'existe pas.");
+            }
+            note("Génération {$name} du module", 'error');
+            $this->generate();
+            note("Module {$name} généré avec succès.", 'error');
+        }
+
+        // Affecte le module généré ou existant à la propriété $module
+>>>>>>> origin/main
         $this->module = Module::find($this->moduleName);
     }
 
@@ -136,9 +154,13 @@ class ModuleGenerator
 
         $moduleItems[] = $moduleData;
         $moduleItems = json_encode(array_values($moduleItems), JSON_PRETTY_PRINT);
+<<<<<<< HEAD
         if (! File::exists($pathModuleMenuItems)) {
             File::put($pathModuleMenuItems, json_encode([], JSON_PRETTY_PRINT));
         }
+=======
+
+>>>>>>> origin/main
         File::put($pathModuleMenuItems, $moduleItems);
 
         // Met à jour la propriété $module après génération

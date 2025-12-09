@@ -21,47 +21,57 @@ use RuntimeException;
 final class ControllerGen
 {
     use StubResolverTrait;
+
     private DFModel $dfModel;
 
     private string $moduleName;               // Studly (ex: Blog)
+
     private string $modelKey;                 // kebab (ex: blog-author)
+
     private string $modelName;                // Studly (ex: BlogAuthor)
+
     private string $modelFqcn;                // ex: Modules\Blog\Models\BlogAuthor
 
     private ModuleGenerator $moduleGen;
+
     private string $controllerNamespace;      // ex: Modules\Blog\Http\Controllers
+
     private string $controllerDirectoryPath;  // ex: Modules/Blog/app/Http/Controllers
+
     private string $controllerName;           // ex: BlogAuthorController
+
     private string $controllerFilePath;       // ex: .../BlogAuthorController.php
+
     private string $controllerStubPath;       // ex: app/Generator/Backend/Stubs/backend/Controller.stub
+
     private string $routeApiPath;             // ex: Modules/Blog/routes/api.php
 
     /** Chemin du JSON de définitions: ModuleData/{kebab}.json */
     private string $jsonPath;
 
     /**
-     * @param DFModel $dfModel Définition typée du modèle.
+     * @param  DFModel  $dfModel  Définition typée du modèle.
      */
     public function __construct(DFModel $dfModel)
     {
-        $this->dfModel    = $dfModel;
+        $this->dfModel = $dfModel;
 
         $this->moduleName = Str::studly($dfModel->moduleName());
-        $this->modelKey   = $dfModel->key();
-        $this->modelName  = $dfModel->name();
-        $this->modelFqcn  = (string) ($dfModel->fqcn() ?: rtrim($dfModel->namespace(), '\\') . '\\' . $this->modelName);
+        $this->modelKey = $dfModel->key();
+        $this->modelName = $dfModel->name();
+        $this->modelFqcn = (string) ($dfModel->fqcn() ?: rtrim($dfModel->namespace(), '\\').'\\'.$this->modelName);
 
         // Générateur de module (chemins/namespaces)
-        $this->moduleGen               = new ModuleGenerator($this->moduleName);
-        $this->controllerNamespace     = $this->moduleGen->getControllerNameSpace();
+        $this->moduleGen = new ModuleGenerator($this->moduleName);
+        $this->controllerNamespace = $this->moduleGen->getControllerNameSpace();
         $this->controllerDirectoryPath = $this->moduleGen->getPathControllers();
-        $this->controllerName          = $this->modelName . 'Controller';
-        $this->controllerFilePath      = $this->controllerDirectoryPath . '/' . $this->controllerName . '.php';
-        $this->controllerStubPath      = $this->resolveStubPath('backend/Controller.stub');
+        $this->controllerName = $this->modelName.'Controller';
+        $this->controllerFilePath = $this->controllerDirectoryPath.'/'.$this->controllerName.'.php';
+        $this->controllerStubPath = $this->resolveStubPath('backend/Controller.stub');
 
-        $this->routeApiPath            = $this->moduleGen->getRouteApiPath();
+        $this->routeApiPath = $this->moduleGen->getRouteApiPath();
 
-        $this->jsonPath                = $this->jsonPath($this->moduleName);
+        $this->jsonPath = $this->jsonPath($this->moduleName);
     }
 
     /**
@@ -70,10 +80,10 @@ final class ControllerGen
     public static function for(string $moduleName, string $modelKey): self
     {
         $jsonPath = self::jsonPath($moduleName);
-        if (!File::exists($jsonPath)) {
+        if (! File::exists($jsonPath)) {
             throw new RuntimeException("Fichier de définition introuvable: {$jsonPath}");
         }
-        $store   = DefinitionStore::fromFile($jsonPath);
+        $store = DefinitionStore::fromFile($jsonPath);
         $dfModel = $store->module()->model($modelKey);
 
         return new self($dfModel);
@@ -82,11 +92,11 @@ final class ControllerGen
     /**
      * Génère le contrôleur et la FormRequest associée.
      *
-     * @param bool $withRoute Si true, ajoute/actualise la ressource API et met à jour le JSON.
+     * @param  bool  $withRoute  Si true, ajoute/actualise la ressource API et met à jour le JSON.
      */
     public function generate(bool $withRoute = false): bool
     {
-        if (!File::exists($this->controllerStubPath)) {
+        if (! File::exists($this->controllerStubPath)) {
             throw new RuntimeException("Stub introuvable: {$this->controllerStubPath}");
         }
 
@@ -94,26 +104,26 @@ final class ControllerGen
         (new RequestGen($this->modelKey, $this->moduleName))->generate();
 
         // 2) Construire le contrôleur depuis le stub
-        $requestName = $this->modelName . 'Request';
-        $requestFqcn = $this->moduleGen->getRequestNamespace() . '\\' . $requestName;
+        $requestName = $this->modelName.'Request';
+        $requestFqcn = $this->moduleGen->getRequestNamespace().'\\'.$requestName;
 
         $replacements = [
             '{{ controllerNamespace }}' => $this->controllerNamespace,
-            '{{ controllerName }}'      => $this->controllerName,
-            '{{ modelFqcn }}'           => $this->modelFqcn,
-            '{{ modelName }}'           => $this->modelName,
-            '{{ requestFqcn }}'         => $requestFqcn,
-            '{{ requestName }}'         => $requestName,
-            '{{ requestNamespace }}'    => '', // si inutilisé dans le stub
+            '{{ controllerName }}' => $this->controllerName,
+            '{{ modelFqcn }}' => $this->modelFqcn,
+            '{{ modelName }}' => $this->modelName,
+            '{{ requestFqcn }}' => $requestFqcn,
+            '{{ requestName }}' => $requestName,
+            '{{ requestNamespace }}' => '', // si inutilisé dans le stub
         ];
 
         $template = File::get($this->controllerStubPath);
-        $content  = strtr($template, $replacements);
+        $content = strtr($template, $replacements);
 
         File::ensureDirectoryExists($this->controllerDirectoryPath, 0755);
 
         // Écrire si absent ; si présent on ne réécrit pas
-        if (!File::exists($this->controllerFilePath)) {
+        if (! File::exists($this->controllerFilePath)) {
             File::put($this->controllerFilePath, $content);
             $this->markHasController(); // maj store JSON
         }
@@ -131,7 +141,7 @@ final class ControllerGen
      */
     public function updateRoute(): bool
     {
-        if (!File::exists($this->routeApiPath)) {
+        if (! File::exists($this->routeApiPath)) {
             // Certains modules n'ont pas d'API exposée : on ne jette pas d'exception.
             return false;
         }
@@ -157,11 +167,11 @@ final class ControllerGen
 
     private function markHasController(): void
     {
-        if (!File::exists($this->jsonPath)) {
+        if (! File::exists($this->jsonPath)) {
             return;
         }
         $store = DefinitionStore::fromFile($this->jsonPath);
-        $df    = $store->module()->model($this->modelKey);
+        $df = $store->module()->model($this->modelKey);
 
         $df->backend()->hasController = true;
 
@@ -171,11 +181,11 @@ final class ControllerGen
 
     private function markHasRoute(?string $apiRoute): void
     {
-        if (!File::exists($this->jsonPath)) {
+        if (! File::exists($this->jsonPath)) {
             return;
         }
         $store = DefinitionStore::fromFile($this->jsonPath);
-        $df    = $store->module()->model($this->modelKey);
+        $df = $store->module()->model($this->modelKey);
 
         $df->backend()->hasRoute = true;
         if ($apiRoute) {
@@ -195,7 +205,8 @@ final class ControllerGen
      */
     private static function jsonPath(string $moduleName, bool $ensureDir = false): string
     {
-        $path = Module::getModulePath($moduleName) . 'module.json';
+        $path = Module::getModulePath($moduleName).'module.json';
+
         return $path;
     }
 }

@@ -19,7 +19,7 @@ class Relation
         return $this->relatedModel;
     }
 
-    static function setDataRelation(string $table, string $module, string $model)
+    public static function setDataRelation(string $table, string $module, string $model)
     {
 
         /*

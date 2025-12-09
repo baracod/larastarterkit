@@ -25,12 +25,12 @@ final class DefinitionQuery
     private $predicate;
 
     /**
-     * @param array<string, ModelDefinition> $models
+     * @param  array<string, ModelDefinition>  $models
      */
     public function __construct(array $models)
     {
-        $this->models    = $models;
-        $this->predicate = static fn(ModelDefinition $m): bool => true;
+        $this->models = $models;
+        $this->predicate = static fn (ModelDefinition $m): bool => true;
     }
 
     /**
@@ -39,17 +39,17 @@ final class DefinitionQuery
      * Opérateurs : '=', '==', '!=', '<>', 'like'
      * - 'like' : utilise % en wildcard (ex: '%Author%')
      *
-     * @param  string      $path            Clé dot-notation
-     * @param  mixed       $operatorOrValue Opérateur ou valeur si '=' implicite
-     * @param  mixed|null  $maybeValue      Valeur si opérateur explicite
+     * @param  string  $path  Clé dot-notation
+     * @param  mixed  $operatorOrValue  Opérateur ou valeur si '=' implicite
+     * @param  mixed|null  $maybeValue  Valeur si opérateur explicite
      * @return $this
      *
      * @throws InvalidArgumentException Si opérateur non supporté
      */
     public function where(string $path, mixed $operatorOrValue, mixed $maybeValue = null): self
     {
-        $operator = $maybeValue === null ? '=' : (string)$operatorOrValue;
-        $value    = $maybeValue === null ? $operatorOrValue : $maybeValue;
+        $operator = $maybeValue === null ? '=' : (string) $operatorOrValue;
+        $value = $maybeValue === null ? $operatorOrValue : $maybeValue;
 
         $prev = $this->predicate;
 
@@ -59,10 +59,10 @@ final class DefinitionQuery
             $ok = match ($operator) {
                 '=', '==' => $current == $value,
                 '!=', '<>' => $current != $value,
-                'like'     => is_string($current) && is_string($value)
+                'like' => is_string($current) && is_string($value)
                     ? $this->like($current, $value)
                     : false,
-                default    => throw new InvalidArgumentException("Opérateur where() non supporté: {$operator}"),
+                default => throw new InvalidArgumentException("Opérateur where() non supporté: {$operator}"),
             };
 
             return $prev($m) && $ok;
@@ -73,8 +73,6 @@ final class DefinitionQuery
 
     /**
      * Retourne le premier modèle correspondant ou null.
-     *
-     * @return ModelDefinition|null
      */
     public function first(): ?ModelDefinition
     {
@@ -106,30 +104,24 @@ final class DefinitionQuery
 
     /**
      * Vérifie la correspondance d’une chaîne à un motif %like%.
-     *
-     * @param  string $haystack
-     * @param  string $pattern
-     * @return bool
      */
     private function like(string $haystack, string $pattern): bool
     {
-        $regex = '/^' . str_replace('%', '.*', preg_quote($pattern, '/')) . '$/i';
+        $regex = '/^'.str_replace('%', '.*', preg_quote($pattern, '/')).'$/i';
 
-        return (bool)preg_match($regex, $haystack);
+        return (bool) preg_match($regex, $haystack);
     }
 
     /**
      * Récupère une valeur via dot-notation simple.
      *
-     * @param  array<string, mixed> $arr
-     * @param  string               $path
-     * @return mixed
+     * @param  array<string, mixed>  $arr
      */
     private function getDot(array $arr, string $path): mixed
     {
         $cursor = $arr;
         foreach (explode('.', $path) as $seg) {
-            if (!is_array($cursor) || !array_key_exists($seg, $cursor)) {
+            if (! is_array($cursor) || ! array_key_exists($seg, $cursor)) {
                 return null;
             }
             $cursor = $cursor[$seg];

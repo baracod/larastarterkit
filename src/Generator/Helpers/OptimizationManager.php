@@ -28,7 +28,7 @@ final class OptimizationManager
             if ($result->failed()) {
                 Log::warning('[Optimization] composer dump-autoload failed', [
                     'exitCode' => $result->exitCode(),
-                    'error'    => $result->errorOutput(),
+                    'error' => $result->errorOutput(),
                 ]);
             }
         } catch (Throwable $e) {
@@ -83,7 +83,7 @@ final class OptimizationManager
      * - $rebuild: en prod, rebâtit les caches après clear
      * - $maintenance: en prod, fait down/up autour des opérations
      */
-    public static function refreshAll(bool $withComposer = true, bool $rebuild = true, bool $maintenance = null): void
+    public static function refreshAll(bool $withComposer = true, bool $rebuild = true, ?bool $maintenance = null): void
     {
         $isProd = App::environment('production');
         $maintenance = $maintenance ?? $isProd;

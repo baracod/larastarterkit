@@ -4,30 +4,24 @@ declare(strict_types=1);
 
 namespace Baracod\Larastarterkit\Generator\Backend\Model;
 
-use Baracod\Larastarterkit\Generator\Backend\Http\ControllerGen;
 use Baracod\Larastarterkit\Generator\Backend\Http\ApiDocGen;
+use Baracod\Larastarterkit\Generator\Backend\Http\ControllerGen;
 use Baracod\Larastarterkit\Generator\Backend\Http\RouteGen;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
-use Baracod\Larastarterkit\Generator\Backend\Model\ModelGen;
 use Baracod\Larastarterkit\Generator\Frontend\TypeScriptGeneratorFromJson;
 use Baracod\Larastarterkit\Generator\ModuleGenerator;
 use Baracod\Larastarterkit\Generator\Traits\SqlConversion;
-use Illuminate\Console\View\Components\Confirm;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
-use function Laravel\Prompts\{
-    info,
-    warning,
-    error,
-    note,
-    select,
-    multiselect,
-    text,
-    confirm,
-    table
-};
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\table;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\warning;
 
 /**
  * Gère un fichier JSON {module, models:{...}} et fournit une UI pour créer/éditer
@@ -38,29 +32,38 @@ final class ModelDefinitionManager
     use SqlConversion;
 
     private const UI_SCROLL = 20;
+
     private const TECH_COLUMNS = ['id', 'created_at', 'updated_at', 'deleted_at', 'uuid'];
+
     private const MENU_BACK = '« Retour';
+
     private const MENU_SAVE = '💾 Enregistrer';
+
     private const MENU_DELETE = '🗑️ Supprimer';
+
     private const MENU_ADD = '➕ Ajouter';
+
     private const MENU_EDIT = '✏️ Éditer';
+
     private const MENU_NEXT = '#Suivant';
 
     private string $moduleName;
+
     private ModuleGenerator $moduleGen;
+
     private string $jsonPath;
 
     public function __construct(string $moduleName, ?string $jsonDir = null)
     {
         $this->moduleName = $moduleName;
-        $this->moduleGen  = new ModuleGenerator($moduleName);
+        $this->moduleGen = new ModuleGenerator($moduleName);
 
         // Emplacement du JSON : ModuleData/{module}.json
-        $dir = $jsonDir ?:  base_path("ModuleData");
-        if (!File::exists($dir)) {
+        $dir = $jsonDir ?: base_path('ModuleData');
+        if (! File::exists($dir)) {
             File::makeDirectory($dir, 0775, true);
         }
-        $this->jsonPath = $dir . DIRECTORY_SEPARATOR . Str::kebab($moduleName) . '.json';
+        $this->jsonPath = $dir.DIRECTORY_SEPARATOR.Str::kebab($moduleName).'.json';
 
         $this->ensureFile();
     }
@@ -70,8 +73,8 @@ final class ModelDefinitionManager
      */
     private function ensureFile(): void
     {
-        if (!File::exists($this->jsonPath)) {
-            $data = ['module' => $this->moduleName, 'models' => new \stdClass()];
+        if (! File::exists($this->jsonPath)) {
+            $data = ['module' => $this->moduleName, 'models' => new \stdClass];
             File::put($this->jsonPath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         }
     }
@@ -88,10 +91,12 @@ final class ModelDefinitionManager
             $data = json_decode($raw ?: '{}', true) ?: [];
             $data['module'] = $data['module'] ?? $this->moduleName;
             $data['models'] = $data['models'] ?? [];
+
             return $data;
         } catch (\Throwable $th) {
-            //throw $th;
+            // throw $th;
             info($th->getMessage());
+
             return ['module' => $this->moduleName, 'models' => []];
         }
     }
@@ -99,7 +104,7 @@ final class ModelDefinitionManager
     /**
      * Sauvegarde l’état sur disque.
      *
-     * @param array{module:string,models:array<string,array<string,mixed>>} $data
+     * @param  array{module:string,models:array<string,array<string,mixed>>}  $data
      */
     public function write(array $data): void
     {
@@ -129,7 +134,7 @@ final class ModelDefinitionManager
 
             // Liste des modèles existants
             foreach ($models as $key => $def) {
-                $options[$key] = $def['name'] . "  ·  " . ($def['tableName'] ?? '-');
+                $options[$key] = $def['name'].'  ·  '.($def['tableName'] ?? '-');
             }
 
             // Actions globales
@@ -143,10 +148,10 @@ final class ModelDefinitionManager
                 scroll: self::UI_SCROLL
             );
 
-
             if ($choice === '__savequit') {
                 $this->write($data);
                 info("Sauvegardé dans : {$this->jsonPath}");
+
                 return $data;
             }
 
@@ -156,9 +161,10 @@ final class ModelDefinitionManager
                     $data['models'][$def['key']] = $def;
 
                     info("La structure du Modèle « {$def['name']} » ajouté.");
-                    //generation de fichier php.
+                    // generation de fichier php.
                     $this->genPhpClass($def, $data);
                 }
+
                 continue;
             }
 
@@ -187,7 +193,8 @@ final class ModelDefinitionManager
 
     /**
      * UI de création : table → nom → fillable → relations → meta.
-     * @param array{module:string,models:array<string,array<string,mixed>>} $data
+     *
+     * @param  array{module:string,models:array<string,array<string,mixed>>}  $data
      * @return array<string,mixed>|null
      */
     private function createModelUI(array $data): ?array
@@ -195,6 +202,7 @@ final class ModelDefinitionManager
         $tables = $this->moduleGen->getTableList();
         if ($tables === []) {
             warning('Aucune table trouvée pour ce module.');
+
             return null;
         }
 
@@ -211,9 +219,9 @@ final class ModelDefinitionManager
 
         $namespace = $this->moduleGen->getModelNameSpace();
         $path = rtrim($this->moduleGen->getModelsDirectoryPath(), '/')
-            . '/' . $name . '.php';
-        $fqcn = $namespace . '\\' . $name;
-        $key  = Str::kebab($name);
+            .'/'.$name.'.php';
+        $fqcn = $namespace.'\\'.$name;
+        $key = Str::kebab($name);
 
         // Build fillable
         $fillable = $this->buildFillableFromTable($table);
@@ -231,6 +239,7 @@ final class ModelDefinitionManager
         $data['models'][$def['key']] = $def;
         $this->write($data);
         info("Modèle « {$name} » prêt.");
+
         return $def;
     }
 
@@ -241,7 +250,7 @@ final class ModelDefinitionManager
     /**
      * UI d’édition d’un modèle.
      *
-     * @param array<string,mixed> $def
+     * @param  array<string,mixed>  $def
      * @return array<string,mixed>|null null => supprimé
      */
     private function editModelUI(array $def): ?array
@@ -263,23 +272,26 @@ final class ModelDefinitionManager
                 ['Request',  $backendMeta['hasRequest'] ? 'oui' : 'non'],
                 ['Route',  $backendMeta['hasRoute'] ? 'oui' : 'non'],
 
-
             ];
             table(headers: ['Champ', 'Valeur'], rows: $summary);
 
-            $A_CREATE_MODEL      = '__create_model';
+            $A_CREATE_MODEL = '__create_model';
             $A_CREATE_CONTROLLER = '__create_controller';
             $A_CREATE_REQUEST = '__create_request';
             $A_UPDATE_ROUTE = '__update_route';
 
-            if (!$backendMeta["hasModel"])
+            if (! $backendMeta['hasModel']) {
                 $actions[$A_CREATE_MODEL] = 'Créer un modèle';
-            if (!$backendMeta["hasController"])
+            }
+            if (! $backendMeta['hasController']) {
                 $actions[$A_CREATE_CONTROLLER] = 'Créer un contrôleur';
-            if (!$backendMeta["hasRequest"])
+            }
+            if (! $backendMeta['hasRequest']) {
                 $actions[$A_CREATE_REQUEST] = 'Créer une requête';
-            if (!$backendMeta["hasRoute"])
+            }
+            if (! $backendMeta['hasRoute']) {
                 $actions[$A_UPDATE_ROUTE] = 'Mettre à jour une route';
+            }
 
             $actions[self::MENU_BACK] = self::MENU_BACK;
 
@@ -332,10 +344,10 @@ final class ModelDefinitionManager
         $name = trim(text('Nom du modèle', "Actuel : {$def['name']}"));
         if ($name !== '') {
             $def['name'] = $name;
-            $def['key']  = Str::kebab($name);
+            $def['key'] = Str::kebab($name);
             $def['path'] = rtrim(dirname((string) $def['path']), '/')
-                . '/' . $name . '.php';
-            $def['fqcn'] = ($def['namespace'] ?? '') . '\\' . $name;
+                .'/'.$name.'.php';
+            $def['fqcn'] = ($def['namespace'] ?? '').'\\'.$name;
         }
 
         $tables = $this->moduleGen->getTableList();
@@ -377,11 +389,12 @@ final class ModelDefinitionManager
         }
 
         $def['fillable'] = $fresh;
+
         return $def;
     }
 
     /**
-     * @param array<string,mixed> $def
+     * @param  array<string,mixed>  $def
      * @return array<string,mixed>
      */
     private function editRelationsUI(array $def): array
@@ -391,21 +404,22 @@ final class ModelDefinitionManager
             table(
                 headers: ['#', 'type', 'name', 'foreignKey', 'table', 'module'],
                 rows: array_map(
-                    fn($r, $i) => [$i, $r['type'] ?? '', $r['name'] ?? '', $r['foreignKey'] ?? '', $r['table'] ?? '', $r['moduleName'] ?? ''],
+                    fn ($r, $i) => [$i, $r['type'] ?? '', $r['name'] ?? '', $r['foreignKey'] ?? '', $r['table'] ?? '', $r['moduleName'] ?? ''],
                     $rels,
                     array_keys($rels)
                 )
             );
 
             $choice = select('Relations', [
-                '__add'   => self::MENU_ADD,
-                '__edit'  => self::MENU_EDIT,
-                '__del'   => self::MENU_DELETE,
+                '__add' => self::MENU_ADD,
+                '__edit' => self::MENU_EDIT,
+                '__del' => self::MENU_DELETE,
                 self::MENU_BACK => self::MENU_BACK,
             ]);
 
             if ($choice === self::MENU_BACK) {
                 $def['relations'] = array_values($rels);
+
                 return $def;
             }
 
@@ -420,20 +434,24 @@ final class ModelDefinitionManager
             if ($choice === '__edit') {
                 if ($rels === []) {
                     warning('Aucune relation.');
+
                     continue;
                 }
                 $idx = (int) text('Index de la relation à éditer (voir tableau ci-dessus)');
-                if (!isset($rels[$idx])) {
+                if (! isset($rels[$idx])) {
                     warning('Index invalide.');
+
                     continue;
                 }
                 $rels[$idx] = $this->editSingleRelationUI($rels[$idx]);
+
                 continue;
             }
 
             if ($choice === '__del') {
                 if ($rels === []) {
                     warning('Aucune relation.');
+
                     continue;
                 }
                 $idx = (int) text('Index de la relation à supprimer');
@@ -441,6 +459,7 @@ final class ModelDefinitionManager
                     unset($rels[$idx]);
                     $rels = array_values($rels);
                 }
+
                 continue;
             }
         }
@@ -449,7 +468,7 @@ final class ModelDefinitionManager
     /** @param array<string,mixed> $def */
     private function configureMetaUI(array $def): array
     {
-        $def['backend']  = $def['backend']  ?? ['hasController' => false, 'hasRequest' => false, 'hasRoute' => false, 'hasPermission' => false];
+        $def['backend'] = $def['backend'] ?? ['hasController' => false, 'hasRequest' => false, 'hasRoute' => false, 'hasPermission' => false];
         $def['frontend'] = $def['frontend'] ?? [
             'hasType' => false,
             'hasApi' => false,
@@ -460,7 +479,7 @@ final class ModelDefinitionManager
             'hasMenu' => false,
             'hasPermission' => false,
             'fields' => [],
-            'casl' => ['create' => false, 'read' => false, 'update' => false, 'delete' => false, 'access' => false]
+            'casl' => ['create' => false, 'read' => false, 'update' => false, 'delete' => false, 'access' => false],
         ];
 
         // backend flags
@@ -481,30 +500,29 @@ final class ModelDefinitionManager
         return $def;
     }
 
-
     // ─────────────────────────────────────────────────────────────────────────────
     //  CREATION DE CLASSES PHP
     // ─────────────────────────────────────────────────────────────────────────────
-    #region CREATION DE CLASSES PHP
+    // region CREATION DE CLASSES PHP
     private function genPhpClass(array $entityStructure, array $data): void
     {
         // Actions (valeurs stables)
-        $A_NEXT              = self::MENU_NEXT ?? '__next__';
-        $A_CREATE_MODEL      = '__create_model';
+        $A_NEXT = self::MENU_NEXT ?? '__next__';
+        $A_CREATE_MODEL = '__create_model';
         $A_CREATE_CONTROLLER = '__create_controller';
-        $A_CREATE_REQUEST    = '__create_request'; // réservé/optionnel
-        $A_UPDATE_ROUTE      = '__update_route';
-        $A_API_REST          = '__api_rest';
-        $A_FRONTEND          = '__frontend';
+        $A_CREATE_REQUEST = '__create_request'; // réservé/optionnel
+        $A_UPDATE_ROUTE = '__update_route';
+        $A_API_REST = '__api_rest';
+        $A_FRONTEND = '__frontend';
 
         // Normalisation des métadonnées
-        $entityStructure['backend']   = $entityStructure['backend']   ?? [];
+        $entityStructure['backend'] = $entityStructure['backend'] ?? [];
         $entityStructure['moduleName'] = $entityStructure['moduleName'] ?? ($this->moduleName ?? null);
-        $entityStructure['key']       = $entityStructure['key']       ?? Str::snake($entityStructure['name'] ?? 'Model');
-        $entityStructure['name']      = $entityStructure['name']      ?? Str::studly($entityStructure['key']);
+        $entityStructure['key'] = $entityStructure['key'] ?? Str::snake($entityStructure['name'] ?? 'Model');
+        $entityStructure['name'] = $entityStructure['name'] ?? Str::studly($entityStructure['key']);
 
-        $name   = $entityStructure['name'];
-        $key    = $entityStructure['key'];
+        $name = $entityStructure['name'];
+        $key = $entityStructure['key'];
 
         // Menu dynamique
         $options = [];
@@ -519,15 +537,15 @@ final class ModelDefinitionManager
         }
 
         // Toujours proposés
-        $options[$A_API_REST]     = "Générer API REST (modèle + contrôleur + route)";
-        $options[$A_FRONTEND]     = "Générer le frontend REST : {$name}";
-        $options[$A_NEXT]         = "Continuer";
+        $options[$A_API_REST] = 'Générer API REST (modèle + contrôleur + route)';
+        $options[$A_FRONTEND] = "Générer le frontend REST : {$name}";
+        $options[$A_NEXT] = 'Continuer';
 
         while (true) {
             $action = select('Que veux-tu générer ?', $options);
 
             // Si select() renvoie le label, on remappe vers la clé d’action
-            if (!array_key_exists($action, $options)) {
+            if (! array_key_exists($action, $options)) {
                 $action = array_search($action, $options, true) ?: $A_NEXT;
             }
 
@@ -569,8 +587,9 @@ final class ModelDefinitionManager
      */
     private function generateModel(array &$entity, array &$data): void
     {
-        if (!empty($entity['backend']['hasModel'])) {
+        if (! empty($entity['backend']['hasModel'])) {
             info("Le modèle {$entity['name']} existe déjà.");
+
             return;
         }
 
@@ -587,8 +606,9 @@ final class ModelDefinitionManager
      */
     private function generateController(array &$entity, array &$data): void
     {
-        if (!empty($entity['backend']['hasController'])) {
+        if (! empty($entity['backend']['hasController'])) {
             info("Le contrôleur {$entity['name']}Controller existe déjà.");
+
             return;
         }
 
@@ -605,9 +625,9 @@ final class ModelDefinitionManager
      */
     private function updateRoute(array &$entity, array &$data): void
     {
-        $routeGen  = new RouteGen($this->moduleGen->getRouteApiPath());
+        $routeGen = new RouteGen($this->moduleGen->getRouteApiPath());
         $routeName = Str::kebab(Str::smartPlural($entity['key']));
-        $apiRoute =   $routeGen->addApiResource($routeName, "{$entity['name']}Controller", $this->moduleName)['apiRoute'];
+        $apiRoute = $routeGen->addApiResource($routeName, "{$entity['name']}Controller", $this->moduleName)['apiRoute'];
 
         $entity['backend']['hasRoute'] = true;
         $entity['backend']['apiRoute'] = $apiRoute;
@@ -645,6 +665,7 @@ final class ModelDefinitionManager
                 unset($options[$k]);
             }
         }
+
         return $options;
     }
 
@@ -665,7 +686,7 @@ final class ModelDefinitionManager
             $this->persistEntity($entity, $data);
         }
     }
-    #endregion CREATION DE CLASSES PHP
+    // endregion CREATION DE CLASSES PHP
 
     // ─────────────────────────────────────────────────────────────────────────────
     // BLOCS MÉTIER
@@ -673,20 +694,23 @@ final class ModelDefinitionManager
 
     /**
      * Construit la liste fillable depuis la table (UI multiselect + types).
+     *
      * @return list<array{name:string,type:string,defaultValue:mixed,customizedType:string}>
      */
     private function buildFillableFromTable(string $table): array
     {
-        if (!Schema::hasTable($table)) {
+        if (! Schema::hasTable($table)) {
             error("Table « {$table} » introuvable.");
+
             return [];
         }
 
         $cols = Schema::getColumnListing($table);
-        $cols = array_values(array_filter($cols, fn($c) => !in_array($c, self::TECH_COLUMNS, true)));
+        $cols = array_values(array_filter($cols, fn ($c) => ! in_array($c, self::TECH_COLUMNS, true)));
 
         if ($cols === []) {
             warning("Aucune colonne sélectionnable pour « {$table} ».");
+
             return [];
         }
 
@@ -741,12 +765,12 @@ final class ModelDefinitionManager
     }
 
     /**
-     * @param list<array{name:string,type:string,defaultValue:mixed,customizedType:string}> $fillable
+     * @param  list<array{name:string,type:string,defaultValue:mixed,customizedType:string}>  $fillable
      * @return list<array<string,mixed>>
      */
     private function collectBelongsToRelationsUI(array $fillable): array
     {
-        $fkFields = array_values(array_filter($fillable, fn($f) => Str::endsWith($f['name'], '_id')));
+        $fkFields = array_values(array_filter($fillable, fn ($f) => Str::endsWith($f['name'], '_id')));
 
         if ($fkFields === []) {
             return [];
@@ -782,13 +806,14 @@ final class ModelDefinitionManager
     /** @return array<string,mixed> */
     private function editSingleRelationUI(array $rel): array
     {
-        $rel['name']       = trim(text('Nom de la relation', "Actuel : " . ($rel['name'] ?? ''))) ?: ($rel['name'] ?? '');
-        $rel['foreignKey'] = trim(text('Foreign key', "Actuel : " . ($rel['foreignKey'] ?? ''))) ?: ($rel['foreignKey'] ?? '');
-        $rel['table']      = trim(text('Table liée', "Actuel : " . ($rel['table'] ?? ''))) ?: ($rel['table'] ?? '');
-        $rel['ownerKey']   = trim(text('Owner key', "Actuel : " . ($rel['ownerKey'] ?? 'id'))) ?: ($rel['ownerKey'] ?? 'id');
-        $rel['moduleName'] = trim(text('Module cible', "Actuel : " . ($rel['moduleName'] ?? $this->moduleName))) ?: ($rel['moduleName'] ?? $this->moduleName);
+        $rel['name'] = trim(text('Nom de la relation', 'Actuel : '.($rel['name'] ?? ''))) ?: ($rel['name'] ?? '');
+        $rel['foreignKey'] = trim(text('Foreign key', 'Actuel : '.($rel['foreignKey'] ?? ''))) ?: ($rel['foreignKey'] ?? '');
+        $rel['table'] = trim(text('Table liée', 'Actuel : '.($rel['table'] ?? ''))) ?: ($rel['table'] ?? '');
+        $rel['ownerKey'] = trim(text('Owner key', 'Actuel : '.($rel['ownerKey'] ?? 'id'))) ?: ($rel['ownerKey'] ?? 'id');
+        $rel['moduleName'] = trim(text('Module cible', 'Actuel : '.($rel['moduleName'] ?? $this->moduleName))) ?: ($rel['moduleName'] ?? $this->moduleName);
         $rel['externalModule'] = ($rel['moduleName'] ?? $this->moduleName) !== $this->moduleName;
         $rel['isParentHasMany'] = confirm('Définir hasMany dans le parent ?', (bool) ($rel['isParentHasMany'] ?? false));
+
         return $rel;
     }
 
@@ -822,8 +847,8 @@ final class ModelDefinitionManager
             'model' => [
                 'name' => $targetModel,
                 'namespace' => $targetGen->getModelNameSpace(),
-                'fqcn' => $targetGen->getModelNameSpace() . '\\' . $targetModel,
-                'path' => $targetGen->getModelsDirectoryPath() . '/' . $targetModel . '.php',
+                'fqcn' => $targetGen->getModelNameSpace().'\\'.$targetModel,
+                'path' => $targetGen->getModelsDirectoryPath().'/'.$targetModel.'.php',
             ],
             'isParentHasMany' => $isParentHasMany,
         ];
@@ -832,12 +857,12 @@ final class ModelDefinitionManager
     /**
      * Applique une personnalisation de types via UI.
      *
-     * @param list<array{name:string,type:string,defaultValue:mixed,customizedType:string}> $fillable
+     * @param  list<array{name:string,type:string,defaultValue:mixed,customizedType:string}>  $fillable
      * @return list<array{name:string,type:string,defaultValue:mixed,customizedType:string}>
      */
     private function customizeTypesUI(string $table, array $fillable): array
     {
-        $names = array_map(fn($f) => $f['name'], $fillable);
+        $names = array_map(fn ($f) => $f['name'], $fillable);
         $choices = array_combine($names, $names);
 
         $toEdit = multiselect(
@@ -888,6 +913,7 @@ final class ModelDefinitionManager
             }
             $opts[$key] = (string) $label;
         }
+
         return $opts;
     }
 
@@ -897,8 +923,9 @@ final class ModelDefinitionManager
         $modules = ModuleGenerator::getModuleList();
         if ($managerModule) {
             $modules['deleteModule'] = '# Supprimer le module #';
-            $modules['addModule']    = '# Créer le module #';
+            $modules['addModule'] = '# Créer le module #';
         }
+
         return select(
             label: 'Sélectionner le module',
             options: $this->toOptions($modules, false),
@@ -915,6 +942,7 @@ final class ModelDefinitionManager
             $models['addModel'] = '# Créer un modèle #';
             $models['deleteModel'] = '# Supprimer un modèle #';
         }
+
         return select(
             label: 'Sélectionner le modèle',
             options: $this->toOptions($models, false),
@@ -928,18 +956,20 @@ final class ModelDefinitionManager
      */
     private function askTableColumn(string $tableName, bool $multiSelect = false, bool $allSelected = false, bool $hiddenIdKeys = true): array|string|null
     {
-        if (!Schema::hasTable($tableName)) {
+        if (! Schema::hasTable($tableName)) {
             error("La table « {$tableName} » est introuvable.");
+
             return $multiSelect ? [] : null;
         }
 
         $columns = Schema::getColumnListing($tableName);
         if ($hiddenIdKeys) {
-            $columns = array_values(array_filter($columns, fn($c) => !in_array($c, self::TECH_COLUMNS, true)));
+            $columns = array_values(array_filter($columns, fn ($c) => ! in_array($c, self::TECH_COLUMNS, true)));
         }
 
         if ($columns === []) {
             warning("La table « {$tableName} » ne contient aucune colonne sélectionnable.");
+
             return $multiSelect ? [] : null;
         }
 
@@ -947,6 +977,7 @@ final class ModelDefinitionManager
 
         if ($multiSelect) {
             $default = $allSelected ? array_values($options) : [];
+
             return multiselect(
                 label: "Sélectionner des colonnes ( {$tableName} )",
                 options: $options,
@@ -965,8 +996,8 @@ final class ModelDefinitionManager
     }
 
     /**
-     * @param list<array{name:string,type:string,defaultValue:mixed,customizedType:string}> $fillable
-     * @param list<array<string,mixed>> $relations
+     * @param  list<array{name:string,type:string,defaultValue:mixed,customizedType:string}>  $fillable
+     * @param  list<array<string,mixed>>  $relations
      * @return array<string,mixed>
      */
     private function defaultModelDef(
@@ -980,35 +1011,35 @@ final class ModelDefinitionManager
         array $fillable
     ): array {
         return [
-            'name'       => $name,
-            'key'        => $key,
-            'namespace'  => $namespace,
-            'tableName'  => $table,
+            'name' => $name,
+            'key' => $key,
+            'namespace' => $namespace,
+            'tableName' => $table,
             'moduleName' => $this->moduleName,
-            'fillable'   => $fillable,
-            'relations'  => $relations,
-            'path'       => $path,
-            'fqcn'       => $fqcn,
+            'fillable' => $fillable,
+            'relations' => $relations,
+            'path' => $path,
+            'fqcn' => $fqcn,
             'backend' => [
                 'hasModel' => false,
                 'hasController' => false,
-                'hasRequest'    => false,
-                'hasRoute'      => false,
+                'hasRequest' => false,
+                'hasRoute' => false,
                 'hasPermission' => false,
             ],
             'frontend' => [
-                'hasType'               => false,
-                'hasApi'                => false,
-                'hasLang'               => false,
+                'hasType' => false,
+                'hasApi' => false,
+                'hasLang' => false,
                 'hasAddOrEditComponent' => false,
-                'hasReadComponent'      => false,
-                'hasIndex'              => false,
-                'hasMenu'               => false,
-                'hasPermission'         => false,
-                'fields'                => [],
+                'hasReadComponent' => false,
+                'hasIndex' => false,
+                'hasMenu' => false,
+                'hasPermission' => false,
+                'fields' => [],
                 'casl' => [
                     'create' => false,
-                    'read'   => false,
+                    'read' => false,
                     'update' => false,
                     'delete' => false,
                     'access' => false,

@@ -22,15 +22,15 @@ use Baracod\Larastarterkit\Generator\DefinitionFile\Contracts\ArrayConvertible;
 final class CaslPermissions implements ArrayConvertible
 {
     /**
-     * @param bool $create Autorise la création
-     * @param bool $read   Autorise la lecture
-     * @param bool $update Autorise la mise à jour
-     * @param bool $delete Autorise la suppression
-     * @param bool $access Autorise l’accès global
+     * @param  bool  $create  Autorise la création
+     * @param  bool  $read  Autorise la lecture
+     * @param  bool  $update  Autorise la mise à jour
+     * @param  bool  $delete  Autorise la suppression
+     * @param  bool  $access  Autorise l’accès global
      */
     public function __construct(
         public bool $create = false,
-        public bool $read   = false,
+        public bool $read = false,
         public bool $update = false,
         public bool $delete = false,
         public bool $access = false,
@@ -41,29 +41,30 @@ final class CaslPermissions implements ArrayConvertible
     /**
      * Construit l’objet à partir d’un tableau.
      *
-     * @param array<string, mixed> $a
+     * @param  array<string, mixed>  $a
      * @return static
      */
     public static function fromArray(array $a): self
     {
         return new self(
-            (bool)($a['create'] ?? false),
-            (bool)($a['read']   ?? false),
-            (bool)($a['update'] ?? false),
-            (bool)($a['delete'] ?? false),
-            (bool)($a['access'] ?? false),
+            (bool) ($a['create'] ?? false),
+            (bool) ($a['read'] ?? false),
+            (bool) ($a['update'] ?? false),
+            (bool) ($a['delete'] ?? false),
+            (bool) ($a['access'] ?? false),
         );
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @return CaslArray
      */
     public function toArray(): array
     {
         return [
             'create' => $this->create,
-            'read'   => $this->read,
+            'read' => $this->read,
             'update' => $this->update,
             'delete' => $this->delete,
             'access' => $this->access,

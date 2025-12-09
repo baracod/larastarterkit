@@ -39,7 +39,7 @@ return [
             'package' => 'package.json',
             'moduleIndex.vue' => 'resources/ts/pages/index.vue',
             'menuItems' => 'menuItems.ts',
-            'menuItems.json' => 'menuItems.json'
+            'menuItems.json' => 'menuItems.json',
         ],
         'replacements' => [
             'resources/ts/pages/index' => ['LOWER_NAME'],
@@ -143,7 +143,7 @@ return [
             'services' => ['path' => 'app/Services', 'generate' => true],
             'scopes' => ['path' => 'app/Models/Scopes', 'generate' => false],
             'traits' => ['path' => 'app/Traits', 'generate' => true],
-            'controllers' => ['path' => 'app/Http/Controllers', 'generate' => true], //ajouter par moi
+            'controllers' => ['path' => 'app/Http/Controllers', 'generate' => true], // ajouter par moi
 
             // app/Http/
 

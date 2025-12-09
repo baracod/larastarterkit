@@ -32,32 +32,24 @@ final class DefinitionStore
 {
     /**
      * Chemin d’origine du fichier JSON (si chargé depuis un fichier).
-     *
-     * @var string|null
      */
     private ?string $filePath = null;
 
     /**
      * Module racine typé.
-     *
-     * @var ModuleDefinition
      */
     private ModuleDefinition $module;
 
-    /**
-     * @param ModuleDefinition $module
-     * @param string|null      $filePath
-     */
     private function __construct(ModuleDefinition $module, ?string $filePath)
     {
-        $this->module   = $module;
+        $this->module = $module;
         $this->filePath = $filePath;
     }
 
     /**
      * Construit un store depuis un tableau (décodage JSON déjà effectué).
      *
-     * @param  array<string, mixed> $root
+     * @param  array<string, mixed>  $root
      * @return static
      */
     public static function fromArray(array $root): self
@@ -68,14 +60,14 @@ final class DefinitionStore
     /**
      * Construit un store depuis un fichier JSON.
      *
-     * @param  string $path Chemin absolu/relatif vers le fichier JSON
+     * @param  string  $path  Chemin absolu/relatif vers le fichier JSON
      * @return static
      *
      * @throws DomainException Si le fichier est introuvable ou JSON invalide
      */
     public static function fromFile(string $path): self
     {
-        if (!is_file($path)) {
+        if (! is_file($path)) {
             throw new DomainException("Fichier introuvable: {$path}");
         }
 
@@ -93,8 +85,6 @@ final class DefinitionStore
 
     /**
      * Accède au module racine.
-     *
-     * @return ModuleDefinition
      */
     public function module(): ModuleDefinition
     {
@@ -103,8 +93,6 @@ final class DefinitionStore
 
     /**
      * Démarre une requête “façon Eloquent” sur les modèles.
-     *
-     * @return DefinitionQuery
      */
     public function models(): DefinitionQuery
     {
@@ -114,8 +102,7 @@ final class DefinitionStore
     /**
      * Sérialise et écrit le JSON sur disque.
      *
-     * @param  string|null $override Chemin alternatif de sauvegarde
-     * @return void
+     * @param  string|null  $override  Chemin alternatif de sauvegarde
      *
      * @throws DomainException Si aucun chemin connu ou échec d’encodage
      */
@@ -123,7 +110,7 @@ final class DefinitionStore
     {
         $path = $override ?? $this->filePath;
 
-        if (!$path) {
+        if (! $path) {
             throw new DomainException('Aucun chemin de sauvegarde connu.');
         }
 

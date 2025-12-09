@@ -14,12 +14,12 @@ namespace Baracod\Larastarterkit\Generator\DefinitionFile\Enums;
  */
 enum FieldType: string
 {
-    case String   = 'string';
-    case Text     = 'text';
-    case Integer  = 'integer';
-    case Float    = 'float';
-    case Boolean  = 'boolean';
-    case Date     = 'date';
+    case String = 'string';
+    case Text = 'text';
+    case Integer = 'integer';
+    case Float = 'float';
+    case Boolean = 'boolean';
+    case Date = 'date';
     case DateTime = 'datetime';
-    case Json     = 'json';
+    case Json = 'json';
 }
