@@ -65,6 +65,7 @@ final class ConsoleUI
         $this->moduleName = Str::studly($moduleName);
         $this->moduleGen  = new ModuleGenerator($this->moduleName);
 
+
         // Fichier de définition (ex: Modules/Blog/module.json)
         $this->jsonPath = $jsonPath;
         $this->ensureFile();
@@ -133,7 +134,8 @@ final class ConsoleUI
                 }
 
                 $studly = Str::studly($name);
-                $gen = new ModuleGenerator($studly);
+                $ModuleGen = new ModuleGenerator($studly);
+                $ModuleGen->generate();
 
                 info("Module « {$studly} » prêt.");
                 $jsonDir = Module::getModulePath($studly)  . 'module.json';
@@ -278,11 +280,14 @@ final class ConsoleUI
         $suggestedName = Str::studly(Str::singular($table));
         $name = trim(text('Nom du modèle', "Par défaut : {$suggestedName}"));
         $name = $name !== '' ? $name : $suggestedName;
-
         $namespace = $this->moduleGen->getModelNameSpace();
+
+
         $path      = rtrim($this->moduleGen->getModelsDirectoryPath(), '/') . '/' . $name . '.php';
         $fqcn      = $namespace . '\\' . $name;
         $key       = Str::kebab($name);
+
+
 
         // Fillable via types mappés → FieldDefinition[]
         $fillableFields = $this->buildFillableFromTable($table); // list<DField>
@@ -321,6 +326,7 @@ final class ConsoleUI
                 'access' => false
             ],
         ];
+        echo("test 1\n");
 
         $arr = [
             'name'       => $name,
@@ -343,6 +349,7 @@ final class ConsoleUI
         //     $model = $this->configureMetaUI($model);
         // }
 
+        echo("test 2\n");
 
         // Persiste
         $this->moduleDef->createModel($model);

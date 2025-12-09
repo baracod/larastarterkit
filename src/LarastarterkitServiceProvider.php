@@ -11,12 +11,8 @@ class LarastarterkitServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/modules.php', 'modules');
 
-        Str::macro('smartPlural', function ($word) {
-            $uncountable = ['cursus', 'status', 'syllabus'];
-
-            return in_array(strtolower($word), $uncountable) ? $word : Str::plural($word);
-        });
         /*
          * This class is a Package Service Provider
          *
@@ -28,5 +24,32 @@ class LarastarterkitServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasMigration('create_larastarterkit_table')
             ->hasCommand(LarastarterkitCommand::class);
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        // ajoute le macro smartPlural à Str
+        Str::macro('smartPlural', function ($word) {
+            $uncountable = ['cursus', 'status', 'syllabus'];
+
+            return in_array(strtolower($word), $uncountable, true) ? $word : Str::plural($word);
+        });
+
+        // Allow user to publish the customized laravel-modules config from this package
+        $this->publishes([
+            __DIR__.'/../config/modules.php' => config_path('modules.php'),
+        ], 'larastarterkit-modules-config');
+
+        // (optionnel) register a convenience tag that groups stubs  config if you want:
+        // $this->publishes([
+        //     __DIR__ . '/../../Stubs' => base_path('stubs/larastarterkit'),
+        //     __DIR__ . '/../config/modules.php' => config_path('modules.php'),
+        // ], 'larastarterkit-all');
+
+        $this->publishes([
+            __DIR__.'/../Stubs' => base_path('stubs/larastarterkit'),
+        ], 'larastarterkit-stubs');
     }
 }

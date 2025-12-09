@@ -7,9 +7,10 @@ use Illuminate\Console\Command;
 
 class LarastarterkitCommand extends Command
 {
-    public $signature = 'larastarterkit';
+    // Signature artisan pour exécuter la commande du package.
+    protected $signature = 'larastarterkit';
 
-    public $description = 'My command';
+    protected $description = 'La commande principale de Larastarterkit';
 
     public function handle(): int
     {

@@ -25,7 +25,7 @@ return [
     */
     'stubs' => [
         'enabled' => true,
-        'path' => base_path('stubs/laravel-module'),
+        'path' => base_path('stubs/larastarterkit/laravel-module'),
         'files' => [
             'routes/web' => 'routes/web.php',
             'routes/api' => 'routes/api.php',

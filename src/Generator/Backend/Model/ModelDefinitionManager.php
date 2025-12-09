@@ -290,7 +290,6 @@ final class ModelDefinitionManager
                 scroll: self::UI_SCROLL
             );
 
-            dd($choice);
             if ($choice == $A_CREATE_MODEL) {
                 // Génération du modèle
                 new ModelGen($def['key'], $def['moduleName']);
