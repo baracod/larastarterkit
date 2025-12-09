@@ -8,7 +8,6 @@ use Baracod\Larastarterkit\Generator\DefinitionFile\Contracts\ArrayConvertible;
 use Baracod\Larastarterkit\Generator\DefinitionFile\Value\BackendConfig;
 use Baracod\Larastarterkit\Generator\DefinitionFile\Value\FrontendConfig;
 
-
 /**
  * Class ModelDefinition
  *
@@ -42,17 +41,10 @@ final class ModelDefinition implements ArrayConvertible
     private array $relations = [];
 
     private BackendConfig $backend;
+
     private FrontendConfig $frontend;
 
     /**
-     * @param string      $key
-     * @param string      $name
-     * @param string      $namespace
-     * @param string      $tableName
-     * @param string      $moduleName
-     * @param string|null $path
-     * @param string|null $fqcn
-     *
      * @throws DomainException Si une propriété requise est vide
      */
     private function __construct(
@@ -70,18 +62,13 @@ final class ModelDefinition implements ArrayConvertible
         self::assertNonEmpty($tableName, 'tableName');
         self::assertNonEmpty($moduleName, 'moduleName');
 
-        $this->backend  = new BackendConfig();
-        $this->frontend = new FrontendConfig();
+        $this->backend = new BackendConfig;
+        $this->frontend = new FrontendConfig;
     }
 
     /**
      * Fabrique un modèle typé.
      *
-     * @param  string $key
-     * @param  string $name
-     * @param  string $namespace
-     * @param  string $tableName
-     * @param  string $moduleName
      * @return static
      */
     public static function new(
@@ -97,37 +84,35 @@ final class ModelDefinition implements ArrayConvertible
     /**
      * Construit un modèle à partir d’un tableau associatif (décodage JSON).
      *
-     * @param  array<string, mixed> $a
+     * @param  array<string, mixed>  $a
      * @return static
      */
     public static function fromArray(array $a): self
     {
         $m = new self(
-            key: (string)($a['key']        ?? ''),
-            name: (string)($a['name']       ?? ''),
-            namespace: (string)($a['namespace']  ?? ''),
-            tableName: (string)($a['tableName']  ?? ''),
-            moduleName: (string)($a['moduleName'] ?? ($a['module'] ?? '')),
-            path: isset($a['path']) ? (string)$a['path'] : null,
-            fqcn: isset($a['fqcn']) ? (string)$a['fqcn'] : null,
+            key: (string) ($a['key'] ?? ''),
+            name: (string) ($a['name'] ?? ''),
+            namespace: (string) ($a['namespace'] ?? ''),
+            tableName: (string) ($a['tableName'] ?? ''),
+            moduleName: (string) ($a['moduleName'] ?? ($a['module'] ?? '')),
+            path: isset($a['path']) ? (string) $a['path'] : null,
+            fqcn: isset($a['fqcn']) ? (string) $a['fqcn'] : null,
         );
 
-        foreach ((array)($a['fillable'] ?? []) as $f) {
+        foreach ((array) ($a['fillable'] ?? []) as $f) {
             $field = FieldDefinition::fromArray($f);
             $m->fillable[$field->name] = $field;
         }
 
         $m->relations = is_array($a['relations'] ?? null) ? $a['relations'] : [];
-        $m->backend   = BackendConfig::fromArray((array)($a['backend']  ?? []));
-        $m->frontend  = FrontendConfig::fromArray((array)($a['frontend'] ?? []));
+        $m->backend = BackendConfig::fromArray((array) ($a['backend'] ?? []));
+        $m->frontend = FrontendConfig::fromArray((array) ($a['frontend'] ?? []));
 
         return $m;
     }
 
     /**
      * Retourne la clé unique du modèle (ex: "blog-author").
-     *
-     * @return string
      */
     public function key(): string
     {
@@ -136,8 +121,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Nom de classe sans namespace (ex: "BlogAuthor").
-     *
-     * @return string
      */
     public function name(): string
     {
@@ -146,8 +129,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Namespace PHP du modèle (ex: "Modules\Blog\Models").
-     *
-     * @return string
      */
     public function namespace(): string
     {
@@ -156,8 +137,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Nom de la table SQL (ex: "blog_authors").
-     *
-     * @return string
      */
     public function tableName(): string
     {
@@ -166,8 +145,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Nom du module (ex: "Blog").
-     *
-     * @return string
      */
     public function moduleName(): string
     {
@@ -176,8 +153,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Chemin du fichier du modèle Laravel physique, si connu.
-     *
-     * @return string|null
      */
     public function path(): ?string
     {
@@ -186,8 +161,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * FQCN complet (ex: "Modules\Blog\Models\BlogAuthor"), si connu.
-     *
-     * @return string|null
      */
     public function fqcn(): ?string
     {
@@ -196,8 +169,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Accès à la configuration backend (objet mutable fluent).
-     *
-     * @return BackendConfig
      */
     public function backend(): BackendConfig
     {
@@ -206,20 +177,19 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Accès à la configuration frontend (objet mutable fluent).
-     *
-     * @return FrontendConfig
      */
-    public function frontend(FrontendConfig | null $frontend = null): FrontendConfig
+    public function frontend(?FrontendConfig $frontend = null): FrontendConfig
     {
-        if (empty($frontend))
+        if (empty($frontend)) {
             return $this->frontend;
+        }
+
         return $this->frontend;
     }
 
     /**
      * Ajoute un champ "fillable".
      *
-     * @param  FieldDefinition $field
      * @return $this
      *
      * @throws DomainException Si un champ avec le même nom existe déjà
@@ -238,7 +208,6 @@ final class ModelDefinition implements ArrayConvertible
     /**
      * Ajoute ou remplace un champ "fillable".
      *
-     * @param  FieldDefinition $field
      * @return $this
      */
     public function upsertField(FieldDefinition $field): self
@@ -251,7 +220,7 @@ final class ModelDefinition implements ArrayConvertible
     /**
      * Supprime un champ "fillable" s’il existe.
      *
-     * @param  string $name Nom du champ
+     * @param  string  $name  Nom du champ
      * @return $this
      */
     public function removeField(string $name): self
@@ -263,9 +232,6 @@ final class ModelDefinition implements ArrayConvertible
 
     /**
      * Indique si le modèle possède un champ donné.
-     *
-     * @param  string $name
-     * @return bool
      */
     public function hasField(string $name): bool
     {
@@ -310,29 +276,26 @@ final class ModelDefinition implements ArrayConvertible
     public function toArray(): array
     {
         return [
-            'name'       => $this->name,
-            'key'        => $this->key,
-            'namespace'  => $this->namespace,
-            'tableName'  => $this->tableName,
+            'name' => $this->name,
+            'key' => $this->key,
+            'namespace' => $this->namespace,
+            'tableName' => $this->tableName,
             'moduleName' => $this->moduleName,
-            'fillable'   => array_values(array_map(
-                static fn(FieldDefinition $f) => $f->toArray(),
+            'fillable' => array_values(array_map(
+                static fn (FieldDefinition $f) => $f->toArray(),
                 $this->fillable
             )),
-            'relations'  => $this->relations,
-            'path'       => $this->path,
-            'fqcn'       => $this->fqcn,
-            'backend'    => $this->backend->toArray(),
-            'frontend'   => $this->frontend->toArray(),
+            'relations' => $this->relations,
+            'path' => $this->path,
+            'fqcn' => $this->fqcn,
+            'backend' => $this->backend->toArray(),
+            'frontend' => $this->frontend->toArray(),
         ];
     }
 
     /**
      * Valide qu’une chaîne requise n’est pas vide.
      *
-     * @param  string $v
-     * @param  string $field
-     * @return void
      *
      * @throws DomainException
      */

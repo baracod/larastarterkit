@@ -19,13 +19,13 @@ trait StubResolverTrait
         }
 
         // 2. Stub "packagé" dans /Stubs
-        $packageStub = __DIR__ . "/../../../Stubs/{$stubName}";
+        $packageStub = __DIR__."/../../../Stubs/{$stubName}";
         if (file_exists($packageStub)) {
             return $packageStub;
         }
 
         // 3. Fallback interne dans src/Generator
-        $internalStub = __DIR__ . "/../Stubs/{$stubName}";
+        $internalStub = __DIR__."/../Stubs/{$stubName}";
         if (file_exists($internalStub)) {
             return $internalStub;
         }

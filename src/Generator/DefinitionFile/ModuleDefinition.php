@@ -60,32 +60,30 @@ final class ModuleDefinition implements ArrayConvertible
 
     /**
      * Chemin du fichier JSON d’origine (optionnel, pour la persistance).
-     *
-     * @var string|null
      */
     private ?string $filePath = null;
 
     /**
-     * @param  string $module Nom interne du module (historiquement utilisé)
+     * @param  string  $module  Nom interne du module (historiquement utilisé)
      *
      * @throws DomainException Si vide
      */
     public function __construct(private string $module)
     {
         if ($module === '') {
-            throw new DomainException("Le nom du module est requis.");
+            throw new DomainException('Le nom du module est requis.');
         }
 
         // Valeurs par défaut cohérentes si non renseignées
-        $this->name  = $module;
+        $this->name = $module;
         $this->alias = strtolower($module);
-        $this->filePath = Module::getModulePath($module) . 'module.json';
+        $this->filePath = Module::getModulePath($module).'module.json';
     }
 
     /**
      * Construit un module à partir du tableau racine JSON.
      *
-     * @param  array<string, mixed> $a
+     * @param  array<string, mixed>  $a
      * @return static
      */
     public static function fromArray(array $a): self
@@ -99,17 +97,17 @@ final class ModuleDefinition implements ArrayConvertible
         $m = new self($moduleName);
 
         // Métadonnées NWIDART (toutes optionnelles)
-        $m->name        = (string) ($a['name'] ?? $moduleName);
-        $m->alias       = (string) ($a['alias'] ?? strtolower($moduleName));
+        $m->name = (string) ($a['name'] ?? $moduleName);
+        $m->alias = (string) ($a['alias'] ?? strtolower($moduleName));
         $m->description = (string) ($a['description'] ?? '');
-        $m->keywords    = array_values(array_map('strval', is_array($a['keywords'] ?? null) ? $a['keywords'] : []));
-        $m->priority    = isset($a['priority']) ? (int) $a['priority'] : 0;
-        $m->providers   = array_values(array_map('strval', is_array($a['providers'] ?? null) ? $a['providers'] : []));
-        $m->files       = array_values(array_map('strval', is_array($a['files'] ?? null) ? $a['files'] : []));
+        $m->keywords = array_values(array_map('strval', is_array($a['keywords'] ?? null) ? $a['keywords'] : []));
+        $m->priority = isset($a['priority']) ? (int) $a['priority'] : 0;
+        $m->providers = array_values(array_map('strval', is_array($a['providers'] ?? null) ? $a['providers'] : []));
+        $m->files = array_values(array_map('strval', is_array($a['files'] ?? null) ? $a['files'] : []));
 
         // Modèles
         $rawModels = $a['models'] ?? [];
-        if (!is_array($rawModels)) {
+        if (! is_array($rawModels)) {
             throw new DomainException('"models" doit être un objet {key: model}.');
         }
 
@@ -173,8 +171,6 @@ final class ModuleDefinition implements ArrayConvertible
 
     /**
      * Retourne le chemin du fichier JSON d’origine, si connu.
-     *
-     * @return string|null
      */
     public function filePath(): ?string
     {
@@ -184,12 +180,12 @@ final class ModuleDefinition implements ArrayConvertible
     /**
      * Définit ou met à jour le chemin du fichier JSON associé.
      *
-     * @param  string|null $filePath
      * @return $this
      */
     public function setFilePath(?string $filePath): self
     {
         $this->filePath = $filePath;
+
         return $this;
     }
 
@@ -206,14 +202,12 @@ final class ModuleDefinition implements ArrayConvertible
     /**
      * Récupère un modèle par sa clé.
      *
-     * @param  string $key
-     * @return ModelDefinition
      *
      * @throws DomainException Si le modèle n’existe pas
      */
     public function model(string $key): ModelDefinition
     {
-        if (!isset($this->models[$key])) {
+        if (! isset($this->models[$key])) {
             throw new DomainException("Modèle inexistant: {$key}");
         }
 
@@ -223,8 +217,6 @@ final class ModuleDefinition implements ArrayConvertible
     /**
      * Crée un nouveau modèle (échoue s’il existe déjà).
      *
-     * @param  ModelDefinition $model
-     * @return ModelDefinition
      *
      * @throws DomainException Si un modèle avec la même clé existe
      */
@@ -241,9 +233,6 @@ final class ModuleDefinition implements ArrayConvertible
 
     /**
      * Ajoute ou remplace un modèle par sa clé.
-     *
-     * @param  ModelDefinition $model
-     * @return ModelDefinition
      */
     public function upsertModel(ModelDefinition $model): ModelDefinition
     {
@@ -252,9 +241,6 @@ final class ModuleDefinition implements ArrayConvertible
 
     /**
      * Supprime un modèle si présent.
-     *
-     * @param  string $key
-     * @return void
      */
     public function deleteModel(string $key): void
     {
@@ -275,19 +261,19 @@ final class ModuleDefinition implements ArrayConvertible
 
         return [
             // Métadonnées NWIDART
-            'name'        => $this->name,
-            'alias'       => $this->alias,
+            'name' => $this->name,
+            'alias' => $this->alias,
             'description' => $this->description,
-            'keywords'    => $this->keywords,
-            'priority'    => $this->priority,
-            'providers'   => $this->providers,
-            'files'       => $this->files,
+            'keywords' => $this->keywords,
+            'priority' => $this->priority,
+            'providers' => $this->providers,
+            'files' => $this->files,
 
             // Compat & clé historique
-            'module'      => $this->module,
+            'module' => $this->module,
 
             // Modèles
-            'models'      => $models,
+            'models' => $models,
         ];
     }
 
@@ -295,8 +281,7 @@ final class ModuleDefinition implements ArrayConvertible
      * Persiste le module courant dans un fichier JSON.
      * Si aucun chemin n’est fourni, utilise {@see filePath()}.
      *
-     * @param  string|null $override Chemin alternatif de sauvegarde
-     * @return void
+     * @param  string|null  $override  Chemin alternatif de sauvegarde
      *
      * @throws DomainException Si aucun chemin connu ou échec d’encodage
      */
@@ -304,7 +289,7 @@ final class ModuleDefinition implements ArrayConvertible
     {
         $path = $override ?? $this->filePath;
 
-        if (!$path) {
+        if (! $path) {
             throw new DomainException('Aucun chemin de sauvegarde connu.');
         }
 

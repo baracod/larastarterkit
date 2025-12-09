@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Baracod\Larastarterkit\Generator\Backend;
 
-use RuntimeException;
-use Illuminate\Support\Str;
+use Baracod\Larastarterkit\Generator\Helpers\OptimizationManager;
+use Baracod\Larastarterkit\Generator\Utils\ConsoleTrait;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Nwidart\Modules\Facades\Module;
-use Nwidart\Modules\Module as ClsModule;
 use Nwidart\Modules\Laravel\Module as LaravelModule;
-use Baracod\Larastarterkit\Generator\Utils\ConsoleTrait;
-
-use Baracod\Larastarterkit\Generator\Helpers\OptimizationManager;
+use Nwidart\Modules\Module as ClsModule;
+use RuntimeException;
 
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\select;
@@ -60,11 +59,11 @@ class ModuleGen
     /**
      * Constructeur — ne crée pas le module.
      *
-     * @param  string      $name         Nom “humain” du module (ex: "Blog" ou "blog")
-     * @param  string|null $icon         Icône optionnelle
-     * @param  string|null $author       Auteur optionnel
-     * @param  string|null $description  Description optionnelle
-     * @param  string|null $groupe       Groupe/catégorie optionnelle
+     * @param  string  $name  Nom “humain” du module (ex: "Blog" ou "blog")
+     * @param  string|null  $icon  Icône optionnelle
+     * @param  string|null  $author  Auteur optionnel
+     * @param  string|null  $description  Description optionnelle
+     * @param  string|null  $groupe  Groupe/catégorie optionnelle
      *
      * @throws \InvalidArgumentException Si le nom est vide
      */
@@ -79,14 +78,14 @@ class ModuleGen
             throw new \InvalidArgumentException('Le nom du module est requis.');
         }
 
-        $this->icon        = $icon;
-        $this->author      = $author;
+        $this->icon = $icon;
+        $this->author = $author;
         $this->description = $description;
-        $this->groupe      = $groupe;
+        $this->groupe = $groupe;
 
         // Normalisations
         $this->moduleName = Str::studly($name);
-        $this->moduleKey  = Str::lower($name);
+        $this->moduleKey = Str::lower($name);
 
         $this->refreshModuleRef();
         $this->initTables();
@@ -94,8 +93,6 @@ class ModuleGen
 
     /**
      * Recharge la référence NWIDART du module (si présent).
-     *
-     * @return void
      */
     private function refreshModuleRef(): void
     {
@@ -108,15 +105,13 @@ class ModuleGen
 
     /**
      * Récupère les tables dont le nom commence par "{$moduleKey}_".
-     *
-     * @return void
      */
     private function initTables(): void
     {
-        $prefix = $this->moduleKey . '_';
+        $prefix = $this->moduleKey.'_';
         $this->tables = array_values(array_filter(
             Schema::getTableListing(),
-            static fn(string $table) => Str::startsWith($table, $prefix)
+            static fn (string $table) => Str::startsWith($table, $prefix)
         ));
     }
 
@@ -132,7 +127,7 @@ class ModuleGen
 
         // Les clés du tableau sont généralement les noms StudlyCase
         return array_values(array_map(
-            static fn(string $key) => Str::studly($key),
+            static fn (string $key) => Str::studly($key),
             array_keys($enabled)
         ));
     }
@@ -149,8 +144,6 @@ class ModuleGen
 
     /**
      * Indique si le module existe (dans NWIDART).
-     *
-     * @return bool
      */
     public function exists(): bool
     {
@@ -164,7 +157,7 @@ class ModuleGen
     /**
      * Assure l’existence du module. Si manquant, lance generate().
      *
-     * @param  bool $refreshCaches Rafraîchir caches/composer après génération
+     * @param  bool  $refreshCaches  Rafraîchir caches/composer après génération
      * @return $this
      */
     public function ensureExists(bool $refreshCaches = true): self
@@ -179,7 +172,6 @@ class ModuleGen
     /**
      * Variante interactive : si manquant, propose la création.
      *
-     * @param  bool $refreshCaches
      * @return $this
      *
      * @throws RuntimeException Si l’utilisateur refuse la création
@@ -211,7 +203,7 @@ class ModuleGen
      * Génère le module via Artisan (nwidart/module:make) si absent,
      * met à jour modules.json, permissions, et rafraîchit les caches.
      *
-     * @param  bool $refreshCaches Rafraîchir composer+optimize après génération
+     * @param  bool  $refreshCaches  Rafraîchir composer+optimize après génération
      * @return $this
      *
      * @throws RuntimeException Si l’exécution Artisan échoue
@@ -220,6 +212,7 @@ class ModuleGen
     {
         if ($this->exists()) {
             $this->refreshModuleRef();
+
             return $this;
         }
 
@@ -253,22 +246,20 @@ class ModuleGen
 
     /**
      * Ajoute l’entrée du module dans Modules/modules.json (idempotent).
-     *
-     * @return void
      */
     private function appendToModulesJson(): void
     {
         $path = base_path('Modules/modules.json');
 
         $payload = [
-            'icon'    => $this->icon,
-            'title'   => $this->moduleName,
-            'action'  => 'access',
+            'icon' => $this->icon,
+            'title' => $this->moduleName,
+            'action' => 'access',
             'subject' => Str::lower($this->moduleName),
-            'to'      => ['name' => Str::lower($this->moduleName)],
-            'author'  => $this->author,
-            'group'   => $this->groupe,
-            'desc'    => $this->description,
+            'to' => ['name' => Str::lower($this->moduleName)],
+            'author' => $this->author,
+            'group' => $this->groupe,
+            'desc' => $this->description,
         ];
 
         $list = [];
@@ -281,7 +272,7 @@ class ModuleGen
 
         // éviter les doublons par 'title'
         $already = collect($list)->firstWhere('title', $this->moduleName);
-        if (!$already) {
+        if (! $already) {
             $list[] = $payload;
         }
 
@@ -291,35 +282,33 @@ class ModuleGen
 
     /**
      * Génère/assigne la permission "access_{module}" à l’administrateur.
-     *
-     * @return void
      */
     public function generatePermissions(): void
     {
         $this->consoleWriteMessage("🔧 Génération des permissions du module `{$this->moduleName}`…");
 
         $adminRole = DB::table('auth_roles')->where('name', 'administrator')->first();
-        if (!$adminRole) {
+        if (! $adminRole) {
             $this->consoleWriteError(
-                "❗ Le rôle `administrator` n'existe pas.\n" .
-                    "Les permissions seront créées mais non assignées automatiquement."
+                "❗ Le rôle `administrator` n'existe pas.\n".
+                    'Les permissions seront créées mais non assignées automatiquement.'
             );
         }
 
-        $action        = 'access';
-        $permissionKey = "{$action}_" . Str::lower($this->moduleName);
-        $description   = "Accéder au module {$this->moduleName}";
+        $action = 'access';
+        $permissionKey = "{$action}_".Str::lower($this->moduleName);
+        $description = "Accéder au module {$this->moduleName}";
 
         // upsert permission
         $permission = DB::table('auth_permissions')->where('key', $permissionKey)->first();
 
-        if (!$permission) {
+        if (! $permission) {
             $permissionId = DB::table('auth_permissions')->insertGetId([
                 'description' => $description,
-                'table_name'  => $permissionKey,
-                'action'      => $action,
-                'subject'     => Str::lower($this->moduleName),
-                'key'         => $permissionKey,
+                'table_name' => $permissionKey,
+                'action' => $action,
+                'subject' => Str::lower($this->moduleName),
+                'key' => $permissionKey,
             ]);
         } else {
             $permissionId = $permission->id;
@@ -336,9 +325,9 @@ class ModuleGen
                 ->where('permission_id', $permissionId)
                 ->exists();
 
-            if (!$existsPivot) {
+            if (! $existsPivot) {
                 DB::table('auth_role_permissions')->insert([
-                    'role_id'       => $adminRole->id,
+                    'role_id' => $adminRole->id,
                     'permission_id' => $permissionId,
                 ]);
                 $this->consoleWriteSuccess("✅ Permission `{$permissionKey}` attribuée à l'administrateur.");
@@ -351,14 +340,14 @@ class ModuleGen
     /**
      * Supprime le module et son entrée modules.json (après confirmation explicite).
      *
-     * @param  bool $confirmation Doit être true pour procéder
-     * @return bool               True si la suppression NWIDART a réussi
+     * @param  bool  $confirmation  Doit être true pour procéder
+     * @return bool True si la suppression NWIDART a réussi
      *
      * @throws \Throwable En cas d’erreur d’E/S
      */
     public function delete(bool $confirmation = false): bool
     {
-        if (!$confirmation) {
+        if (! $confirmation) {
             return false;
         }
 
@@ -368,7 +357,7 @@ class ModuleGen
             $items = json_decode((string) File::get($path), true) ?: [];
             $items = array_values(array_filter(
                 $items,
-                fn(array $it) => ($it['title'] ?? null) !== $this->moduleName
+                fn (array $it) => ($it['title'] ?? null) !== $this->moduleName
             ));
             File::put($path, json_encode($items, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         }
@@ -383,24 +372,21 @@ class ModuleGen
     /**
      * Namespace racine du module (ex: "Modules\Blog").
      *
-     * @return string
      *
      * @throws RuntimeException Si le module n’existe pas
      */
     public function getNameSpace(): string
     {
-        if (!$this->moduleName) {
-            throw new RuntimeException("Nom du module non initialisé.");
+        if (! $this->moduleName) {
+            throw new RuntimeException('Nom du module non initialisé.');
         }
 
-        return 'Modules\\' . $this->moduleName;
+        return 'Modules\\'.$this->moduleName;
     }
 
     /**
      * Chemin absolu du module, ou sous-dossier si $relativePath est fourni.
      *
-     * @param  string|null $relativePath
-     * @return string
      *
      * @throws RuntimeException Si le module n’existe pas
      */
@@ -408,40 +394,35 @@ class ModuleGen
     {
         $this->refreshModuleRef();
 
-        if (!$this->module) {
+        if (! $this->module) {
             throw new RuntimeException("Le module '{$this->moduleName}' n'existe pas.");
         }
 
         return $relativePath
-            ? $this->module->getPath() . '/' . ltrim($relativePath, '/')
+            ? $this->module->getPath().'/'.ltrim($relativePath, '/')
             : $this->module->getPath();
     }
 
-    /** @return string */
     public function getControllerNameSpace(): string
     {
-        return $this->getNameSpace() . '\\Http\\Controllers';
+        return $this->getNameSpace().'\\Http\\Controllers';
     }
 
-    /** @return string */
     public function getRequestNamespace(): string
     {
-        return $this->getNameSpace() . '\\Http\\Requests';
+        return $this->getNameSpace().'\\Http\\Requests';
     }
 
-    /** @return string */
     public function getPathControllers(): string
     {
         return $this->getPath('app/Http/Controllers');
     }
 
-    /** @return string */
     public function getModelNameSpace(): string
     {
-        return $this->getNameSpace() . '\\Models';
+        return $this->getNameSpace().'\\Models';
     }
 
-    /** @return string */
     public function getModelsDirectoryPath(): string
     {
         return $this->getPath('app/Models');
@@ -450,24 +431,22 @@ class ModuleGen
     /**
      * Indique si un modèle (fichier PHP) existe dans app/Models.
      *
-     * @param  string $modelName Nom de classe (ex: "BlogAuthor")
-     * @return bool
+     * @param  string  $modelName  Nom de classe (ex: "BlogAuthor")
      */
     public function modelExist(string $modelName): bool
     {
-        $path = $this->getModelsDirectoryPath() . '/' . $modelName . '.php';
+        $path = $this->getModelsDirectoryPath().'/'.$modelName.'.php';
+
         return File::exists($path);
     }
 
     /**
      * Retourne le chemin du fichier d’un modèle, s’il existe.
-     *
-     * @param  string $modelName
-     * @return string|null
      */
     public function getModelPath(string $modelName): ?string
     {
-        $path = $this->getModelsDirectoryPath() . '/' . $modelName . '.php';
+        $path = $this->getModelsDirectoryPath().'/'.$modelName.'.php';
+
         return File::exists($path) ? $path : null;
     }
 
@@ -480,42 +459,38 @@ class ModuleGen
     {
         $dir = $this->getModelsDirectoryPath();
 
-        if (!File::exists($dir)) {
+        if (! File::exists($dir)) {
             return null;
         }
 
         $files = collect(File::files($dir))
-            ->filter(fn($f) => Str::endsWith($f->getFilename(), '.php'))
-            ->map(fn($f) => pathinfo($f->getFilename(), PATHINFO_FILENAME))
+            ->filter(fn ($f) => Str::endsWith($f->getFilename(), '.php'))
+            ->map(fn ($f) => pathinfo($f->getFilename(), PATHINFO_FILENAME))
             ->values()
             ->all();
 
         return $files ?: null;
     }
 
-    /** @return string */
     public function getRoutePath(): string
     {
         return $this->getPath('routes');
     }
 
-    /** @return string */
     public function getRouteApiPath(): string
     {
-        return $this->getRoutePath() . '/api.php';
+        return $this->getRoutePath().'/api.php';
     }
 
-    /** @return string */
     public function getRouteWebPath(): string
     {
-        return $this->getRoutePath() . '/web.php';
+        return $this->getRoutePath().'/web.php';
     }
 
     /**
      * Injecte une ligne de route dans api.php avant le marqueur //{{ next-route }}.
      *
-     * @param  string $route Ligne à insérer (doit contenir le ";")
-     * @return void
+     * @param  string  $route  Ligne à insérer (doit contenir le ";")
      *
      * @throws RuntimeException Si lecture/écriture échoue
      */
@@ -529,12 +504,12 @@ class ModuleGen
         }
 
         $marker = '//{{ next-route }}';
-        if (!str_contains($content, $marker)) {
+        if (! str_contains($content, $marker)) {
             throw new RuntimeException("Marqueur '{$marker}' introuvable dans {$path}");
         }
 
         // On insère la route AVANT le marqueur pour permettre des insertions multiples
-        $updated = str_replace($marker, rtrim($route) . PHP_EOL . '    ' . $marker, $content);
+        $updated = str_replace($marker, rtrim($route).PHP_EOL.'    '.$marker, $content);
 
         if (@file_put_contents($path, $updated) === false) {
             throw new RuntimeException("Impossible d'écrire dans le fichier {$path}");
@@ -543,9 +518,6 @@ class ModuleGen
 
     /**
      * Retourne (ou crée) un ModuleGenerator basé sur le préfixe table "prefix_table".
-     *
-     * @param  string $table
-     * @return self|null
      */
     public function getModuleOfTable(string $table): ?self
     {
@@ -557,7 +529,7 @@ class ModuleGen
         }
 
         $gen = new self($moduleName);
-        if (!$gen->exists()) {
+        if (! $gen->exists()) {
             $gen->generate();
         }
 
@@ -567,8 +539,7 @@ class ModuleGen
     /**
      * (Placeholder) Génère un contrôleur pour un modèle donné.
      *
-     * @param  string $model Nom de classe (ex: "BlogAuthor")
-     * @return void
+     * @param  string  $model  Nom de classe (ex: "BlogAuthor")
      */
     public function generateController(string $model): void
     {

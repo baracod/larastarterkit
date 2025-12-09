@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Baracod\Larastarterkit\Generator\Backend\Http;
 
-use RuntimeException;
-use Illuminate\Support\Str;
-use Nwidart\Modules\Facades\Module;
-use Illuminate\Support\Facades\File;
-use Baracod\Larastarterkit\Generator\Traits\StubResolverTrait;
 use Baracod\Larastarterkit\Generator\DefinitionFile\DefinitionStore;
 use Baracod\Larastarterkit\Generator\DefinitionFile\FieldDefinition as DField;
 use Baracod\Larastarterkit\Generator\DefinitionFile\ModelDefinition as DFModel;
+use Baracod\Larastarterkit\Generator\Traits\StubResolverTrait;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Nwidart\Modules\Facades\Module;
+use RuntimeException;
 
 /**
  * Générateur de FormRequest pour un modèle d'un module NWIDART.
@@ -24,41 +24,47 @@ use Baracod\Larastarterkit\Generator\DefinitionFile\ModelDefinition as DFModel;
 final class RequestGen
 {
     use StubResolverTrait;
+
     private string $moduleName;       // Studly (ex: Blog)
+
     private string $modelKey;         // kebab (ex: blog-author)
 
     private DFModel $modelDef;        // Définition typée du modèle
+
     private DefinitionStore $store;   // Store du module
 
     private string $modelName;        // ex: BlogAuthor
+
     private string $requestNamespace; // ex: Modules\Blog\Http\Requests
+
     private string $requestPath;      // ex: Modules/Blog/app/Http/Requests/BlogAuthorRequest.php
 
     /** Chemin du JSON (ModuleData/blog.json) */
     private string $jsonPath;
 
     /**
-     * @param string $modelKey   Clé du modèle dans le JSON (kebab-case)
-     * @param string $moduleName Nom du module (Studly/kebab accepté, normalisé en Studly)
+     * @param  string  $modelKey  Clé du modèle dans le JSON (kebab-case)
+     * @param  string  $moduleName  Nom du module (Studly/kebab accepté, normalisé en Studly)
+     *
      * @throws RuntimeException si store ou modèle introuvable
      */
     public function __construct(string $modelKey, string $moduleName)
     {
-        $this->modelKey   = $modelKey;
+        $this->modelKey = $modelKey;
         $this->moduleName = Str::studly($moduleName);
-        $this->jsonPath   = self::jsonPath($this->moduleName);
+        $this->jsonPath = self::jsonPath($this->moduleName);
 
-        if (!File::exists($this->jsonPath)) {
+        if (! File::exists($this->jsonPath)) {
             throw new RuntimeException("Fichier de définition introuvable: {$this->jsonPath}");
         }
 
         // Charge store + modèle typé
-        $this->store    = DefinitionStore::fromFile($this->jsonPath);
+        $this->store = DefinitionStore::fromFile($this->jsonPath);
         $this->modelDef = $this->store->module()->model($this->modelKey);
 
-        $this->modelName        = $this->modelDef->name();
+        $this->modelName = $this->modelDef->name();
         $this->requestNamespace = "Modules\\{$this->moduleName}\\Http\\Requests";
-        $this->requestPath      = base_path("Modules/{$this->moduleName}/app/Http/Requests/{$this->modelName}Request.php");
+        $this->requestPath = base_path("Modules/{$this->moduleName}/app/Http/Requests/{$this->modelName}Request.php");
     }
 
     /**
@@ -67,15 +73,15 @@ final class RequestGen
     public function generate(): bool
     {
         // 1) Règles + messages
-        $rulesByField  = $this->buildRulesFromDefinition($this->modelDef);
-        $rulesBlock    = $this->formatValidationRules($rulesByField);
+        $rulesByField = $this->buildRulesFromDefinition($this->modelDef);
+        $rulesBlock = $this->formatValidationRules($rulesByField);
         $messagesBlock = $this->generateMessagesFromRulesArray($rulesByField);
 
         // 2) Charger le stub
         $stubPath = $this->resolveStubPath('backend/Request.stub');
 
-        if (!File::exists($stubPath)) {
-            throw new RuntimeException("Le stub `stubs/entity-generator/Request.stub` est introuvable.");
+        if (! File::exists($stubPath)) {
+            throw new RuntimeException('Le stub `stubs/entity-generator/Request.stub` est introuvable.');
         }
         $stubContent = File::get($stubPath);
 
@@ -112,9 +118,9 @@ final class RequestGen
         // Index des belongsTo par foreignKey pour le "exists:table,ownerKey"
         $belongsToByFk = [];
         foreach (($model->relations() ?? []) as $rel) {
-            if (($rel['type'] ?? null) === 'belongsTo' && !empty($rel['foreignKey'])) {
-                $belongsToByFk[(string)$rel['foreignKey']] = [
-                    'table'    => $rel['table']    ?? null,
+            if (($rel['type'] ?? null) === 'belongsTo' && ! empty($rel['foreignKey'])) {
+                $belongsToByFk[(string) $rel['foreignKey']] = [
+                    'table' => $rel['table'] ?? null,
                     'ownerKey' => $rel['ownerKey'] ?? 'id',
                 ];
             }
@@ -123,16 +129,18 @@ final class RequestGen
         $rules = [];
 
         foreach ($model->fields() as $field) {
-            if (!$field instanceof DField) {
+            if (! $field instanceof DField) {
                 continue;
             }
 
-            $name           = $field->name;
-            if ($name === '') continue;
+            $name = $field->name;
+            if ($name === '') {
+                continue;
+            }
 
-            $rawType        = $field->type->value;     // enum FieldType
-            $customizedType = trim((string)($field->customizedType ?? ''));
-            $defaultValue   = $field->defaultValue ?? null;
+            $rawType = $field->type->value;     // enum FieldType
+            $customizedType = trim((string) ($field->customizedType ?? ''));
+            $defaultValue = $field->defaultValue ?? null;
 
             // nullable si defaultValue == null / "NULL" ou nom “technique”
             $forceNullableByName = in_array(strtolower($name), ['id', 'hash', 'uuid'], true);
@@ -142,7 +150,7 @@ final class RequestGen
             $fieldRules[] = $nullable ? 'nullable' : 'required';
 
             // exists:table,ownerKey si belongsTo détecté
-            if (isset($belongsToByFk[$name]) && !empty($belongsToByFk[$name]['table'])) {
+            if (isset($belongsToByFk[$name]) && ! empty($belongsToByFk[$name]['table'])) {
                 $refTable = $belongsToByFk[$name]['table'];
                 $ownerKey = $belongsToByFk[$name]['ownerKey'] ?? 'id';
                 $fieldRules[] = "exists:{$refTable},{$ownerKey}";
@@ -153,11 +161,13 @@ final class RequestGen
             if ($mapped !== null) {
                 foreach (explode('|', $mapped) as $rule) {
                     $r = trim($rule);
-                    if ($r !== '') $fieldRules[] = $r;
+                    if ($r !== '') {
+                        $fieldRules[] = $r;
+                    }
                 }
             }
 
-            $rules[$name] = "'" . implode('|', array_unique($fieldRules)) . "'";
+            $rules[$name] = "'".implode('|', array_unique($fieldRules))."'";
         }
 
         return $rules;
@@ -165,8 +175,13 @@ final class RequestGen
 
     private function isNullish(mixed $val): bool
     {
-        if ($val === null) return true;
-        if (is_string($val) && strtoupper(trim($val)) === 'NULL') return true;
+        if ($val === null) {
+            return true;
+        }
+        if (is_string($val) && strtoupper(trim($val)) === 'NULL') {
+            return true;
+        }
+
         return false;
     }
 
@@ -181,15 +196,15 @@ final class RequestGen
         }
 
         return match (strtolower($fieldType)) {
-            'integer'   => 'integer',
-            'float'     => 'numeric',
-            'boolean'   => 'boolean',
-            'date'      => 'date',
-            'datetime'  => 'date',              // ou date_format si tu forces un format
-            'json'      => 'json',              // si tu veux un tableau: 'array'
-            'text'      => 'string',
-            'string'    => 'string',
-            default     => 'string',
+            'integer' => 'integer',
+            'float' => 'numeric',
+            'boolean' => 'boolean',
+            'date' => 'date',
+            'datetime' => 'date',              // ou date_format si tu forces un format
+            'json' => 'json',              // si tu veux un tableau: 'array'
+            'text' => 'string',
+            'string' => 'string',
+            default => 'string',
         };
     }
 
@@ -197,11 +212,12 @@ final class RequestGen
     private function formatValidationRules(array $rules): string
     {
         $lines = array_map(
-            fn($k, $v) => "            '{$k}' => {$v},",
+            fn ($k, $v) => "            '{$k}' => {$v},",
             array_keys($rules),
             $rules
         );
-        return "[\n" . implode("\n", $lines) . "\n        ];";
+
+        return "[\n".implode("\n", $lines)."\n        ];";
     }
 
     /** @param array<string,string> $rulesByColumn */
@@ -212,26 +228,28 @@ final class RequestGen
             $rules = explode('|', trim($ruleString, "'\" "));
             foreach ($rules as $rule) {
                 $rule = trim($rule);
-                if ($rule === '') continue;
+                if ($rule === '') {
+                    continue;
+                }
                 $ruleName = strtolower(explode(':', $rule)[0]);
 
                 $messages[] = match ($ruleName) {
-                    'required'     => "            '{$name}.required' => 'Le champ {$name} est obligatoire.',",
-                    'string'       => "            '{$name}.string' => 'Le champ {$name} doit être une chaîne de caractères.',",
-                    'max'          => "            '{$name}.max' => 'Le champ {$name} dépasse la longueur maximale autorisée.',",
-                    'min'          => "            '{$name}.min' => 'Le champ {$name} est trop court.',",
-                    'integer'      => "            '{$name}.integer' => 'Le champ {$name} doit être un entier.',",
-                    'numeric'      => "            '{$name}.numeric' => 'Le champ {$name} doit être un nombre.',",
-                    'date'         => "            '{$name}.date' => 'Le champ {$name} doit être une date valide.',",
-                    'date_format'  => "            '{$name}.date_format' => 'Le champ {$name} doit respecter le format requis.',",
-                    'before'       => "            '{$name}.before' => 'Le champ {$name} doit être une date antérieure.',",
-                    'boolean'      => "            '{$name}.boolean' => 'Le champ {$name} doit être vrai ou faux.',",
-                    'email'        => "            '{$name}.email' => 'Le champ {$name} doit être une adresse email valide.',",
-                    'url'          => "            '{$name}.url' => 'Le champ {$name} doit être une URL valide.',",
-                    'uuid'         => "            '{$name}.uuid' => 'Le champ {$name} doit être un UUID valide.',",
-                    'exists'       => "            '{$name}.exists' => 'La valeur du champ {$name} est invalide.',",
-                    'unique'       => "            '{$name}.unique' => 'Le champ {$name} doit être unique.',",
-                    default        => null,
+                    'required' => "            '{$name}.required' => 'Le champ {$name} est obligatoire.',",
+                    'string' => "            '{$name}.string' => 'Le champ {$name} doit être une chaîne de caractères.',",
+                    'max' => "            '{$name}.max' => 'Le champ {$name} dépasse la longueur maximale autorisée.',",
+                    'min' => "            '{$name}.min' => 'Le champ {$name} est trop court.',",
+                    'integer' => "            '{$name}.integer' => 'Le champ {$name} doit être un entier.',",
+                    'numeric' => "            '{$name}.numeric' => 'Le champ {$name} doit être un nombre.',",
+                    'date' => "            '{$name}.date' => 'Le champ {$name} doit être une date valide.',",
+                    'date_format' => "            '{$name}.date_format' => 'Le champ {$name} doit respecter le format requis.',",
+                    'before' => "            '{$name}.before' => 'Le champ {$name} doit être une date antérieure.',",
+                    'boolean' => "            '{$name}.boolean' => 'Le champ {$name} doit être vrai ou faux.',",
+                    'email' => "            '{$name}.email' => 'Le champ {$name} doit être une adresse email valide.',",
+                    'url' => "            '{$name}.url' => 'Le champ {$name} doit être une URL valide.',",
+                    'uuid' => "            '{$name}.uuid' => 'Le champ {$name} doit être un UUID valide.',",
+                    'exists' => "            '{$name}.exists' => 'La valeur du champ {$name} est invalide.',",
+                    'unique' => "            '{$name}.unique' => 'Le champ {$name} doit être unique.',",
+                    default => null,
                 };
             }
         }
@@ -254,7 +272,8 @@ final class RequestGen
 
     private static function jsonPath(string $moduleName, bool $ensureDir = false): string
     {
-        $path = Module::getModulePath($moduleName) . 'module.json';
+        $path = Module::getModulePath($moduleName).'module.json';
+
         return $path;
     }
 }

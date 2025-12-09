@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Baracod\Larastarterkit\Generator\DefinitionFile;
 
 use DomainException;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use RecursiveCallbackFilterIterator;
 use FilesystemIterator;
+use RecursiveCallbackFilterIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use SplFileInfo;
 
 use function base_path;
@@ -42,11 +42,11 @@ final class DefinitionDiscovery
     /**
      * Liste tous les chemins de fichiers JSON de modules détectés.
      *
-     * @param  string[]|string   $roots     Dossier ou liste de dossiers à explorer (ex: base_path('Modules')).
-     * @param  string[]          $patterns  Noms de fichiers ciblés (glob simple via fnmatch).
-     * @param  bool              $recursive Explorer récursivement (true par défaut).
-     * @param  string[]          $ignore    Dossiers à ignorer (par nom de base).
-     * @return list<string>                 Chemins absolus des fichiers trouvés.
+     * @param  string[]|string  $roots  Dossier ou liste de dossiers à explorer (ex: base_path('Modules')).
+     * @param  string[]  $patterns  Noms de fichiers ciblés (glob simple via fnmatch).
+     * @param  bool  $recursive  Explorer récursivement (true par défaut).
+     * @param  string[]  $ignore  Dossiers à ignorer (par nom de base).
+     * @return list<string> Chemins absolus des fichiers trouvés.
      *
      * @example
      * $files = DefinitionDiscovery::findJsonFiles(base_path('Modules'));
@@ -62,7 +62,7 @@ final class DefinitionDiscovery
         $files = [];
 
         foreach ($roots as $root) {
-            if (!is_dir($root)) {
+            if (! is_dir($root)) {
                 continue;
             }
 
@@ -71,8 +71,9 @@ final class DefinitionDiscovery
             // Filtre pour exclure vendor/node_modules/etc.
             $filter = new RecursiveCallbackFilterIterator($dir, static function (SplFileInfo $file, $key, $iterator) use ($ignore) {
                 if ($file->isDir()) {
-                    return !in_array($file->getBasename(), $ignore, true);
+                    return ! in_array($file->getBasename(), $ignore, true);
                 }
+
                 return true;
             });
 
@@ -82,7 +83,7 @@ final class DefinitionDiscovery
 
             foreach ($iterator as $entry) {
                 /** @var SplFileInfo $entry */
-                if (!$entry->isFile()) {
+                if (! $entry->isFile()) {
                     continue;
                 }
 
@@ -103,10 +104,10 @@ final class DefinitionDiscovery
     /**
      * Charge tous les DefinitionStore à partir de ROOTS/PATTERNS donnés.
      *
-     * @param  string[]|string $roots
-     * @param  string[]        $patterns
-     * @param  callable|null   $onError   Callback (optionnel) en cas d’erreur: function(string $file, \Throwable $e): void
-     * @return array<string, DefinitionStore>  Tableau indexé par chemin de fichier.
+     * @param  string[]|string  $roots
+     * @param  string[]  $patterns
+     * @param  callable|null  $onError  Callback (optionnel) en cas d’erreur: function(string $file, \Throwable $e): void
+     * @return array<string, DefinitionStore> Tableau indexé par chemin de fichier.
      *
      * @throws DomainException En cas d’erreur de lecture si aucun $onError n’est fourni.
      *
@@ -119,9 +120,10 @@ final class DefinitionDiscovery
         ?callable $onError = null
     ): array {
         $stores = [];
-        if (empty($roots))
+        if (empty($roots)) {
             $roots = base_path('Modules');
-        $files  = self::findJsonFiles($roots, $patterns);
+        }
+        $files = self::findJsonFiles($roots, $patterns);
 
         foreach ($files as $file) {
             try {
@@ -129,6 +131,7 @@ final class DefinitionDiscovery
             } catch (\Throwable $e) {
                 if ($onError) {
                     $onError($file, $e);
+
                     continue;
                 }
                 throw new DomainException("Échec de chargement du fichier {$file}: {$e->getMessage()}", previous: $e);
@@ -146,11 +149,11 @@ final class DefinitionDiscovery
      *  - 'skip'   : ignore les suivants et conserve le premier.
      *  - 'suffix' : suffixe le nom en double avec '#2', '#3', ...
      *
-     * @param  string[]|string $roots
-     * @param  string[]        $patterns
-     * @param  'throw'|'skip'|'suffix' $onDuplicate
-     * @param  callable|null   $onError Callback optionnel: function(string $file, \Throwable $e): void
-     * @return array<string, ModuleDefinition>  Clé = nom (éventuellement suffixé en mode 'suffix')
+     * @param  string[]|string  $roots
+     * @param  string[]  $patterns
+     * @param  'throw'|'skip'|'suffix'  $onDuplicate
+     * @param  callable|null  $onError  Callback optionnel: function(string $file, \Throwable $e): void
+     * @return array<string, ModuleDefinition> Clé = nom (éventuellement suffixé en mode 'suffix')
      *
      * @throws DomainException En cas de doublon (mode 'throw') ou de lecture invalide sans $onError.
      *
@@ -163,7 +166,7 @@ final class DefinitionDiscovery
         string $onDuplicate = 'throw',
         ?callable $onError = null
     ): array {
-        $stores  = self::loadAllStores($roots, $patterns, $onError);
+        $stores = self::loadAllStores($roots, $patterns, $onError);
         $modules = [];
 
         foreach ($stores as $path => $store) {
@@ -182,6 +185,7 @@ final class DefinitionDiscovery
                         $candidate = "{$name}#{$i}";
                     }
                     $modules[$candidate] = $store->module();
+
                     continue;
                 }
 
@@ -198,9 +202,9 @@ final class DefinitionDiscovery
     /**
      * Variante pratique : renvoie une Collection Laravel si disponible.
      *
-     * @param  string[]|string $roots
-     * @param  string[]        $patterns
-     * @param  'throw'|'skip'|'suffix' $onDuplicate
+     * @param  string[]|string  $roots
+     * @param  string[]  $patterns
+     * @param  'throw'|'skip'|'suffix'  $onDuplicate
      * @return \Illuminate\Support\Collection<string, ModuleDefinition>|array<string, ModuleDefinition>
      */
     public static function collectAllModules(

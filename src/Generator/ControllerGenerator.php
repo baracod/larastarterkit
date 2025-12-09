@@ -2,31 +2,39 @@
 
 namespace Baracod\Larastarterkit\Generator;
 
-use Illuminate\Support\Str;
-use Nwidart\Modules\Facades\Module;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use function Laravel\Prompts\confirm;
+use Illuminate\Support\Str;
+use Nwidart\Modules\Facades\Module;
 
+use function Laravel\Prompts\confirm;
 
 class ControllerGenerator
 {
     private string $tableName;
+
     private string $modelName;
+
     private string $controllerPath;
+
     private string $modelNamespace;
+
     private string $controllerNamespace;
+
     private ?string $moduleName;
+
     private ?string $routePath;
+
     private string $controllerName;
+
     private ModuleGenerator $module;
 
     /**
      * ControllerGenerator constructor.
      *
-     * @param string      $table     Le nom de la table.
-     * @param string|null $modelName Le nom du modèle.
-     * @param string|null $moduleName    Le nom du module (optionnel).
+     * @param  string  $table  Le nom de la table.
+     * @param  string|null  $modelName  Le nom du modèle.
+     * @param  string|null  $moduleName  Le nom du module (optionnel).
      */
     public function __construct(
         string $table,
@@ -35,19 +43,19 @@ class ControllerGenerator
     ) {
         $this->tableName = $table;
         $this->modelName = $modelName;
-        $this->moduleName    =  $moduleName;
-        $this->controllerName = $this->modelName . 'Controller';
+        $this->moduleName = $moduleName;
+        $this->controllerName = $this->modelName.'Controller';
         $this->module = new ModuleGenerator($this->moduleName);
 
         if (empty($this->moduleName)) {
             $this->controllerNamespace = 'App\Http\Controllers';
-            $this->modelNamespace      = "App\\Models\\{$this->modelName}";
-            $this->controllerPath      = app_path("Http/Controllers/{$this->controllerName}.php");
+            $this->modelNamespace = "App\\Models\\{$this->modelName}";
+            $this->controllerPath = app_path("Http/Controllers/{$this->controllerName}.php");
         } else {
             $this->controllerNamespace = "Modules\\{$this->moduleName}\\Http\\Controllers";
-            $this->modelNamespace      = "Modules\\{$this->moduleName}\\Models\\{$this->modelName}";
-            $this->controllerPath      = base_path("Modules/{$this->moduleName}/app/Http/Controllers/{$this->controllerName}.php");
-            $this->routePath           = base_path("Modules/{$this->moduleName}/routes/api.php");
+            $this->modelNamespace = "Modules\\{$this->moduleName}\\Models\\{$this->modelName}";
+            $this->controllerPath = base_path("Modules/{$this->moduleName}/app/Http/Controllers/{$this->controllerName}.php");
+            $this->routePath = base_path("Modules/{$this->moduleName}/routes/api.php");
         }
 
         File::ensureDirectoryExists($this->module->getPathControllers());
@@ -56,9 +64,7 @@ class ControllerGenerator
     /**
      * Génère le contrôleur.
      *
-     * @param array|null $response Référence à un tableau de réponse.
-     *
-     * @return bool
+     * @param  array|null  $response  Référence à un tableau de réponse.
      */
     public function generate(?array &$response = null): bool
     {
@@ -71,21 +77,19 @@ class ControllerGenerator
         $requestClass = "{$this->modelName}Request";
 
         // Génération des règles de validation pour les actions "add" et "edit".
-        $addValidationRules  = $this->generateValidationRules('add');
+        $addValidationRules = $this->generateValidationRules('add');
         $editValidationRules = $this->generateValidationRules('edit');
 
-
         // Formatage des règles pour insertion dans le template.
-        $formattedAddRules  = collect($addValidationRules)
-            ->map(fn($rule, $field) => "'{$field}' => '{$rule}'")
+        $formattedAddRules = collect($addValidationRules)
+            ->map(fn ($rule, $field) => "'{$field}' => '{$rule}'")
             ->implode(",\n            ");
         $formattedEditRules = collect($editValidationRules)
-            ->map(fn($rule, $field) => "'{$field}' => '{$rule}'")
+            ->map(fn ($rule, $field) => "'{$field}' => '{$rule}'")
             ->implode(",\n            ");
 
         $modelVariable = Str::camel($this->modelName); // Exemple : "post" au lieu de "Post"
-        $requestNamespace = $this->module->getRequestNamespace() . '\\' . $this->modelName . 'Request';
-
+        $requestNamespace = $this->module->getRequestNamespace().'\\'.$this->modelName.'Request';
 
         $controllerContent = str_replace(
             ['{{ namespace }}', '{{ modelNamespace }}', '{{ modelName }}', '{{ controllerName }}', '{{ requestClass }}', '{{ modelVariable }}', '{{ requestNamespace }}'],
@@ -93,28 +97,27 @@ class ControllerGenerator
             $controllerTemplate
         );
 
-
         $confirmation = true;
         // Vérification de l'existence du fichier.
-        if (File::exists($this->controllerPath))
+        if (File::exists($this->controllerPath)) {
             $confirmation = confirm("Voulez-vous écraser le controller `{$this->controllerName}`");
+        }
 
-
-        if (!$confirmation)
+        if (! $confirmation) {
             return false;
-
+        }
 
         // Écriture du fichier du contrôleur.
         File::put($this->controllerPath, $controllerContent);
 
         // Si un module est défini, on génère la route associée.
-        if (!empty($this->moduleName) && $this->routePath) {
+        if (! empty($this->moduleName) && $this->routePath) {
             $this->generateRoute();
         }
 
         $response = [
             'message' => "Le contrôleur `{$this->controllerName}` a été généré avec succès.",
-            'path'    => $this->controllerPath
+            'path' => $this->controllerPath,
         ];
 
         return true;
@@ -123,28 +126,27 @@ class ControllerGenerator
     /**
      * Génère les règles de validation en fonction des colonnes de la table.
      *
-     * @param string $type Type de règles ("add" ou "edit").
-     *
-     * @return array
+     * @param  string  $type  Type de règles ("add" ou "edit").
      */
-    private function generateValidationRules(string $type = "edit"): array
+    private function generateValidationRules(string $type = 'edit'): array
     {
         $columns = DB::select(
-            "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH
+            'SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH
         FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?",
+        WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?',
             [env('DB_DATABASE'), $this->tableName]
         );
 
         // Exclure certaines colonnes.
         $columns = array_filter($columns, function ($column) use ($type) {
-            if ($column->COLUMN_NAME === 'id' && $type === "edit") {
+            if ($column->COLUMN_NAME === 'id' && $type === 'edit') {
                 return true;
             }
-            return !in_array($column->COLUMN_NAME, ['id', 'created_at', 'updated_at']);
+
+            return ! in_array($column->COLUMN_NAME, ['id', 'created_at', 'updated_at']);
         });
 
-        if ($type === "add") {
+        if ($type === 'add') {
             // Pour l'ajout, on exclut la colonne "id" si présente.
             $columns = array_filter($columns, function ($column) {
                 return $column->COLUMN_NAME !== 'id';
@@ -155,10 +157,10 @@ class ControllerGenerator
         $rules = [];
 
         foreach ($columns as $column) {
-            $field     = $column->COLUMN_NAME;
-            $dataType  = $column->DATA_TYPE;
+            $field = $column->COLUMN_NAME;
+            $dataType = $column->DATA_TYPE;
             $columnType = $column->COLUMN_TYPE; // Récupérer `tinyint(1)`
-            $nullable  = $column->IS_NULLABLE === 'YES';
+            $nullable = $column->IS_NULLABLE === 'YES';
             $maxLength = $column->CHARACTER_MAXIMUM_LENGTH;
 
             $fieldRules = [];
@@ -212,23 +214,19 @@ class ControllerGenerator
 
     /**
      * Récupère les clés étrangères pour la table.
-     *
-     * @return array
      */
     private function getForeignKeys(): array
     {
         return DB::select(
-            "SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+            'SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
             FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-            WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND REFERENCED_TABLE_NAME IS NOT NULL",
+            WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND REFERENCED_TABLE_NAME IS NOT NULL',
             [env('DB_DATABASE'), $this->tableName]
         );
     }
 
     /**
      * Génère une entrée de route pour le contrôleur dans le fichier de routes API du module.
-     *
-     * @return void
      */
     // public function generateRoute(): void
     // {
@@ -253,8 +251,6 @@ class ControllerGenerator
     //     }
     // }
 
-
-
     public function generateRoute(): void
     {
         try {
@@ -276,7 +272,7 @@ class ControllerGenerator
             }
 
             // Ajout des routes à l'emplacement prévu
-            $newRoutes = $deleteRouteLine . "\n" . $resourceRouteLine . "\n//{{ next-route }}";
+            $newRoutes = $deleteRouteLine."\n".$resourceRouteLine."\n//{{ next-route }}";
             $updatedContent = str_replace('//{{ next-route }}', $newRoutes, $apiFileContent);
 
             File::put($this->routePath, $updatedContent);

@@ -2,6 +2,4 @@
 
 namespace Baracod\Larastarterkit\Generator\IA;
 
-class GeneratorService
-{
-}
+class GeneratorService {}

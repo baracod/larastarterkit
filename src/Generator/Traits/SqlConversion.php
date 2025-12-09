@@ -59,15 +59,16 @@ trait SqlConversion
     public static function enumValues(string $sqlType): ?array
     {
         $type = strtolower(trim($sqlType));
-        if (!preg_match('/^(enum|set)\s*\((.*)\)$/', $type, $m)) {
+        if (! preg_match('/^(enum|set)\s*\((.*)\)$/', $type, $m)) {
             return null;
         }
 
         $inside = $m[2]; // 'a','b','c'
         // Capture les valeurs entre quotes simples, en gérant l'échappement \'
         preg_match_all("/'((?:\\\\'|[^'])*)'/", $inside, $vals);
+
         // Remplace \' par '
-        return array_map(static fn($v) => str_replace("\\'", "'", $v), $vals[1]);
+        return array_map(static fn ($v) => str_replace("\\'", "'", $v), $vals[1]);
     }
 
     /**
@@ -83,25 +84,25 @@ trait SqlConversion
     protected function sqlToTs(string $sqlTypeRaw, array $options = []): string
     {
         $opts = array_merge([
-            'nullable'     => false,
-            'jsonAs'       => 'unknown', // 'any' | 'unknown' | 'record'
-            'dateAs'       => 'string',  // 'string' | 'date'
-            'bigIntAs'     => 'number',  // 'number' | 'bigint'
-            'enumAsUnion'  => true,
+            'nullable' => false,
+            'jsonAs' => 'unknown', // 'any' | 'unknown' | 'record'
+            'dateAs' => 'string',  // 'string' | 'date'
+            'bigIntAs' => 'number',  // 'number' | 'bigint'
+            'enumAsUnion' => true,
         ], $options);
 
-        $t    = strtolower(trim($sqlTypeRaw));
+        $t = strtolower(trim($sqlTypeRaw));
         $base = preg_replace('/\(.*/', '', $t);                // varchar(255) -> varchar
         $isTinyInt1 = (bool) preg_match('/^tinyint\s*\(\s*1\s*\)/', $t);
 
-        $withNull = static fn(string $ts) => $opts['nullable'] ? "{$ts} | null" : $ts;
+        $withNull = static fn (string $ts) => $opts['nullable'] ? "{$ts} | null" : $ts;
 
         // Enum / Set -> union de littéraux (ou string si enumAsUnion=false)
         $enumVals = $this->extractEnumOrSetValues($t);
         if ($enumVals !== null) {
             $ts = $opts['enumAsUnion'] && count($enumVals) > 0
                 ? implode(' | ', array_map(
-                    static fn(string $v) => "'" . str_replace("'", "\\'", $v) . "'",
+                    static fn (string $v) => "'".str_replace("'", "\\'", $v)."'",
                     $enumVals
                 ))
                 : 'string';
@@ -116,9 +117,9 @@ trait SqlConversion
 
         // JSON flavor
         $jsonType = match ($opts['jsonAs']) {
-            'any'    => 'any',
+            'any' => 'any',
             'record' => 'Record<string, unknown>',
-            default  => 'unknown',
+            default => 'unknown',
         };
 
         // Dates flavor
@@ -166,7 +167,7 @@ trait SqlConversion
      */
     private function extractEnumOrSetValues(string $lowerSqlType): ?array
     {
-        if (!preg_match('/^(enum|set)\s*\((.*)\)$/i', $lowerSqlType, $m)) {
+        if (! preg_match('/^(enum|set)\s*\((.*)\)$/i', $lowerSqlType, $m)) {
             return null;
         }
 
@@ -177,6 +178,7 @@ trait SqlConversion
         foreach ($matches[1] as $v) {
             $vals[] = str_replace("\\'", "'", $v);
         }
+
         return $vals;
     }
 

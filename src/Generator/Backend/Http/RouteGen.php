@@ -63,14 +63,13 @@ class RouteGen
      */
     public function addApiResource(string $name, string $controller, ?string $module = null): array
     {
-        if (!File::exists($this->filePath)) {
-            throw new \RuntimeException("Fichier api.php introuvable.");
+        if (! File::exists($this->filePath)) {
+            throw new \RuntimeException('Fichier api.php introuvable.');
         }
-
 
         $content = File::get($this->filePath);
         $module = Str::studly($module);
-        $route = 'api/' . $module . '/' . $name;
+        $route = 'api/'.$module.'/'.$name;
 
         // Namespace contrôleur
         $controllerNamespace = Str::camel($module)
@@ -81,20 +80,20 @@ class RouteGen
         $routeLine = "Route::apiResource('{$name}', \\{$controllerNamespace}::class)->names('{$name}');";
 
         // Détection de doublon tolérante aux espaces/retours à la ligne
-        $dupPattern = "/Route::apiResource\\(\\s*['\"]" . preg_quote($name, '/') . "['\"]\\s*,/m";
+        $dupPattern = "/Route::apiResource\\(\\s*['\"]".preg_quote($name, '/')."['\"]\\s*,/m";
         if (preg_match($dupPattern, $content) === 1) {
             return ['statut' => 'already_exists', 'apiRoute' => $route];
         }
 
         // Cherche le marqueur et capture son indentation
-        if (!preg_match('/^(\s*)\/\/\{\{\s*next-route\s*\}\}/m', $content, $m)) {
+        if (! preg_match('/^(\s*)\/\/\{\{\s*next-route\s*\}\}/m', $content, $m)) {
             return ['statut' => 'marker_not_found', 'apiRoute' => $route];
         }
         $indent = $m[1] ?? '    '; // indentation par défaut si non trouvée
 
         // Injection AVANT le marqueur, en préservant le marqueur tel quel (sans le modifier)
-        $injection = $indent . $routeLine . PHP_EOL . $m[0];
-        $updated   = preg_replace('/^(\s*)\/\/\{\{\s*next-route\s*\}\}/m', $injection, $content, 1);
+        $injection = $indent.$routeLine.PHP_EOL.$m[0];
+        $updated = preg_replace('/^(\s*)\/\/\{\{\s*next-route\s*\}\}/m', $injection, $content, 1);
 
         File::put($this->filePath, $updated);
 

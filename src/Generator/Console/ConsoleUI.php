@@ -21,17 +21,14 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Nwidart\Modules\Facades\Module;
 
-use function Laravel\Prompts\{
-    info,
-    warning,
-    error,
-    note,
-    select,
-    multiselect,
-    text,
-    confirm,
-    table
-};
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\table;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\warning;
 
 /**
  * Gère un fichier JSON {module, models:{...}} via l'ORM DefinitionFile (typé),
@@ -41,43 +38,49 @@ final class ConsoleUI
 {
     use SqlConversion;
 
-    private const UI_SCROLL  = 20;
-    private const TECH_COLS  = ['id', 'created_at', 'updated_at', 'deleted_at', 'uuid'];
-    private const MENU_BACK  = '« Retour';
-    private const MENU_SAVE  = '💾 Enregistrer';
+    private const UI_SCROLL = 20;
+
+    private const TECH_COLS = ['id', 'created_at', 'updated_at', 'deleted_at', 'uuid'];
+
+    private const MENU_BACK = '« Retour';
+
+    private const MENU_SAVE = '💾 Enregistrer';
+
     private const MENU_DELETE = '🗑️ Supprimer';
-    private const MENU_ADD   = '➕ Ajouter';
-    private const MENU_EDIT  = '✏️ Éditer';
-    private const MENU_NEXT  = '#Suivant';
+
+    private const MENU_ADD = '➕ Ajouter';
+
+    private const MENU_EDIT = '✏️ Éditer';
+
+    private const MENU_NEXT = '#Suivant';
 
     private string $moduleName;
+
     private ModuleGenerator $moduleGen;
+
     private string $jsonPath;
 
-    /** @var DefinitionStore */
     private DefinitionStore $store;
 
-    /** @var DFModule */
     private DFModule $moduleDef;
 
     public function __construct(?string $moduleName, ?string $jsonPath = null)
     {
         $this->moduleName = Str::studly($moduleName);
-        $this->moduleGen  = new ModuleGenerator($this->moduleName);
+        $this->moduleGen = new ModuleGenerator($this->moduleName);
 
         // Fichier de définition (ex: Modules/Blog/module.json)
         $this->jsonPath = $jsonPath;
         $this->ensureFile();
-        $this->store    = DefinitionStore::fromFile($this->jsonPath);
+        $this->store = DefinitionStore::fromFile($this->jsonPath);
         $this->moduleDef = $this->store->module();
     }
 
     /**
      * Ouvre un manager pour un module fourni, ou lance un sélecteur/creator si null.
      *
-     * @param  string|null $moduleName  Nom du module (Studly). Si null ⇒ sélection/creation interactive.
-     * @param  string|null $jsonDir     Répertoire des JSON (défaut: base_path('ModuleData'))
-     * @return self
+     * @param  string|null  $moduleName  Nom du module (Studly). Si null ⇒ sélection/creation interactive.
+     * @param  string|null  $jsonDir  Répertoire des JSON (défaut: base_path('ModuleData'))
      */
     public static function for(?string $moduleName = null, ?string $jsonDir = null): self
     {
@@ -90,9 +93,6 @@ final class ConsoleUI
 
     /**
      * Sélectionne un module existant ou en crée un nouveau, puis retourne le manager.
-     *
-     * @param  string|null $jsonDir
-     * @return self
      */
     public static function pickOrCreate(?string $jsonDir = null): self
     {
@@ -100,19 +100,19 @@ final class ConsoleUI
             $mods = ModuleGenerator::getModuleList(); // ex: ['Blog','Commerce', ...]
             $options = [];
 
-            if (!empty($mods)) {
+            if (! empty($mods)) {
                 foreach ($mods as $m) {
                     $options[$m] = "📦 {$m}";
                 }
             }
-            $options['__create']  = '➕ Créer un module';
+            $options['__create'] = '➕ Créer un module';
             $options['__refresh'] = '🔄 Rafraîchir la liste';
-            $options['__cancel']  = '❌ Annuler';
+            $options['__cancel'] = '❌ Annuler';
 
             $choice = select(
                 label: 'Sélectionner un module',
                 options: $options,
-                default: !empty($mods) ? array_key_first($options) : '__create',
+                default: ! empty($mods) ? array_key_first($options) : '__create',
                 scroll: 20
             );
 
@@ -129,6 +129,7 @@ final class ConsoleUI
                 $name = trim(text('Nom du module (Studly autorisés)', 'Blog'));
                 if ($name === '') {
                     warning('Nom vide. Réessaie.');
+
                     continue;
                 }
 
@@ -136,29 +137,29 @@ final class ConsoleUI
                 $gen = new ModuleGenerator($studly);
 
                 info("Module « {$studly} » prêt.");
-                $jsonDir = Module::getModulePath($studly)  . 'module.json';
+                $jsonDir = Module::getModulePath($studly).'module.json';
 
                 return new self($studly, $jsonDir);
             }
 
-            if ($jsonDir === null)
-                $jsonDir = Module::getModulePath($choice)  . 'module.json';
+            if ($jsonDir === null) {
+                $jsonDir = Module::getModulePath($choice).'module.json';
+            }
+
             // choix d’un module existant
             return new self($choice, $jsonDir);
         }
     }
-
-
 
     /**
      * Crée la structure initiale si absent.
      */
     private function ensureFile(): void
     {
-        if (!File::exists($this->jsonPath)) {
+        if (! File::exists($this->jsonPath)) {
             $data = [
                 'module' => $this->moduleName,
-                'models' => new \stdClass(),
+                'models' => new \stdClass,
             ];
             File::put(
                 $this->jsonPath,
@@ -179,17 +180,18 @@ final class ConsoleUI
     /**
      * Raccourci: lance le flux interactif complet (sélection/création ⇒ UI des modèles).
      *
-     * @param  string|null $moduleName
-     * @param  string|null $jsonDir
      * @return array{module:string,models:array<string,array<string,mixed>>}
      */
     public static function interactiveStart(?string $moduleName = null, ?string $jsonDir = null): array
     {
         $mgr = self::for($moduleName, $jsonDir);
+
         return $mgr->interactive();
     }
+
     /**
      * Menu principal : créer/éditer/supprimer des modèles (via ORM).
+     *
      * @return array{module:string,models:array<string,array<string,mixed>>} snapshot JSON final
      */
     public function interactive()
@@ -203,7 +205,7 @@ final class ConsoleUI
             $options = [];
 
             foreach ($models as $key => $m) {
-                $options[$key] = $m->name() . '  ·  ' . $m->tableName();
+                $options[$key] = $m->name().'  ·  '.$m->tableName();
             }
             $options['__create'] = '➕ Créer un modèle';
 
@@ -225,6 +227,7 @@ final class ConsoleUI
                     // génération de fichiers PHP si besoin
                     $this->genPhpClass($model);
                 }
+
                 continue;
             }
 
@@ -258,13 +261,13 @@ final class ConsoleUI
 
     /**
      * UI de création : table → nom → fillable → relations → meta → DFModel.
-     * @return DFModel|null
      */
     private function createModelUI(): ?DFModel
     {
         $tables = $this->moduleGen->getTableList();
         if ($tables === []) {
             warning('Aucune table trouvée pour ce module.');
+
             return null;
         }
 
@@ -280,9 +283,9 @@ final class ConsoleUI
         $name = $name !== '' ? $name : $suggestedName;
 
         $namespace = $this->moduleGen->getModelNameSpace();
-        $path      = rtrim($this->moduleGen->getModelsDirectoryPath(), '/') . '/' . $name . '.php';
-        $fqcn      = $namespace . '\\' . $name;
-        $key       = Str::kebab($name);
+        $path = rtrim($this->moduleGen->getModelsDirectoryPath(), '/').'/'.$name.'.php';
+        $fqcn = $namespace.'\\'.$name;
+        $key = Str::kebab($name);
 
         // Fillable via types mappés → FieldDefinition[]
         $fillableFields = $this->buildFillableFromTable($table); // list<DField>
@@ -290,7 +293,7 @@ final class ConsoleUI
         // Relations belongsTo (optionnelles) — tableau libre, on l’injecte via fromArray()
         $relations = $this->collectBelongsToRelationsUI(
             array_map(
-                fn(DField $f) => ['name' => $f->name, 'type' => $f->type->value, 'defaultValue' => $f->defaultValue, 'customizedType' => $f->customizedType],
+                fn (DField $f) => ['name' => $f->name, 'type' => $f->type->value, 'defaultValue' => $f->defaultValue, 'customizedType' => $f->customizedType],
                 $fillableFields
             )
         );
@@ -299,41 +302,41 @@ final class ConsoleUI
         $backend = [
             'hasModel' => false,
             'hasController' => false,
-            'hasRequest'    => false,
-            'hasRoute'      => false,
+            'hasRequest' => false,
+            'hasRoute' => false,
             'hasPermission' => false,
         ];
         $frontend = [
-            'hasType'               => false,
-            'hasApi'                => false,
-            'hasLang'               => false,
+            'hasType' => false,
+            'hasApi' => false,
+            'hasLang' => false,
             'hasAddOrEditComponent' => false,
-            'hasReadComponent'      => false,
-            'hasIndex'              => false,
-            'hasMenu'               => false,
-            'hasPermission'         => false,
-            'fields'                => [],
-            'casl'                  => [
+            'hasReadComponent' => false,
+            'hasIndex' => false,
+            'hasMenu' => false,
+            'hasPermission' => false,
+            'fields' => [],
+            'casl' => [
                 'create' => false,
                 'read' => false,
                 'update' => false,
                 'delete' => false,
-                'access' => false
+                'access' => false,
             ],
         ];
 
         $arr = [
-            'name'       => $name,
-            'key'        => $key,
-            'namespace'  => $namespace,
-            'tableName'  => $table,
+            'name' => $name,
+            'key' => $key,
+            'namespace' => $namespace,
+            'tableName' => $table,
             'moduleName' => $this->moduleName,
-            'fillable'   => array_map(fn(DField $f) => $f->toArray(), $fillableFields),
-            'relations'  => $relations,
-            'path'       => $path,
-            'fqcn'       => $fqcn,
-            'backend'    => $backend,
-            'frontend'   => $frontend,
+            'fillable' => array_map(fn (DField $f) => $f->toArray(), $fillableFields),
+            'relations' => $relations,
+            'path' => $path,
+            'fqcn' => $fqcn,
+            'backend' => $backend,
+            'frontend' => $frontend,
         ];
 
         $model = DFModel::fromArray($arr);
@@ -342,7 +345,6 @@ final class ConsoleUI
         // if (confirm('Configurer maintenant les indicateurs backend/frontend ?', default: false)) {
         //     $model = $this->configureMetaUI($model);
         // }
-
 
         // Persiste
         $this->moduleDef->createModel($model);
@@ -358,12 +360,13 @@ final class ConsoleUI
 
     /**
      * UI d’édition d’un modèle typé.
+     *
      * @return DFModel|null null => supprimé
      */
     private function editModelUI(DFModel $model): ?DFModel
     {
         while (true) {
-            $backend  = $model->backend();
+            $backend = $model->backend();
             $frontend = method_exists($model, 'frontend') ? $model->frontend() : (object) [];
 
             $summary = [
@@ -381,45 +384,53 @@ final class ConsoleUI
                 ['Route (backend)',      $backend->hasRoute ? 'oui' : 'non'],
                 ['----------', '-----------------'],
                 // Ces champs frontend sont optionnels si ton DFModel ne les expose pas encore.
-                ['Types TS (frontend)',      ($frontend->hasTypes   ?? false) ? 'oui' : 'non'],
-                ['Client API (frontend)',    ($frontend->hasClient  ?? false) ? 'oui' : 'non'],
-                ['Pages Vue (frontend)',     ($frontend->hasPages   ?? false) ? 'oui' : 'non'],
-                ['Menu intégré (frontend)',  ($frontend->inMenu     ?? false) ? 'oui' : 'non'],
+                ['Types TS (frontend)',      ($frontend->hasTypes ?? false) ? 'oui' : 'non'],
+                ['Client API (frontend)',    ($frontend->hasClient ?? false) ? 'oui' : 'non'],
+                ['Pages Vue (frontend)',     ($frontend->hasPages ?? false) ? 'oui' : 'non'],
+                ['Menu intégré (frontend)',  ($frontend->inMenu ?? false) ? 'oui' : 'non'],
             ];
             table(headers: ['Champ', 'Valeur'], rows: $summary);
 
             // Backend
-            $A_CREATE_MODEL       = '__create_model';
-            $A_CREATE_CONTROLLER  = '__create_controller';
-            $A_CREATE_REQUEST     = '__create_request';
-            $A_UPDATE_ROUTE       = '__update_route';
-            $A_EDIT_FILLABLE      = '__edit_fillable';
-            $A_EDIT_RELATIONS     = '__edit_relations';
-            $A_META               = '__configure_meta';
-            $A_DELETE             = '__delete_model';
+            $A_CREATE_MODEL = '__create_model';
+            $A_CREATE_CONTROLLER = '__create_controller';
+            $A_CREATE_REQUEST = '__create_request';
+            $A_UPDATE_ROUTE = '__update_route';
+            $A_EDIT_FILLABLE = '__edit_fillable';
+            $A_EDIT_RELATIONS = '__edit_relations';
+            $A_META = '__configure_meta';
+            $A_DELETE = '__delete_model';
 
             // Frontend (nouveau)
-            $A_FRONT_ALL          = '__front_all';         // tout-en-un
-            $A_FRONT_TYPES        = '__front_types';       // générer/mettre à jour types TS (.d.ts + classes .ts)
-            $A_FRONT_CLIENT       = '__front_client';      // générer client ofetch pour l’entité
-            $A_FRONT_PAGES        = '__front_pages';       // générer pages Vue (index + AddOrEdit)
-            $A_FRONT_MENU         = '__front_menu';        // injecter/mettre à jour menuItems
-            $A_FRONT_ROUTES       = '__front_routes';      // (optionnel) déclarations de routes front si tu en as
+            $A_FRONT_ALL = '__front_all';         // tout-en-un
+            $A_FRONT_TYPES = '__front_types';       // générer/mettre à jour types TS (.d.ts + classes .ts)
+            $A_FRONT_CLIENT = '__front_client';      // générer client ofetch pour l’entité
+            $A_FRONT_PAGES = '__front_pages';       // générer pages Vue (index + AddOrEdit)
+            $A_FRONT_MENU = '__front_menu';        // injecter/mettre à jour menuItems
+            $A_FRONT_ROUTES = '__front_routes';      // (optionnel) déclarations de routes front si tu en as
 
             $actions = [];
 
             // Propositions backend
-            if (!$backend->hasModel)       $actions[$A_CREATE_MODEL]      = 'Créer un modèle (backend)';
-            if (!$backend->hasController)  $actions[$A_CREATE_CONTROLLER] = 'Créer un contrôleur (backend)';
-            if (!$backend->hasRequest)     $actions[$A_CREATE_REQUEST]    = 'Créer une FormRequest (backend)';
-            if (!$backend->hasRoute)       $actions[$A_UPDATE_ROUTE]      = 'Mettre à jour la route API (backend)';
+            if (! $backend->hasModel) {
+                $actions[$A_CREATE_MODEL] = 'Créer un modèle (backend)';
+            }
+            if (! $backend->hasController) {
+                $actions[$A_CREATE_CONTROLLER] = 'Créer un contrôleur (backend)';
+            }
+            if (! $backend->hasRequest) {
+                $actions[$A_CREATE_REQUEST] = 'Créer une FormRequest (backend)';
+            }
+            if (! $backend->hasRoute) {
+                $actions[$A_UPDATE_ROUTE] = 'Mettre à jour la route API (backend)';
+            }
 
-            $actions[$A_EDIT_FILLABLE]  = 'Éditer les fillable';
+            $actions[$A_EDIT_FILLABLE] = 'Éditer les fillable';
             $actions[$A_EDIT_RELATIONS] = 'Éditer les relations';
-            $actions[$A_META]           = 'Configurer backend/frontend';
+            $actions[$A_META] = 'Configurer backend/frontend';
 
             // Propositions frontend (toujours visibles—idempotentes)
-            $actions[$A_FRONT_ALL]    = 'Créer / régénérer le frontend REST (tout-en-un)';
+            $actions[$A_FRONT_ALL] = 'Créer / régénérer le frontend REST (tout-en-un)';
             // $actions[$A_FRONT_TYPES]  = 'Générer / mettre à jour les types TypeScript';
             // $actions[$A_FRONT_CLIENT] = 'Générer / mettre à jour le client API (ofetch)';
             // $actions[$A_FRONT_PAGES]  = 'Générer / mettre à jour les pages Vue (index + AddOrEdit)';
@@ -427,8 +438,8 @@ final class ConsoleUI
             // $actions[$A_FRONT_ROUTES] = 'Mettre à jour les routes front (si applicable)';
 
             // Divers
-            $actions[$A_DELETE]         = 'Supprimer le modèle';
-            $actions[self::MENU_BACK]   = self::MENU_BACK;
+            $actions[$A_DELETE] = 'Supprimer le modèle';
+            $actions[self::MENU_BACK] = self::MENU_BACK;
 
             $choice = select('Action', $actions, default: self::MENU_BACK, scroll: self::UI_SCROLL);
 
@@ -440,42 +451,50 @@ final class ConsoleUI
                 if (confirm("Supprimer « {$model->key()} » ?", false)) {
                     return null;
                 }
+
                 continue;
             }
 
             // Backend
             if ($choice === $A_CREATE_MODEL) {
                 $this->generateModel($model);
+
                 continue;
             }
             if ($choice === $A_CREATE_CONTROLLER) {
                 $this->generateController($model);
+
                 continue;
             }
             if ($choice === $A_CREATE_REQUEST) {
                 info('Générateur de Request non encore implémenté.');
+
                 continue;
             }
             if ($choice === $A_UPDATE_ROUTE) {
                 $this->updateRoute($model);
+
                 continue;
             }
             if ($choice === $A_EDIT_FILLABLE) {
                 $model = $this->editFillableUI($model);
                 $this->moduleDef->upsertModel($model);
                 $this->store->save($this->jsonPath);
+
                 continue;
             }
             if ($choice === $A_EDIT_RELATIONS) {
                 $model = $this->editRelationsUI($model);
                 $this->moduleDef->upsertModel($model);
                 $this->store->save($this->jsonPath);
+
                 continue;
             }
             if ($choice === $A_META) {
                 $model = $this->configureMetaUI($model);
                 $this->moduleDef->upsertModel($model);
                 $this->store->save($this->jsonPath);
+
                 continue;
             }
 
@@ -490,6 +509,7 @@ final class ConsoleUI
                 $this->markFrontendFlags($model);
                 $this->moduleDef->upsertModel($model);
                 $this->store->save($this->jsonPath);
+
                 continue;
             }
         }
@@ -505,8 +525,9 @@ final class ConsoleUI
     {
         $modelData = $this->moduleDef->model(key: $dFModel->key());
 
-        if (!$modelData) {
+        if (! $modelData) {
             warning("⚠️ Impossible de trouver le modèle '{$modelData->key()}' dans la définition du module.");
+
             return;
         }
 
@@ -523,8 +544,6 @@ final class ConsoleUI
 
         $this->moduleDef->save();
     }
-
-
 
     // ─────────────────────────────────────────────────────────────────────────────
     // SOUS-MENUS (typed)
@@ -558,7 +577,7 @@ final class ConsoleUI
 
         // Remplace le modèle via fromArray (car pas de setFields dans l’ORM)
         $arr = $model->toArray();
-        $arr['fillable'] = array_map(fn(DField $f) => $f->toArray(), $fresh);
+        $arr['fillable'] = array_map(fn (DField $f) => $f->toArray(), $fresh);
 
         return DFModel::fromArray($arr);
     }
@@ -575,52 +594,58 @@ final class ConsoleUI
             table(
                 headers: ['#', 'type', 'name', 'foreignKey', 'table', 'module'],
                 rows: array_map(
-                    fn($r, $i) => [$i, $r['type'] ?? '', $r['name'] ?? '', $r['foreignKey'] ?? '', $r['table'] ?? '', $r['moduleName'] ?? ''],
+                    fn ($r, $i) => [$i, $r['type'] ?? '', $r['name'] ?? '', $r['foreignKey'] ?? '', $r['table'] ?? '', $r['moduleName'] ?? ''],
                     $rels,
                     array_keys($rels)
                 )
             );
 
             $choice = select('Relations', [
-                '__add'   => self::MENU_ADD,
-                '__edit'  => self::MENU_EDIT,
-                '__del'   => self::MENU_DELETE,
+                '__add' => self::MENU_ADD,
+                '__edit' => self::MENU_EDIT,
+                '__del' => self::MENU_DELETE,
                 self::MENU_BACK => self::MENU_BACK,
             ]);
 
             if ($choice === self::MENU_BACK) {
                 $arr = $model->toArray();
                 $arr['relations'] = array_values($rels);
+
                 return DFModel::fromArray($arr);
             }
 
             if ($choice === '__add') {
                 $freshForUi = array_map(
-                    fn(DField $f) => ['name' => $f->name, 'type' => $f->type->value, 'defaultValue' => $f->defaultValue, 'customizedType' => $f->customizedType],
+                    fn (DField $f) => ['name' => $f->name, 'type' => $f->type->value, 'defaultValue' => $f->defaultValue, 'customizedType' => $f->customizedType],
                     array_values($model->fields())
                 );
                 $new = $this->collectBelongsToRelationsUI($freshForUi);
                 $rels = array_values(array_merge($rels, $new));
+
                 continue;
             }
 
             if ($choice === '__edit') {
                 if ($rels === []) {
                     warning('Aucune relation.');
+
                     continue;
                 }
                 $idx = (int) text('Index de la relation à éditer');
-                if (!isset($rels[$idx])) {
+                if (! isset($rels[$idx])) {
                     warning('Index invalide.');
+
                     continue;
                 }
                 $rels[$idx] = $this->editSingleRelationUI($rels[$idx]);
+
                 continue;
             }
 
             if ($choice === '__del') {
                 if ($rels === []) {
                     warning('Aucune relation.');
+
                     continue;
                 }
                 $idx = (int) text('Index de la relation à supprimer');
@@ -628,6 +653,7 @@ final class ConsoleUI
                     unset($rels[$idx]);
                     $rels = array_values($rels);
                 }
+
                 continue;
             }
         }
@@ -640,28 +666,28 @@ final class ConsoleUI
     {
         // Backend flags
         $b = $model->backend();
-        $b->hasController = confirm('Backend · hasController ?', (bool)$b->hasController);
-        $b->hasRequest    = confirm('Backend · hasRequest ?',    (bool)$b->hasRequest);
-        $b->hasRoute      = confirm('Backend · hasRoute ?',      (bool)$b->hasRoute);
-        $b->hasPermission = confirm('Backend · hasPermission ?', (bool)$b->hasPermission);
+        $b->hasController = confirm('Backend · hasController ?', (bool) $b->hasController);
+        $b->hasRequest = confirm('Backend · hasRequest ?', (bool) $b->hasRequest);
+        $b->hasRoute = confirm('Backend · hasRoute ?', (bool) $b->hasRoute);
+        $b->hasPermission = confirm('Backend · hasPermission ?', (bool) $b->hasPermission);
 
         // Frontend flags
         $f = $model->frontend();
-        $f->hasType               = confirm('Frontend · hasType ?',               (bool)$f->hasType);
-        $f->hasApi                = confirm('Frontend · hasApi ?',                (bool)$f->hasApi);
-        $f->hasLang               = confirm('Frontend · hasLang ?',               (bool)$f->hasLang);
-        $f->hasAddOrEditComponent = confirm('Frontend · hasAddOrEditComponent ?', (bool)$f->hasAddOrEditComponent);
-        $f->hasReadComponent      = confirm('Frontend · hasReadComponent ?',      (bool)$f->hasReadComponent);
-        $f->hasIndex              = confirm('Frontend · hasIndex ?',              (bool)$f->hasIndex);
-        $f->hasMenu               = confirm('Frontend · hasMenu ?',               (bool)$f->hasMenu);
-        $f->hasPermission         = confirm('Frontend · hasPermission ?',         (bool)$f->hasPermission);
+        $f->hasType = confirm('Frontend · hasType ?', (bool) $f->hasType);
+        $f->hasApi = confirm('Frontend · hasApi ?', (bool) $f->hasApi);
+        $f->hasLang = confirm('Frontend · hasLang ?', (bool) $f->hasLang);
+        $f->hasAddOrEditComponent = confirm('Frontend · hasAddOrEditComponent ?', (bool) $f->hasAddOrEditComponent);
+        $f->hasReadComponent = confirm('Frontend · hasReadComponent ?', (bool) $f->hasReadComponent);
+        $f->hasIndex = confirm('Frontend · hasIndex ?', (bool) $f->hasIndex);
+        $f->hasMenu = confirm('Frontend · hasMenu ?', (bool) $f->hasMenu);
+        $f->hasPermission = confirm('Frontend · hasPermission ?', (bool) $f->hasPermission);
 
         // CASL
-        $f->casl->create = confirm('CASL · create ?', (bool)$f->casl->create);
-        $f->casl->read   = confirm('CASL · read ?',   (bool)$f->casl->read);
-        $f->casl->update = confirm('CASL · update ?', (bool)$f->casl->update);
-        $f->casl->delete = confirm('CASL · delete ?', (bool)$f->casl->delete);
-        $f->casl->access = confirm('CASL · access ?', (bool)$f->casl->access);
+        $f->casl->create = confirm('CASL · create ?', (bool) $f->casl->create);
+        $f->casl->read = confirm('CASL · read ?', (bool) $f->casl->read);
+        $f->casl->update = confirm('CASL · update ?', (bool) $f->casl->update);
+        $f->casl->delete = confirm('CASL · delete ?', (bool) $f->casl->delete);
+        $f->casl->access = confirm('CASL · access ?', (bool) $f->casl->access);
 
         return $model;
     }
@@ -672,28 +698,34 @@ final class ConsoleUI
 
     private function genPhpClass(DFModel $model): void
     {
-        $A_NEXT              = self::MENU_NEXT;
-        $A_CREATE_MODEL      = '__create_model';
+        $A_NEXT = self::MENU_NEXT;
+        $A_CREATE_MODEL = '__create_model';
         $A_CREATE_CONTROLLER = '__create_controller';
-        $A_CREATE_REQUEST    = '__create_request';
-        $A_UPDATE_ROUTE      = '__update_route';
-        $A_API_REST          = '__api_rest';
-        $A_FRONTEND          = '__frontend';
+        $A_CREATE_REQUEST = '__create_request';
+        $A_UPDATE_ROUTE = '__update_route';
+        $A_API_REST = '__api_rest';
+        $A_FRONTEND = '__frontend';
 
         $name = $model->name();
         $options = [];
 
-        if (!$model->backend()->hasModel)       $options[$A_CREATE_MODEL]      = "Générer le modèle : {$name}.php";
-        if (!$model->backend()->hasController)  $options[$A_CREATE_CONTROLLER] = "Générer le contrôleur : {$name}Controller.php";
-        if (!$model->backend()->hasRoute)       $options[$A_UPDATE_ROUTE]      = "Ajouter la route pour {$name}Controller.php";
+        if (! $model->backend()->hasModel) {
+            $options[$A_CREATE_MODEL] = "Générer le modèle : {$name}.php";
+        }
+        if (! $model->backend()->hasController) {
+            $options[$A_CREATE_CONTROLLER] = "Générer le contrôleur : {$name}Controller.php";
+        }
+        if (! $model->backend()->hasRoute) {
+            $options[$A_UPDATE_ROUTE] = "Ajouter la route pour {$name}Controller.php";
+        }
 
-        $options[$A_API_REST] = "Générer API REST (modèle + contrôleur + route)";
+        $options[$A_API_REST] = 'Générer API REST (modèle + contrôleur + route)';
         $options[$A_FRONTEND] = "Générer le frontend REST : {$name}";
-        $options[$A_NEXT]     = "Continuer";
+        $options[$A_NEXT] = 'Continuer';
 
         while (true) {
             $action = select('Que veux-tu générer ?', $options);
-            if (!array_key_exists($action, $options)) {
+            if (! array_key_exists($action, $options)) {
                 $action = array_search($action, $options, true) ?: $A_NEXT;
             }
 
@@ -732,6 +764,7 @@ final class ConsoleUI
     {
         if ($model->backend()->hasModel) {
             info("Le modèle {$model->name()} existe déjà.");
+
             return;
         }
 
@@ -748,6 +781,7 @@ final class ConsoleUI
     {
         if ($model->backend()->hasController) {
             info("Le contrôleur {$model->name()}Controller existe déjà.");
+
             return;
         }
 
@@ -755,7 +789,7 @@ final class ConsoleUI
         if ($controllerGen->generate()) {
             info("Contrôleur {$model->name()}Controller créé.");
             $model->backend()->hasController = true;
-            //la génération de controller crée aussi une Request basique
+            // la génération de controller crée aussi une Request basique
             $model->backend()->hasRequest = true;
             $this->moduleDef->upsertModel($model);
             $this->store->save($this->jsonPath);
@@ -764,7 +798,7 @@ final class ConsoleUI
 
     private function updateRoute(DFModel $model): void
     {
-        $routeGen  = new RouteGen($this->moduleGen->getRouteApiPath());
+        $routeGen = new RouteGen($this->moduleGen->getRouteApiPath());
 
         $routeName = method_exists(Str::class, 'smartPlural')
             ? Str::kebab(Str::smartPlural($model->key()))
@@ -802,25 +836,28 @@ final class ConsoleUI
 
     /**
      * Construit les FieldDefinition depuis la table (UI multiselect + types).
+     *
      * @return list<DField>
      */
     private function buildFillableFromTable(string $table): array
     {
-        if (!Schema::hasTable($table)) {
+        if (! Schema::hasTable($table)) {
             error("Table « {$table} » introuvable.");
+
             return [];
         }
 
         $cols = Schema::getColumnListing($table);
-        $cols = array_values(array_filter($cols, fn($c) => !in_array($c, self::TECH_COLS, true)));
+        $cols = array_values(array_filter($cols, fn ($c) => ! in_array($c, self::TECH_COLS, true)));
 
         if ($cols === []) {
             warning("Aucune colonne sélectionnable pour « {$table} ».");
+
             return [];
         }
 
         $options = array_combine($cols, $cols);
-        $chosen  = multiselect(
+        $chosen = multiselect(
             label: "Colonnes de « {$table} »",
             options: $options,
             default: array_values($options),
@@ -857,7 +894,6 @@ final class ConsoleUI
             return DField::make($name, $ftype)->default($default);
         }, $chosen);
 
-
         table(['col name', 'sql type', 'default'], $preview);
 
         if (confirm('Personnaliser des types ?', false)) {
@@ -868,12 +904,12 @@ final class ConsoleUI
     }
 
     /**
-     * @param list<array{name:string,type:string,defaultValue:mixed,customizedType:string}> $fillable
+     * @param  list<array{name:string,type:string,defaultValue:mixed,customizedType:string}>  $fillable
      * @return list<array<string,mixed>>
      */
     private function collectBelongsToRelationsUI(array $fillable): array
     {
-        $fkFields = array_values(array_filter($fillable, fn($f) => Str::endsWith($f['name'], '_id')));
+        $fkFields = array_values(array_filter($fillable, fn ($f) => Str::endsWith($f['name'], '_id')));
         if ($fkFields === []) {
             return [];
         }
@@ -908,13 +944,14 @@ final class ConsoleUI
     /** @return array<string,mixed> */
     private function editSingleRelationUI(array $rel): array
     {
-        $rel['name']       = trim(text('Nom de la relation', "Actuel : " . ($rel['name'] ?? ''))) ?: ($rel['name'] ?? '');
-        $rel['foreignKey'] = trim(text('Foreign key', "Actuel : " . ($rel['foreignKey'] ?? ''))) ?: ($rel['foreignKey'] ?? '');
-        $rel['table']      = trim(text('Table liée', "Actuel : " . ($rel['table'] ?? ''))) ?: ($rel['table'] ?? '');
-        $rel['ownerKey']   = trim(text('Owner key', "Actuel : " . ($rel['ownerKey'] ?? 'id'))) ?: ($rel['ownerKey'] ?? 'id');
-        $rel['moduleName'] = trim(text('Module cible', "Actuel : " . ($rel['moduleName'] ?? $this->moduleName))) ?: ($rel['moduleName'] ?? $this->moduleName);
+        $rel['name'] = trim(text('Nom de la relation', 'Actuel : '.($rel['name'] ?? ''))) ?: ($rel['name'] ?? '');
+        $rel['foreignKey'] = trim(text('Foreign key', 'Actuel : '.($rel['foreignKey'] ?? ''))) ?: ($rel['foreignKey'] ?? '');
+        $rel['table'] = trim(text('Table liée', 'Actuel : '.($rel['table'] ?? ''))) ?: ($rel['table'] ?? '');
+        $rel['ownerKey'] = trim(text('Owner key', 'Actuel : '.($rel['ownerKey'] ?? 'id'))) ?: ($rel['ownerKey'] ?? 'id');
+        $rel['moduleName'] = trim(text('Module cible', 'Actuel : '.($rel['moduleName'] ?? $this->moduleName))) ?: ($rel['moduleName'] ?? $this->moduleName);
         $rel['externalModule'] = ($rel['moduleName'] ?? $this->moduleName) !== $this->moduleName;
         $rel['isParentHasMany'] = confirm('Définir hasMany dans le parent ?', (bool) ($rel['isParentHasMany'] ?? false));
+
         return $rel;
     }
 
@@ -948,8 +985,8 @@ final class ConsoleUI
             'model' => [
                 'name' => $targetModel,
                 'namespace' => $targetGen->getModelNameSpace(),
-                'fqcn' => $targetGen->getModelNameSpace() . '\\' . $targetModel,
-                'path' => $targetGen->getModelsDirectoryPath() . '/' . $targetModel . '.php',
+                'fqcn' => $targetGen->getModelNameSpace().'\\'.$targetModel,
+                'path' => $targetGen->getModelsDirectoryPath().'/'.$targetModel.'.php',
             ],
             'isParentHasMany' => $isParentHasMany,
         ];
@@ -974,18 +1011,18 @@ final class ConsoleUI
     private function mapPhpTypeToFieldType(string $phpType): FieldType
     {
         return match ($phpType) {
-            'int', 'integer'    => FieldType::Integer,
-            'float', 'double'   => FieldType::Float,
-            'bool', 'boolean'   => FieldType::Boolean,
-            'date'              => FieldType::Date,
-            'datetime'          => FieldType::DateTime,
-            'json', 'array'     => FieldType::Json,
-            default             => FieldType::String,
+            'int', 'integer' => FieldType::Integer,
+            'float', 'double' => FieldType::Float,
+            'bool', 'boolean' => FieldType::Boolean,
+            'date' => FieldType::Date,
+            'datetime' => FieldType::DateTime,
+            'json', 'array' => FieldType::Json,
+            default => FieldType::String,
         };
     }
 
     /**
-     * @param list<string>|array<int,string> $list
+     * @param  list<string>|array<int,string>  $list
      * @return array<string,string>
      */
     private function toOptions(array $list, bool $preserveKeys = true): array
@@ -999,6 +1036,7 @@ final class ConsoleUI
             }
             $opts[$key] = (string) $label;
         }
+
         return $opts;
     }
 
@@ -1007,8 +1045,9 @@ final class ConsoleUI
         $modules = ModuleGenerator::getModuleList();
         if ($managerModule) {
             $modules['deleteModule'] = '# Supprimer le module #';
-            $modules['addModule']    = '# Créer le module #';
+            $modules['addModule'] = '# Créer le module #';
         }
+
         return select(
             label: 'Sélectionner le module',
             options: $this->toOptions($modules, false),
@@ -1025,6 +1064,7 @@ final class ConsoleUI
             $models['addModel'] = '# Créer un modèle #';
             $models['deleteModel'] = '# Supprimer un modèle #';
         }
+
         return select(
             label: 'Sélectionner le modèle',
             options: $this->toOptions($models, false),
@@ -1038,18 +1078,20 @@ final class ConsoleUI
      */
     private function askTableColumn(string $tableName, bool $multiSelect = false, bool $allSelected = false, bool $hiddenIdKeys = true): array|string|null
     {
-        if (!Schema::hasTable($tableName)) {
+        if (! Schema::hasTable($tableName)) {
             error("La table « {$tableName} » est introuvable.");
+
             return $multiSelect ? [] : null;
         }
 
         $columns = Schema::getColumnListing($tableName);
         if ($hiddenIdKeys) {
-            $columns = array_values(array_filter($columns, fn($c) => !in_array($c, self::TECH_COLS, true)));
+            $columns = array_values(array_filter($columns, fn ($c) => ! in_array($c, self::TECH_COLS, true)));
         }
 
         if ($columns === []) {
             warning("La table « {$tableName} » ne contient aucune colonne sélectionnable.");
+
             return $multiSelect ? [] : null;
         }
 
@@ -1057,6 +1099,7 @@ final class ConsoleUI
 
         if ($multiSelect) {
             $default = $allSelected ? array_values($options) : [];
+
             return multiselect(
                 label: "Sélectionner des colonnes ( {$tableName} )",
                 options: $options,
@@ -1076,12 +1119,13 @@ final class ConsoleUI
 
     /**
      * Personnalise les types (enum FieldType) pour une sélection de champs.
-     * @param list<DField> $fillable
+     *
+     * @param  list<DField>  $fillable
      * @return list<DField>
      */
     private function customizeTypesUI(string $table, array $fillable): array
     {
-        $names = array_map(fn(DField $f) => $f->name, $fillable);
+        $names = array_map(fn (DField $f) => $f->name, $fillable);
         $choices = array_combine($names, $names);
 
         $toEdit = multiselect(

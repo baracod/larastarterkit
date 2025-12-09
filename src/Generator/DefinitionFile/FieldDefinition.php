@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Baracod\Larastarterkit\Generator\DefinitionFile;
 
-use Baracod\Larastarterkit\Generator\DefinitionFile\Enums\FieldType;
 use Baracod\Larastarterkit\Generator\DefinitionFile\Contracts\ArrayConvertible;
+use Baracod\Larastarterkit\Generator\DefinitionFile\Enums\FieldType;
 
 /**
  * Class FieldDefinition
@@ -25,10 +25,10 @@ use Baracod\Larastarterkit\Generator\DefinitionFile\Contracts\ArrayConvertible;
 final class FieldDefinition implements ArrayConvertible
 {
     /**
-     * @param string         $name           Nom du champ (snake_case recommandé)
-     * @param FieldType      $type           Type fort (enum)
-     * @param mixed          $defaultValue   Valeur par défaut si applicable
-     * @param string|null    $customizedType Type personnalisé (si besoin)
+     * @param  string  $name  Nom du champ (snake_case recommandé)
+     * @param  FieldType  $type  Type fort (enum)
+     * @param  mixed  $defaultValue  Valeur par défaut si applicable
+     * @param  string|null  $customizedType  Type personnalisé (si besoin)
      *
      * @throws DomainException Si le nom est invalide
      */
@@ -44,8 +44,6 @@ final class FieldDefinition implements ArrayConvertible
     /**
      * Fabrique un champ avec nom et type.
      *
-     * @param  string    $name
-     * @param  FieldType $type
      * @return static
      */
     public static function make(string $name, FieldType $type): self
@@ -56,7 +54,6 @@ final class FieldDefinition implements ArrayConvertible
     /**
      * Raccourci pour un champ string.
      *
-     * @param  string $name
      * @return static
      */
     public static function string(string $name): self
@@ -67,7 +64,6 @@ final class FieldDefinition implements ArrayConvertible
     /**
      * Définit la valeur par défaut.
      *
-     * @param  mixed $value
      * @return $this
      */
     public function default(mixed $value): self
@@ -80,7 +76,6 @@ final class FieldDefinition implements ArrayConvertible
     /**
      * Définit un type personnalisé (facultatif).
      *
-     * @param  string|null $type
      * @return $this
      */
     public function customized(?string $type): self
@@ -93,14 +88,14 @@ final class FieldDefinition implements ArrayConvertible
     /**
      * Construit un champ depuis un tableau.
      *
-     * @param  array<string, mixed> $a
+     * @param  array<string, mixed>  $a
      * @return static
      *
      * @throws DomainException Si le nom est invalide ou type inconnu
      */
     public static function fromArray(array $a): self
     {
-        $name = (string)($a['name'] ?? '');
+        $name = (string) ($a['name'] ?? '');
         $type = FieldType::from($a['type'] ?? 'string');
 
         return new self(
@@ -112,15 +107,16 @@ final class FieldDefinition implements ArrayConvertible
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @return FieldArray
      */
     public function toArray(): array
     {
         return [
-            'name'           => $this->name,
-            'type'           => $this->type->value,
-            'defaultValue'   => $this->defaultValue,
+            'name' => $this->name,
+            'type' => $this->type->value,
+            'defaultValue' => $this->defaultValue,
             'customizedType' => $this->customizedType,
         ];
     }
@@ -128,14 +124,12 @@ final class FieldDefinition implements ArrayConvertible
     /**
      * Vérifie la validité d’un nom de champ.
      *
-     * @param  string $name
-     * @return void
      *
      * @throws DomainException Si invalide
      */
     private static function assertValidName(string $name): void
     {
-        if ($name === '' || !preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name)) {
+        if ($name === '' || ! preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name)) {
             throw new \DomainException("Nom de champ invalide: '{$name}'");
         }
     }
