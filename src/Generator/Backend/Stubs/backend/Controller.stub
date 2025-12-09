@@ -1,0 +1,53 @@
+<?php
+
+namespace {{ controllerNamespace }};
+
+use {{ modelFqcn }};
+use {{ requestFqcn }};
+use Illuminate\Http\Request;
+
+class {{ controllerName }}
+{
+    public function index()
+    {
+        return {{ modelName }}::all();
+    }
+
+    public function show($id)
+    {
+        return {{ modelName }}::findOrFail($id);
+    }
+
+    public function store({{ requestName }} $request)
+    {
+        $validated = $request->validated();
+        return {{ modelName }}::create($validated);
+    }
+
+    public function update({{ requestName }} $request, {{ modelName }} $record)
+    {
+        $validated = $request->validated();
+        $record->update($validated);
+        return $record;
+    }
+
+    public function destroy($id)
+    {
+        $record = {{ modelName }}::findOrFail($id);
+
+        $record->delete();
+
+        return response()->json(['message' => 'Deleted successfully']);
+    }
+
+    public function destroyMultiple({{ requestName }} $request)
+    {
+        $ids = $request->all();
+
+        $record = {{ modelName }}::whereIn('id', $ids);
+
+        $record->delete();
+
+        return response()->json(['message' => 'Deleted successfully']);
+    }
+}

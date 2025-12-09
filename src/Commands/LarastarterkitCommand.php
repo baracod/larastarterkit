@@ -2,8 +2,8 @@
 
 namespace Baracod\Larastarterkit\Commands;
 
+use Baracod\Larastarterkit\Generator\Console\ConsoleUI;
 use Illuminate\Console\Command;
-use Baracod\Larastarterkit\Generator\Model\ModelDefinitionManager;
 
 class LarastarterkitCommand extends Command
 {
@@ -14,13 +14,13 @@ class LarastarterkitCommand extends Command
     public function handle(): int
     {
         try {
-            $mgr = new ModelDefinitionManager('Blog');
-            $mgr->interactive();
-            $this->comment('All done');
+            $generatorUiConsole = ConsoleUI::for();
+            $generatorUiConsole->interactive();
 
             return self::SUCCESS;
         } catch (\Throwable $th) {
-            $this->error('Error: ' . $th->getMessage());
+            $this->error('Error: '.$th->getMessage());
+
             return self::FAILURE;
         }
     }
