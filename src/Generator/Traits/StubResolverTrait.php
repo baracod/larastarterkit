@@ -28,30 +28,6 @@ trait StubResolverTrait
             return $cache[$stubName] = $published;
         }
 
-<<<<<<< HEAD
-        // 2) stub spécifique au "laravel-module" personnalisé dans Stubs/laravel-module/
-        $packageLaravelModuleStub = realpath(__DIR__."/../../../Stubs/laravel-module/{$stubName}");
-        if ($packageLaravelModuleStub && file_exists($packageLaravelModuleStub)) {
-            return $cache[$stubName] = $packageLaravelModuleStub;
-        }
-
-        // 3) stub packagé générique dans /Stubs
-        $packageStub = realpath(__DIR__."/../../../Stubs/{$stubName}");
-        if ($packageStub && file_exists($packageStub)) {
-            return $cache[$stubName] = $packageStub;
-        }
-
-        // 4) fallback interne (src/Generator/.../Stubs)
-        $internalStub = realpath(__DIR__."/../Stubs/{$stubName}");
-        if ($internalStub && file_exists($internalStub)) {
-            return $cache[$stubName] = $internalStub;
-        }
-
-        // 5) rechercher dans vendor/*/*/stubs/** (permet d'overrider stubs d'autres packages)
-        $vendorMatch = $this->findStubInVendor($stubName);
-        if ($vendorMatch) {
-            return $cache[$stubName] = $vendorMatch;
-=======
         // 2. Stub "packagé" dans /Stubs
         $packageStub = __DIR__."/../../../Stubs/{$stubName}";
         if (file_exists($packageStub)) {
@@ -62,7 +38,6 @@ trait StubResolverTrait
         $internalStub = __DIR__."/../Stubs/{$stubName}";
         if (file_exists($internalStub)) {
             return $internalStub;
->>>>>>> origin/main
         }
 
         throw new \RuntimeException("Stub introuvable: {$stubName}");

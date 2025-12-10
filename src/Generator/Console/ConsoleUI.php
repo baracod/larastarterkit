@@ -284,17 +284,9 @@ final class ConsoleUI
         $name = trim(text('Nom du modèle', "Par défaut : {$suggestedName}"));
         $name = $name !== '' ? $name : $suggestedName;
         $namespace = $this->moduleGen->getModelNameSpace();
-<<<<<<< HEAD
-
-
-        $path      = rtrim($this->moduleGen->getModelsDirectoryPath(), '/') . '/' . $name . '.php';
-        $fqcn      = $namespace . '\\' . $name;
-        $key       = Str::kebab($name);
-=======
         $path = rtrim($this->moduleGen->getModelsDirectoryPath(), '/').'/'.$name.'.php';
         $fqcn = $namespace.'\\'.$name;
         $key = Str::kebab($name);
->>>>>>> origin/main
 
 
 
@@ -358,11 +350,6 @@ final class ConsoleUI
         //     $model = $this->configureMetaUI($model);
         // }
 
-<<<<<<< HEAD
-        echo("test 2\n");
-
-=======
->>>>>>> origin/main
         // Persiste
         $this->moduleDef->createModel($model);
         $this->store->save($this->jsonPath);

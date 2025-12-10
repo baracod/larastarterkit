@@ -16,6 +16,8 @@ class LarastarterkitCommand extends Command
     {
         try {
             $generatorUiConsole = ConsoleUI::for();
+            dd();
+
             $generatorUiConsole->interactive();
 
             return self::SUCCESS;
