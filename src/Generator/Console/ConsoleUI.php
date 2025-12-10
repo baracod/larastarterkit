@@ -69,7 +69,6 @@ final class ConsoleUI
         $this->moduleName = Str::studly($moduleName);
         $this->moduleGen = new ModuleGenerator($this->moduleName);
 
-
         // Fichier de définition (ex: Modules/Blog/module.json)
         $this->jsonPath = $jsonPath;
         $this->ensureFile();
@@ -288,8 +287,6 @@ final class ConsoleUI
         $fqcn = $namespace.'\\'.$name;
         $key = Str::kebab($name);
 
-
-
         // Fillable via types mappés → FieldDefinition[]
         $fillableFields = $this->buildFillableFromTable($table); // list<DField>
 
@@ -327,7 +324,7 @@ final class ConsoleUI
                 'access' => false,
             ],
         ];
-        echo("test 1\n");
+        echo "test 1\n";
 
         $arr = [
             'name' => $name,

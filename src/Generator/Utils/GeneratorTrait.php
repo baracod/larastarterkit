@@ -42,7 +42,6 @@ trait GeneratorTrait
         if (preg_match('/(\[.*\])/sU', $content, $matches)) {
             $jsArrayStr = $matches[1];
 
-
             // On suppose que le tableau extrait est au format JSON valide
             $dataArray = json_decode($jsArrayStr, true);
             if (json_last_error() !== JSON_ERROR_NONE) {

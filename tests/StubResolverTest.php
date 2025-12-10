@@ -16,11 +16,11 @@ it('resolves published stub', function () {
     // arrange: créer un fichier temporaire dans stubs/larastarterkit
     $dir = base_path('stubs/larastarterkit/testdir');
     @mkdir($dir, 0755, true);
-    $file = $dir . '/example.stub';
+    $file = $dir.'/example.stub';
     file_put_contents($file, 'ok');
 
     // act
-    $resolver = new StubResolver();
+    $resolver = new StubResolver;
     $resolved = $resolver->publicResolveStubPath('testdir/example.stub');
 
     // assert
@@ -32,6 +32,6 @@ it('resolves published stub', function () {
 });
 
 it('throws when missing', function () {
-    $resolver = new StubResolver();
+    $resolver = new StubResolver;
     $resolver->publicResolveStubPath('this/file/should/not/exist.stub');
 })->throws(\RuntimeException::class);
