@@ -30,8 +30,6 @@ class LarastarterkitInstallCommand extends Command
         // 5. Publication des Assets Vue/Vuetify (Scaffolding)
         $this->installScaffolding();
 
-
-
         // 6. Gestion des dépendances NPM
         $this->updatePackageJson();
 
@@ -99,12 +97,11 @@ class LarastarterkitInstallCommand extends Command
 
         file_put_contents(
             $composerPath,
-            json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL
+            json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL
         );
 
         $this->line('  - composer.json mis à jour.');
     }
-
 
     protected function installScaffolding()
     {
@@ -175,7 +172,7 @@ class LarastarterkitInstallCommand extends Command
         );
     }
 
-     protected function setupModulesStructure()
+    protected function setupModulesStructure()
     {
         $this->info('📂 Configuration du répertoire Modules...');
 

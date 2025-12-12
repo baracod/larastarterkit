@@ -16,7 +16,7 @@ class Role extends Model
         'display_name',
         'description',
         'order',
-        'is_owner'
+        'is_owner',
     ];
 
     // protected $appends = ['nbr_user'];

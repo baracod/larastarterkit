@@ -2,9 +2,10 @@
 
 namespace Modules\Auth\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
+
 class RoleRequest extends FormRequest
 {
     /**
@@ -16,8 +17,8 @@ class RoleRequest extends FormRequest
     }
 
     public function messages(): array
-{
-    return [
+    {
+        return [
             'id.integer' => 'Le champ id doit être un entier.',
             'name.required' => 'Le champ name est obligatoire.',
             'name.string' => 'Le champ name doit être une chaîne de caractères.',
@@ -33,8 +34,8 @@ class RoleRequest extends FormRequest
             'created_at.before' => 'Le champ created_at doit être une date antérieure.',
             'updated_at.date_format' => 'Le champ updated_at doit respecter le format requis.',
             'updated_at.before' => 'Le champ updated_at doit être une date antérieure.',
-    ];
-}
+        ];
+    }
 
     /**
      * Récupère les règles de validation qui s'appliquent à la requête.
@@ -42,18 +43,18 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-    'id' => 'nullable|integer',
-    'name' => 'required|string|max:255',
-    'display_name' => 'required|string|max:255',
-    'description' => 'nullable|string|max:255',
-    'order' => 'nullable|integer',
-    'is_owner' => 'nullable|boolean',
-    'created_at' => 'nullable|date_format:Y-m-d\TH:i:s.u\Z|before:now',
-    'updated_at' => 'nullable|date_format:Y-m-d\TH:i:s.u\Z|before:now',
-];;
+            'id' => 'nullable|integer',
+            'name' => 'required|string|max:255',
+            'display_name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'order' => 'nullable|integer',
+            'is_owner' => 'nullable|boolean',
+            'created_at' => 'nullable|date_format:Y-m-d\TH:i:s.u\Z|before:now',
+            'updated_at' => 'nullable|date_format:Y-m-d\TH:i:s.u\Z|before:now',
+        ];
     }
 
-     protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         $errors = [];
 
@@ -65,17 +66,17 @@ class RoleRequest extends FormRequest
                     foreach ($validator->failed()[$field] ?? [] as $rule => $params) {
                         return [
                             'key' => strtolower($rule),
-                            'message' => $message
+                            'message' => $message,
                         ]; // "Required", "Integer", etc.
                     }
+
                     return $message;
                 })[0];
         }
 
-
         throw new HttpResponseException(response()->json([
             'message' => 'Validation failed',
-            'errors' => $errors
+            'errors' => $errors,
         ], 422));
     }
 }

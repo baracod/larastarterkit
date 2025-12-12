@@ -2,9 +2,9 @@
 
 namespace Modules\Auth\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
 class PermissionRequest extends FormRequest
 {
@@ -73,17 +73,17 @@ class PermissionRequest extends FormRequest
                     foreach ($validator->failed()[$field] ?? [] as $rule => $params) {
                         return [
                             'key' => strtolower($rule),
-                            'message' => $message
+                            'message' => $message,
                         ]; // "Required", "Integer", etc.
                     }
+
                     return $message;
                 })[0];
         }
 
-
         throw new HttpResponseException(response()->json([
             'message' => 'Validation failed',
-            'errors' => $errors
+            'errors' => $errors,
         ], 422));
     }
 }

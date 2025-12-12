@@ -11,8 +11,7 @@ class ResetPasswordLink extends Notification implements ShouldQueue
 {
     use Queueable;
 
-
-    public function __construct(protected string $token,     ?string $locale = null)
+    public function __construct(protected string $token, ?string $locale = null)
     {
         $this->locale = $locale ?? app()->getLocale() ?? 'fr';
     }
@@ -51,22 +50,21 @@ class ResetPasswordLink extends Notification implements ShouldQueue
         app()->setLocale($this->locale); // ✅ force la langue ici
 
         $appName = config('app.name', 'RAGOL SYSTEM');
-        $minutes = (int) config('auth.passwords.' . config('auth.defaults.passwords') . '.expire', 60);
+        $minutes = (int) config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60);
         $logoUrl = config('app.logo_url', 'https://example.com/logo.png');
-        $base    = rtrim(config('app.frontend_url', 'https://app.example.com'), '/');
+        $base = rtrim(config('app.frontend_url', 'https://app.example.com'), '/');
 
         $url = "{$base}/auth/reset-password?token="
-            . urlencode($this->token)
-            . '&email=' . urlencode($notifiable->getEmailForPasswordReset());
-
+            .urlencode($this->token)
+            .'&email='.urlencode($notifiable->getEmailForPasswordReset());
 
         return (new MailMessage)
             ->subject(__('auth::mail.reset.subject', ['app' => $appName]))
             ->view('auth::notifications.reset-password', [
-                'locale'  => $this->locale,
+                'locale' => $this->locale,
                 'appName' => $appName,
-                'url'     => $url,
-                'user'    => $notifiable,
+                'url' => $url,
+                'user' => $notifiable,
                 'logoUrl' => $logoUrl,
                 'minutes' => $minutes,
             ]);

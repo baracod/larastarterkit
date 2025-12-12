@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Modules\Auth\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +37,9 @@ class UserRole extends Model
     }
 
     protected static $logAttributes = true;
+
     protected static $logFillable = true;
+
     protected static $logName = 'UserRole';
 
     public function getDescriptionForEvent(string $eventName): string

@@ -2,7 +2,6 @@
 
 namespace Baracod\Larastarterkit\Traits;
 
-
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,6 +17,7 @@ trait HandleFile
                 $objects[$key] = self::handleUrl($value);
             }
         }
+
         return $objects;
     }
 
@@ -31,18 +31,18 @@ trait HandleFile
             return Storage::url($val);
         }
 
-        if (Str::contains($val, config('lfm.folder_categories.file.folder_name') . '/')) {
+        if (Str::contains($val, config('lfm.folder_categories.file.folder_name').'/')) {
             return str_replace(
-                config('lfm.folder_categories.file.folder_name') . '/',
-                Storage::url('/') . config('lfm.folder_categories.file.folder_name') . '/',
+                config('lfm.folder_categories.file.folder_name').'/',
+                Storage::url('/').config('lfm.folder_categories.file.folder_name').'/',
                 $val
             );
         }
 
-        if (Str::contains($val, config('lfm.folder_categories.image.folder_name') . '/')) {
+        if (Str::contains($val, config('lfm.folder_categories.image.folder_name').'/')) {
             return str_replace(
-                config('lfm.folder_categories.image.folder_name') . '/',
-                Storage::url('/') . config('lfm.folder_categories.image.folder_name') . '/',
+                config('lfm.folder_categories.image.folder_name').'/',
+                Storage::url('/').config('lfm.folder_categories.image.folder_name').'/',
                 $val
             );
         }

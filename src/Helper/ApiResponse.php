@@ -2,12 +2,12 @@
 
 namespace Baracod\Larastarterkit\Helper;
 
-use Throwable;
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use Baracod\Larastarterkit\Traits\CaseConvert;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 /**
  * Class ApiResponse
@@ -17,14 +17,14 @@ use Illuminate\Validation\ValidationException;
 class ApiResponse
 {
     use CaseConvert;
+
     /**
      * Builds the base response structure.
      *
-     * @param bool $success Indicates if the request was successful.
-     * @param string|null $message Message describing the result.
-     * @param mixed|null $data Data to return.
-     * @param mixed|null $errors Errors to return.
-     * @return array
+     * @param  bool  $success  Indicates if the request was successful.
+     * @param  string|null  $message  Message describing the result.
+     * @param  mixed|null  $data  Data to return.
+     * @param  mixed|null  $errors  Errors to return.
      */
     private static function buildResponse(bool $success, ?string $message, $data = null, $errors = null): array
     {
@@ -49,9 +49,8 @@ class ApiResponse
     /**
      * Sends the final JSON response.
      *
-     * @param array $data The response data.
-     * @param int $statusCode The HTTP status code.
-     * @return JsonResponse
+     * @param  array  $data  The response data.
+     * @param  int  $statusCode  The HTTP status code.
      */
     private static function send(array $data, int $statusCode): JsonResponse
     {
@@ -61,10 +60,9 @@ class ApiResponse
     /**
      * Success response (HTTP 200 OK).
      *
-     * @param mixed|null $data Data to return.
-     * @param string $message Success message.
-     * @param int $statusCode HTTP status code.
-     * @return JsonResponse
+     * @param  mixed|null  $data  Data to return.
+     * @param  string  $message  Success message.
+     * @param  int  $statusCode  HTTP status code.
      */
     public static function success($data = null, string $message = 'Operation successful.', int $statusCode = Response::HTTP_OK): JsonResponse
     {
@@ -74,9 +72,8 @@ class ApiResponse
     /**
      * Response for a successful creation (HTTP 201 Created).
      *
-     * @param mixed|null $data Data of the created resource.
-     * @param string $message Success message.
-     * @return JsonResponse
+     * @param  mixed|null  $data  Data of the created resource.
+     * @param  string  $message  Success message.
      */
     public static function created($data = null, string $message = 'Resource created successfully.'): JsonResponse
     {
@@ -86,9 +83,8 @@ class ApiResponse
     /**
      * Response for a successful update (HTTP 200 OK).
      *
-     * @param mixed|null $data Data of the modified resource.
-     * @param string $message Success message.
-     * @return JsonResponse
+     * @param  mixed|null  $data  Data of the modified resource.
+     * @param  string  $message  Success message.
      */
     public static function edited($data = null, string $message = 'Resource modified successfully.'): JsonResponse
     {
@@ -98,8 +94,7 @@ class ApiResponse
     /**
      * No content response (HTTP 204 No Content).
      *
-     * @param string $message Information message.
-     * @return JsonResponse
+     * @param  string  $message  Information message.
      */
     public static function noContent(string $message = 'No content.'): JsonResponse
     {
@@ -112,23 +107,19 @@ class ApiResponse
     /**
      * General error response.
      *
-     * @param string $message Error message.
-     * @param int $statusCode HTTP status code.
-     * @param mixed|null $errors Error details.
-     * @return JsonResponse
+     * @param  string  $message  Error message.
+     * @param  int  $statusCode  HTTP status code.
+     * @param  mixed|null  $errors  Error details.
      */
     public static function error(string $message, int $statusCode = Response::HTTP_BAD_REQUEST, $errors = null): JsonResponse
     {
         return self::send(self::buildResponse(false, $message, null, $errors), $statusCode);
     }
 
-
-
     /**
      * Response for a resource not found (HTTP 404 Not Found).
      *
-     * @param string $message Error message.
-     * @return JsonResponse
+     * @param  string  $message  Error message.
      */
     public static function notFound(string $message = 'Resource not found.'): JsonResponse
     {
@@ -138,8 +129,7 @@ class ApiResponse
     /**
      * Response for a validation error (HTTP 422 Unprocessable Entity).
      *
-     * @param ValidationException $exception The validation exception.
-     * @return JsonResponse
+     * @param  ValidationException  $exception  The validation exception.
      */
     public static function validation(ValidationException $exception): JsonResponse
     {
@@ -149,28 +139,27 @@ class ApiResponse
     /**
      * Response for an unauthorized access (HTTP 401 Unauthorized).
      *
-     * @param string $message Error message.
-     * @return JsonResponse
+     * @param  string  $message  Error message.
      */
     public static function unauthorized(string $message = 'Unauthorized.'): JsonResponse
     {
         return self::error($message, Response::HTTP_UNAUTHORIZED);
     }
+
     /**
      * Response for an account locked access (HTTP 423 Locked).
      *
-     * @param string $message Error message.
-     * @return JsonResponse
+     * @param  string  $message  Error message.
      */
     public static function locked(string $message = 'Account locked.'): JsonResponse
     {
         return self::error($message, Response::HTTP_LOCKED);
     }
+
     /**
      * Response for a forbidden access (HTTP 403 Forbidden).
      *
-     * @param string $message Error message.
-     * @return JsonResponse
+     * @param  string  $message  Error message.
      */
     public static function forbidden(string $message = 'Forbidden.'): JsonResponse
     {
@@ -180,9 +169,8 @@ class ApiResponse
     /**
      * Response for an internal server error (HTTP 500 Internal Server Error).
      *
-     * @param Throwable $exception The exception that caused the error.
-     * @param string $message Error message for the client.
-     * @return JsonResponse
+     * @param  Throwable  $exception  The exception that caused the error.
+     * @param  string  $message  Error message for the client.
      */
     public static function serverError(Throwable $exception, string $message = 'Internal server error.'): JsonResponse
     {
