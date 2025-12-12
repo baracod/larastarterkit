@@ -1,0 +1,369 @@
+@use "sass:math";
+
+$font-family-custom: "Public Sans",sans-serif,-apple-system,blinkmacsystemfont,
+  "Segoe UI",roboto,"Helvetica Neue",arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+
+/* 👉 Typography custom variables */
+$typography-h5-font-size: 1.125rem;
+$typography-body-1-font-size: 0.9375rem;
+$typography-body-1-line-height: 1.375rem;
+
+@forward "../../../base/libs/vuetify/variables"  with (
+  $body-font-family: $font-family-custom,
+  $border-radius-root: 6px,
+
+  // 👉 Rounded
+  $rounded: (
+    "sm": 4px,
+    "lg": 8px,
+    "shaped": 30px 0,
+  ),
+
+  // 👉 Shadows
+  $shadow-key-umbra: (
+    0: (0 0 0 0 rgba(var(--v-shadow-key-umbra-color), 1)),
+    1: (0 2px 4px rgba(var(--v-shadow-key-umbra-color), 0.12)),
+    2: (0 1px 5px rgba(var(--v-shadow-key-umbra-color), var(--v-shadow-xs-opacity))),
+    3: (0 3px 8px rgba(var(--v-shadow-key-umbra-color), 0.14)),
+    4: (0 2px 6px rgba(var(--v-shadow-key-umbra-color), var(--v-shadow-sm-opacity))),
+    5: (0 4px 10px rgba(var(--v-shadow-key-umbra-color), 0.15)),
+    6: (0 3px 8px rgba(var(--v-shadow-key-umbra-color), var(--v-shadow-md-opacity))),
+    7: (0 4px 18px rgba(var(--v-shadow-key-umbra-color), 0.1)),
+    8: (0 4px 12px rgba(var(--v-shadow-key-umbra-color), var(--v-shadow-lg-opacity))),
+    9: (0 5px 14px rgba(var(--v-shadow-key-umbra-color), 0.18)),
+    10: (0 5px 22px rgba(var(--v-shadow-key-umbra-color), var(--v-shadow-xl-opacity))),
+    11: (0 5px 16px rgba(var(--v-shadow-key-umbra-color), 0.2)),
+    12: (0 6px 17px rgba(var(--v-shadow-key-umbra-color), 0.22)),
+    13: (0 6px 18px rgba(var(--v-shadow-key-umbra-color), 0.22)),
+    14: (0 6px 19px rgba(var(--v-shadow-key-umbra-color), 0.24)),
+    15: (0 7px 20px rgba(var(--v-shadow-key-umbra-color), 0.24)),
+    16: (0 7px 21px rgba(var(--v-shadow-key-umbra-color), 0.26)),
+    17: (0 7px 22px rgba(var(--v-shadow-key-umbra-color), 0.26)),
+    18: (0 8px 23px rgba(var(--v-shadow-key-umbra-color), 0.28)),
+    19: (0 8px 24px 6px rgba(var(--v-shadow-key-umbra-color), 0.28)),
+    20: (0 9px 25px rgba(var(--v-shadow-key-umbra-color), 0.3)),
+    21: (0 9px 26px rgba(var(--v-shadow-key-umbra-color), 0.32)),
+    22: (0 9px 27px rgba(var(--v-shadow-key-umbra-color), 0.32)),
+    23: (0 10px 28px rgba(var(--v-shadow-key-umbra-color), 0.34)),
+    24: (0 10px 30px rgba(var(--v-shadow-key-umbra-color), 0.34))
+  ),
+
+  $shadow-key-penumbra: (
+    0: (0 0 transparent),
+    1: (0 0 transparent),
+    2: (0 0 transparent),
+    3: (0 0 transparent),
+    4: (0 0 transparent),
+    5: (0 0 transparent),
+    6: (0 0 transparent),
+    7: (0 0 transparent),
+    8: (0 0 transparent),
+    9: (0 0 transparent),
+    10: (0 0 transparent),
+    11: (0 0 transparent),
+    12: (0 0 transparent),
+    13: (0 0 transparent),
+    14: (0 0 transparent),
+    15: (0 0 transparent),
+    16: (0 0 transparent),
+    17: (0 0 transparent),
+    18: (0 0 transparent),
+    19: (0 0 transparent),
+    20: (0 0 transparent),
+    21: (0 0 transparent),
+    22: (0 0 transparent),
+    23: (0 0 transparent),
+    24: (0 0 transparent),
+  ),
+
+  $shadow-key-ambient: (
+    0: (0 0 transparent),
+    1: (0 0 transparent),
+    2: (0 0 transparent),
+    3: (0 0 transparent),
+    4: (0 0 transparent),
+    5: (0 0 transparent),
+    6: (0 0 transparent),
+    7: (0 0 transparent),
+    8: (0 0 transparent),
+    9: (0 0 transparent),
+    10: (0 0 transparent),
+    11: (0 0 transparent),
+    12: (0 0 transparent),
+    13: (0 0 transparent),
+    14: (0 0 transparent),
+    15: (0 0 transparent),
+    16: (0 0 transparent),
+    17: (0 0 transparent),
+    18: (0 0 transparent),
+    19: (0 0 transparent),
+    20: (0 0 transparent),
+    21: (0 0 transparent),
+    22: (0 0 transparent),
+    23: (0 0 transparent),
+    24: (0 0 transparent),
+  ),
+
+  // 👉 Typography
+  $typography: (
+    "h1": (
+      "size": 2.875rem,
+      "weight": 500,
+      "line-height": 4.25rem,
+      "letter-spacing": normal
+    ),
+    "h2": (
+      "size": 2.375rem,
+      "weight": 500,
+      "line-height": 3.5rem,
+      "letter-spacing": normal
+    ),
+    "h3": (
+      "size": 1.75rem,
+      "weight": 500,
+      "line-height": 2.625rem
+    ),
+    "h4": (
+      "size": 1.5rem,
+      "weight": 500,
+      "line-height": 2.375rem,
+      "letter-spacing": normal
+    ),
+    "h5": (
+      "size": $typography-h5-font-size,
+      "weight": 500,
+      "line-height": 1.75rem
+    ),
+    "h6":(
+      "size": 0.9375rem,
+      "line-height": 1.375rem,
+      "weight": 500,
+      "letter-spacing": normal
+    ),
+    "body-1":(
+      "size": $typography-body-1-font-size,
+      "line-height": $typography-body-1-line-height,
+      "letter-spacing": normal
+    ),
+    "body-2": (
+      "size": 0.8125rem,
+      "line-height": 1.25rem,
+      "letter-spacing": normal
+    ),
+    "subtitle-1":(
+      "size": 0.9375rem,
+      "weight": 400,
+      "line-height": 1.375rem
+    ),
+    "subtitle-2": (
+      "size": 0.8125rem,
+      "weight": 400,
+      "line-height": 1.25rem,
+      "letter-spacing": normal
+    ),
+    "button": (
+      "size": 0.9375rem,
+      "weight": 500,
+      "line-height": 1.125rem,
+      "letter-spacing": 0.0269rem,
+      "text-transform": capitalize
+    ),
+    "caption":(
+      "size": 0.8125rem,
+      "line-height": 1.125rem,
+      "letter-spacing": 0.025rem
+    ),
+    "overline": (
+      "size": 0.75rem,
+      "weight": 400,
+      "line-height": 0.875rem,
+      "letter-spacing": 0.05rem,
+      "text-transform": uppercase
+    ),
+  ),
+
+  // 👉 Alert
+  $alert-title-font-size: 1.125rem,
+  $alert-title-line-height: 1.5rem,
+  $alert-border-opacity: 0.38,
+  $alert-prepend-margin-inline-end: 12px,
+
+  // 👉 Avatar
+  $avatar-height: 38px,
+  $avatar-width: 38px,
+  $avatar-elevation: 2,
+
+  // 👉 Badge
+  $badge-dot-height: 8px,
+  $badge-dot-width: 8px,
+  $badge-min-width: 24px,
+  $badge-height: 1.5rem,
+  $badge-font-size: 0.8125rem,
+  $badge-border-radius: 12px,
+  $badge-border-color: rgb(var(--v-theme-surface)),
+  $badge-border-transform: scale(1.5),
+  $badge-dot-border-width: 2px,
+
+  // 👉 Chip
+  $chip-font-size: 13px,
+  $chip-font-weight: 500,
+  $chip-label-border-radius: 0.375rem,
+  $chip-height: 28px,
+  $chip-close-size: 1.25rem,
+  $chip-elevation: 0,
+
+  // 👉 Button
+  $button-height: 38px,
+  $button-padding-ratio: 1.9,
+  $button-line-height: 1.375rem,
+  $button-disabled-opacity: 0.45,
+  $button-disabled-overlay: 0.2025,
+  $button-icon-font-size: 0.9375rem,
+  $button-elevation: ("default": 2, "hover": 2, "active": 2),
+
+  // 👉 Button Group
+  $btn-group-border-radius: 8px,
+
+  // 👉 Dialog
+  $dialog-card-header-padding: 24px 24px 0,
+  $dialog-card-header-text-padding-top: 24px,
+  $dialog-card-text-padding: 24px,
+  $dialog-border-radius: 8px,
+  $dialog-elevation: 8,
+
+  // 👉 Card
+  $card-title-font-size: $typography-h5-font-size,
+  $card-text-font-size: $typography-body-1-font-size,
+  $card-subtitle-font-size: 0.9375rem,
+  $card-subtitle-header-padding: 0,
+  $card-subtitle-line-height: 1.375rem,
+  $card-title-line-height: 1.75rem,
+  $card-text-padding: 24px,
+  $card-text-line-height: 1.375rem,
+  $card-item-padding: 24px,
+  $card-elevation: 6,
+
+  // 👉 Carousel
+  $carousel-dot-margin: 0,
+  $carousel-dot-inactive-opacity: 0.4,
+
+  // 👉 Expansion Panel
+  $expansion-panel-title-padding: 12px 20px 12px 24px,
+  $expansion-panel-color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)),
+  $expansion-panel-active-title-min-height: 46px,
+  $expansion-panel-title-min-height: 46px,
+  $expansion-panel-text-padding: 0 20px 20px 24px,
+
+  // 👉 Field
+  $field-font-size: 0.9375rem,
+  $input-density: ("default": -2, "comfortable": -4.5, "compact": -6.5),
+  $field-outline-opacity: 0.22,
+  $field-border-width: 1px,
+  $field-focused-border-width: 2px,
+  $field-control-affixed-padding: 14px,
+
+  // 👉 Input
+  $input-details-padding-above: 4px,
+  $input-details-font-size: 0.8125rem,
+
+  // 👉 List
+  $list-density: ("default": 0, "comfortable": -1.5, "compact": -2.5),
+  $list-item-padding: 8px 20px,
+  $list-item-min-height: 38px,
+  $list-subheader-font-size: 13px,
+  $list-subheader-line-height: 1.25rem,
+  // $list-subheader-padding-start: 20px,
+  $list-subheader-padding-end: 20px,
+  $list-subheader-min-height: 40px,
+  $list-disabled-opacity: 0.4,
+  $list-item-icon-margin-start: 12px,
+  $list-item-icon-margin-end: 12px,
+  $list-item-avatar-margin-start: 12px,
+  $list-item-avatar-margin-end: 12px,
+  $list-item-nav-title-font-size: 0.9375rem,
+  $list-item-nav-title-font-weight: 400,
+  $list-item-nav-subtitle-font-size: 0.8125rem,
+  $list-item-subtitle-line-height: 1.25rem,
+
+  // 👉 label
+  $label-font-size: 0.9375rem,
+
+  // 👉 message
+  $messages-font-size: 13px,
+
+  // 👉 menu
+  $menu-elevation: 8,
+
+  // 👉 navigation drawer
+  $navigation-drawer-temporary-elevation: 8,
+  $navigation-drawer-transition-duration: 0.5s,
+
+  // 👉 pagination
+  $pagination-item-margin: 0.1875rem,
+
+  // 👉 Progress Linear
+  $progress-linear-background-opacity: 1,
+
+  // 👉 Radio
+  $radio-group-label-selection-group-padding-inline: 0,
+
+  // 👉 slider
+  $slider-thumb-hover-opacity: var(--v-activated-opacity),
+  $slider-thumb-label-padding: 2px 10px,
+  $slider-thumb-label-font-size: 0.8125rem,
+  $slider-track-active-size: 6px,
+  $slider-thumb-label-height: 1.5rem,
+  $slider-thumb-label-border-radius: 0.375rem,
+  $slider-thumb-label-transition: none,
+
+  // 👉 select
+  $select-chips-margin-bottom: ("default": 1, "comfortable": 1, "compact": 1),
+
+  // 👉 snackbar
+  $snackbar-background: rgb(var(--v-tooltip-background)),
+  $snackbar-color: rgb(var(--v-theme-surface)),
+  $snackbar-content-padding: 12px 16px,
+  $snackbar-font-size: 0.8125rem,
+  $snackbar-elevation: 2,
+  $snackbar-wrapper-min-height:44px,
+  $snackbar-btn-padding: 0 9px,
+  $snackbar-action-margin: 16px,
+
+  // 👉 switch
+  $switch-inset-track-width: 1.875rem,
+  $switch-inset-track-height: 1.125rem,
+  $switch-inset-thumb-height: 0.875rem,
+  $switch-inset-thumb-width: 0.875rem,
+  $switch-inset-thumb-off-height: 0.875rem,
+  $switch-track-opacity: 1,
+  $switch-track-background: rgba(var(--v-theme-on-surface), var(--v-focus-opacity)),
+  $switch-thumb-background: rgb(var(--v-theme-on-primary)),
+
+  // 👉 table
+  $table-row-height: 50px,
+  $table-color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)),
+  $table-font-size: 0.9375rem,
+  $table-header-height: 56px,
+  $table-header-font-weight: 500,
+  $table-column-padding: 0 16px 0 20px,
+  $data-table-footer-padding: 12px 24px,
+
+  // 👉 tabs
+  $tabs-height: 42px,
+  $tab-min-width: 50px,
+
+  // 👉 tooltip
+  $tooltip-background-color: rgb(var(--v-tooltip-background)),
+  $tooltip-text-color: rgb(var(--v-theme-surface)),
+  $tooltip-font-size: 0.8125rem,
+  $tooltip-border-radius: 0.25rem,
+  $tooltip-padding: 5px 12px,
+  $tooltip-line-height: 1.25rem,
+
+  // 👉 timeline
+  $timeline-dot-size: 34px,
+  $timeline-dot-divider-background: rgba(var(--v-border-color),0.08),
+  $timeline-divider-line-background: rgba(var(--v-border-color), var(--v-border-opacity)),
+  $timeline-divider-line-thickness: 1.5px,
+  $timeline-item-padding: 16px,
+);

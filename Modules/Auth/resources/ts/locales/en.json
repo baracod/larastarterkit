@@ -1,0 +1,117 @@
+{
+    "user": {
+        "menuTitle": "Users",
+        "menuDescription": "Manage system users.",
+        "title": "User",
+        "titlePlural": "Users",
+        "field": {
+            "id": "ID",
+            "name": "Name",
+            "username": "Username",
+            "email": "Email Address",
+            "additionalInfo": "Additional Information",
+            "avatar": "Avatar",
+            "emailVerifiedAt": "Email Verified At",
+            "password": "Password",
+            "rememberToken": "Remember Token",
+            "active": "Active",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "roles": "Roles"
+        }
+    },
+    "role": {
+        "menuTitle": "Roles & Permissions",
+        "menuDescription": "Manage roles and their permissions.",
+        "title": "Role",
+        "titlePlural": "Roles",
+        "field": {
+            "id": "ID",
+            "name": "Name",
+            "displayName": "Display Name",
+            "description": "Description",
+            "order": "Order",
+            "isOwner": "Owner",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "permissions_count": "Permissions",
+            "users_count": "Users"
+        }
+    },
+    "permission": {
+        "menuTitle": "Permissions",
+        "menuDescription": "Manage access permissions.",
+        "title": "Permission",
+        "titlePlural": "Permissions",
+        "field": {
+            "id": "ID",
+            "key": "Key",
+            "action": "Action",
+            "subject": "Subject",
+            "description": "Description",
+            "tableName": "Table Name",
+            "alwaysAllow": "Always Allow",
+            "isPublic": "Public",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At"
+        }
+    },
+    "pages": {
+        "login": {
+            "title": "Login",
+            "welcome": "Welcome to  :app 👋🏻",
+            "subtitle": "Please sign in to your account and start the adventure.",
+            "email": "Email",
+            "password": "Password",
+            "rememberMe": "Remember me",
+            "forgotPassword": "Forgot password?",
+            "action": {
+                "signIn": "Sign in"
+            },
+            "noAccount": "Don't have an account?",
+            "createAccount": "Create an account"
+        },
+        "forgotPassword": {
+            "title": "Forgot Password",
+            "subtitle": "Enter your email address to receive a password reset link.",
+            "email": "Email address",
+            "action": {
+                "sendResetLink": "Send reset link"
+            },
+            "backToLogin": "Back to login"
+        },
+        "labels": {
+            "changePassword": {
+                "titleForm": "Change Password",
+                "newPassword": "New Password",
+                "confirmPassword": "Confirm Password",
+                "warningPasswordFormaTitle": "Ensure that these requirements are met",
+                "warningPasswordFormaText": "Minimum 8 characters long, uppercase & symbol",
+                "passwordMismatch": "The 'New Password' field must match the 'Confirm Password' field.",
+                "minLength": "Password must be at least 8 characters long.",
+                "uppercase": "Password must contain at least one uppercase letter.",
+                "symbol": "Password must include at least one symbol.",
+                "invalid": "Password must be at least 8 characters long, with one uppercase letter and one symbol.",
+                "mismatch": "Passwords do not match."
+            }
+        },
+        "action": {
+            "editRoles": "Modifier Roles",
+            "valide": "Valider"
+        }
+    },
+    "message": {
+        "noRoles": "No roles assigned to this user.",
+        "changePasswordSuccess": "Password changed successfully.",
+        "changePasswordError": "Error changing password.",
+        "changePasswordRule": "The password must contain at least 8 characters, an uppercase letter, and a symbol.",
+        "detachPermissions": {
+            "title": "Permissions detached.",
+            "message": "The permissions have been successfully removed from the roles."
+        },
+        "attachPermissions": {
+            "title": "Permissions attached.",
+            "message": "The permissions have been successfully added to the roles."
+        }
+    }
+}

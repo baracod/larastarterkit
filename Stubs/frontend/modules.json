@@ -1,0 +1,11 @@
+[
+    {
+        "icon": null,
+        "title": "Auth",
+        "action": "access",
+        "subject": "auth",
+        "to": {
+            "name": "auth"
+        }
+    }
+]

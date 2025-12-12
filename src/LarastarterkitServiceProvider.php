@@ -3,6 +3,7 @@
 namespace Baracod\Larastarterkit;
 
 use Baracod\Larastarterkit\Commands\LarastarterkitCommand;
+use Baracod\Larastarterkit\Commands\LarastarterkitInstallCommand;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -23,7 +24,8 @@ class LarastarterkitServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_larastarterkit_table')
-            ->hasCommand(LarastarterkitCommand::class);
+            ->hasCommand(LarastarterkitCommand::class)
+            ->hasCommand(LarastarterkitInstallCommand::class);
     }
 
     public function boot(): void
