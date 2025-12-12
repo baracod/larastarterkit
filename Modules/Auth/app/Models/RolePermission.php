@@ -38,7 +38,9 @@ class RolePermission extends Model
     }
 
     protected static $logAttributes = true;
+
     protected static $logFillable = true;
+
     protected static $logName = 'RolePermission';
 
     public function getDescriptionForEvent(string $eventName): string

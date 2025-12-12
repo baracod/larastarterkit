@@ -2,9 +2,9 @@
 
 namespace Modules\Auth\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
 class UserRequest extends FormRequest
 {
@@ -68,11 +68,10 @@ class UserRequest extends FormRequest
         if ($this->is('api/v1/auth/users/update-profile/*')) {
             $rules = array_intersect_key($rules, $this->all());
             // Optionnel: sur update-profile, évitez d’exiger le password si non envoyé
-            if (!array_key_exists('password', $this->all())) {
+            if (! array_key_exists('password', $this->all())) {
                 unset($rules['password']);
             }
         }
-
 
         return $rules;
     }

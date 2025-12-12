@@ -2,23 +2,19 @@
 
 namespace Modules\Auth\Models;
 
-use Modules\Auth\Models\Role;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Modules\Auth\Notifications\ResetPasswordLink;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\HasApiTokens;
+use Modules\Auth\Notifications\ResetPasswordLink;
 
-
-
-
-class User extends  Authenticatable
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
     protected $table = 'auth_users';
 
     protected $fillable = [
@@ -28,7 +24,7 @@ class User extends  Authenticatable
         'additional_info',
         'avatar',
         'password',
-        'active'
+        'active',
     ];
 
     protected $hidden = [
@@ -43,13 +39,12 @@ class User extends  Authenticatable
 
     protected $appends = [
         'role_names',
-        'avatar_url'
+        'avatar_url',
     ];
-
 
     protected static function booted()
     {
-        //Avant la suppression, supprimer les données pivos
+        // Avant la suppression, supprimer les données pivos
         static::deleting(function ($user) {
             $user->roles()->detach(); // Remove all roles when user is deleted
         });
@@ -72,7 +67,6 @@ class User extends  Authenticatable
     {
         return $this->roles->pluck('display_name');
     }
-
 
     public function hasRole($roleName)
     {
@@ -104,7 +98,7 @@ class User extends  Authenticatable
             ->distinct();
     }
 
-    //-------------------------GETTERS-------------------------------------
+    // -------------------------GETTERS-------------------------------------
 
     /**
      * Get the full URL for the user's avatar.
@@ -136,7 +130,7 @@ class User extends  Authenticatable
      */
     public static function nonAdmin()
     {
-        return self::with('auth_roles')->get()->reject(fn($user) => $user->hasRole('administrator'))->values();
+        return self::with('auth_roles')->get()->reject(fn ($user) => $user->hasRole('administrator'))->values();
     }
 
     /**
@@ -145,7 +139,7 @@ class User extends  Authenticatable
     public static function withLowerRoles($order)
     {
         return self::with('auth_roles')->get()->filter(function ($user) use ($order) {
-            return !$user->roles->where('order', '<=', $order)->count()
+            return ! $user->roles->where('order', '<=', $order)->count()
                 && $user->roles->where('order', '>', $order)->count();
         })->values();
     }
@@ -155,8 +149,7 @@ class User extends  Authenticatable
         return $lang ?: 'fr';
     }
 
-
-    //-------------------------NOTIFICATIONS-------------------------------------
+    // -------------------------NOTIFICATIONS-------------------------------------
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPasswordLink($token));

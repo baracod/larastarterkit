@@ -26,6 +26,7 @@ class RoleController
     public function store(RoleRequest $request)
     {
         $validated = $request->validated();
+
         return Role::create($validated);
     }
 
@@ -33,6 +34,7 @@ class RoleController
     {
         $validated = $request->validated();
         $role->update($validated);
+
         return $role;
     }
 
@@ -59,8 +61,10 @@ class RoleController
     public function getPermissions(int $id, Request $request)
     {
         $role = Role::findOrFail($id);
+
         return $role->permissions;
     }
+
     public function getCommonPermissions($roleIds, Request $request)
     {
         $roleIds = explode(',', $roleIds);
@@ -69,7 +73,7 @@ class RoleController
             ->select('permission_id')
             ->whereIn('role_id', $roleIds)
             ->groupBy('permission_id')
-            ->havingRaw('COUNT(DISTINCT role_id) = ?', [count($roleIds)]) //ne garder que les permissions qui apparaissent pour tous les rôles donnés.
+            ->havingRaw('COUNT(DISTINCT role_id) = ?', [count($roleIds)]) // ne garder que les permissions qui apparaissent pour tous les rôles donnés.
             ->pluck('permission_id');
 
         $commonPermissions = Permission::whereIn('id', $permissionIds)->get();
@@ -79,28 +83,24 @@ class RoleController
         // return $roles->flatMap(fn($role) => $role->permissions);
     }
 
-
-
     public function attachPermissions(Request $request, string $ids)
     {
         // 1) Validation stricte des entrées
         $validated = $request->validate([
-            'permissionIds'   => ['required', 'array'],
+            'permissionIds' => ['required', 'array'],
             'permissionIds.*' => ['integer', Rule::exists('auth_permissions', 'id')],
         ]);
 
-
         $user = $request->user();
 
-        if (!$user || !$user->can('attach', 'auth_permissions')) {
+        if (! $user || ! $user->can('attach', 'auth_permissions')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-
         // 2) Parsing des rôles (CSV → array unique, int)
         $roleIds = collect(explode(',', $ids))
-            ->filter(fn($v) => $v !== '' && is_numeric($v))
-            ->map(fn($v) => (int) $v)
+            ->filter(fn ($v) => $v !== '' && is_numeric($v))
+            ->map(fn ($v) => (int) $v)
             ->unique()
             ->values();
 
@@ -135,10 +135,10 @@ class RoleController
                 $changes = $role->permissions()->sync($permissionIds->all());
 
                 $summary['roles'][] = [
-                    'role_id'  => $role->id,
+                    'role_id' => $role->id,
                     'attached' => $changes['attached'] ?? [],
                     'detached' => $changes['detached'] ?? [],
-                    'updated'  => $changes['updated'] ?? [],
+                    'updated' => $changes['updated'] ?? [],
                 ];
             } else {
                 // Cas 2 : plusieurs rôles → AJOUT SANS DÉTACHEMENT
@@ -148,15 +148,15 @@ class RoleController
                     $current = $role->permissions()->pluck('auth_permissions.id')->all();
                     $toAttach = array_values(array_diff($permissionIds->all(), $current));
 
-                    if (!empty($toAttach)) {
+                    if (! empty($toAttach)) {
                         $role->permissions()->syncWithoutDetaching($toAttach);
                     }
 
                     $summary['roles'][] = [
-                        'role_id'  => $role->id,
+                        'role_id' => $role->id,
                         'attached' => $toAttach,
                         'detached' => [], // jamais détaché dans ce mode
-                        'updated'  => [],
+                        'updated' => [],
                     ];
                 }
             }
@@ -171,26 +171,25 @@ class RoleController
             'data' => $result,
         ]);
     }
+
     public function detachPermissions(Request $request, string $ids)
     {
         // 1) Validation stricte des entrées
         $validated = $request->validate([
-            'permissionIds'   => ['required', 'array'],
+            'permissionIds' => ['required', 'array'],
             'permissionIds.*' => ['integer', Rule::exists('auth_permissions', 'id')],
         ]);
 
-
         $user = $request->user();
 
-        if (!$user || !$user->can('attach', 'auth_permissions')) {
+        if (! $user || ! $user->can('attach', 'auth_permissions')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-
         // 2) Parsing des rôles (CSV → array unique, int)
         $roleIds = collect(explode(',', $ids))
-            ->filter(fn($v) => $v !== '' && is_numeric($v))
-            ->map(fn($v) => (int) $v)
+            ->filter(fn ($v) => $v !== '' && is_numeric($v))
+            ->map(fn ($v) => (int) $v)
             ->unique()
             ->values();
 
@@ -225,21 +224,21 @@ class RoleController
                 $changes = $role->permissions()->detach($permissionIds->all());
 
                 $summary['roles'][] = [
-                    'role_id'  => $role->id,
+                    'role_id' => $role->id,
                     'attached' => $changes['attached'] ?? [],
                     'detached' => $changes['detached'] ?? [],
-                    'updated'  => $changes['updated'] ?? [],
+                    'updated' => $changes['updated'] ?? [],
                 ];
             } else {
                 // Cas 2 : plusieurs rôles → AJOUT SANS DÉTACHEMENT
                 foreach ($roles as $role) {
 
-                    $res =    $role->permissions()->detach($permissionIds->all());
+                    $res = $role->permissions()->detach($permissionIds->all());
 
                     $summary['roles'][] = [
-                        'role_id'  => $role->id,
+                        'role_id' => $role->id,
                         'detached' => $res,
-                        'updated'  => [],
+                        'updated' => [],
                     ];
                 }
             }

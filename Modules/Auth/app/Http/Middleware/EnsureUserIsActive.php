@@ -4,7 +4,6 @@ namespace Modules\Auth\app\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserIsActive
 {
@@ -18,14 +17,13 @@ class EnsureUserIsActive
         // Ici, on suppose que le middleware 'auth' a déjà tourné
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             // Laisse le middleware 'auth' gérer l'Unauthenticated
             return $next($request);
         }
 
         // 3 variantes courantes — choisis celle qui correspond à ton schéma
-        $isSuspended = !$user->active;        // timestamp nullable
-
+        $isSuspended = ! $user->active;        // timestamp nullable
 
         if ($isSuspended) {
             // Révocation optionnelle du token Sanctum (utile côté API)
@@ -38,7 +36,7 @@ class EnsureUserIsActive
                 return response()->json([
                     'success' => false,
                     'message' => 'Account suspended.',
-                    'code'    => 'ACCOUNT_SUSPENDED',
+                    'code' => 'ACCOUNT_SUSPENDED',
                 ], 423); // 423 Locked
             }
 

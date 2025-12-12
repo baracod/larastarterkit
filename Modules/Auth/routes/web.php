@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-//use Modules\Auth\Http\Controllers\AuthController;
+
+// use Modules\Auth\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::group([], function () {
+// Route::group([], function () {
 //    Route::resource('auth', AuthController::class)->names('auth');
-//});
+// });

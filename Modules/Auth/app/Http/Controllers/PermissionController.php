@@ -2,9 +2,9 @@
 
 namespace Modules\Auth\Http\Controllers;
 
-use Modules\Auth\Models\Permission;
-use Modules\Auth\Http\Requests\PermissionRequest;
 use Illuminate\Http\Request;
+use Modules\Auth\Http\Requests\PermissionRequest;
+use Modules\Auth\Models\Permission;
 
 class PermissionController
 {
@@ -21,6 +21,7 @@ class PermissionController
     public function store(PermissionRequest $request)
     {
         $validated = $request->validated();
+
         return Permission::create($validated);
     }
 
@@ -28,6 +29,7 @@ class PermissionController
     {
         $validated = $request->validated();
         $permission->update($validated);
+
         return $permission;
     }
 

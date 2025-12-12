@@ -2,14 +2,8 @@
 
 namespace Modules\Auth\Models;
 
-
-use Modules\Auth\Models\Role;
-use Illuminate\Database\Eloquent\Model;
-use Modules\Auth\Models\RolePermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-
-
+use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
@@ -24,7 +18,7 @@ class Permission extends Model
         'description',
         'table_name',
         'always_allow',
-        'is_public'
+        'is_public',
     ];
 
     public function roles()
