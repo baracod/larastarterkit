@@ -2,7 +2,53 @@
 
 All notable changes to `larastarterkit` will be documented in this file.
 
-##  v0.0.1 - Initial Alpha Release - 2025-12-27
+## v0.0.2 - Automated Installer & Fullstack Scaffolding - 2025-12-27
+
+### 🚀 v0.0.2: The "Zero-Config" Update
+
+This release introduces a powerful new installation command that completely automates the setup of the Modular Monolith architecture and the Vue 3 + Vuetify frontend stack.
+
+#### ✨ New Features
+
+* **New Installer Command**: Introduced `php artisan larastarterkit:install`.
+    * This single command handles the entire project setup from A to Z.
+    
+* **Frontend Scaffolding**:
+    * Automatically copies the full **Vue 3 + Vuetify + TypeScript** architecture.
+    * Installs `vite.config.ts`, `tsconfig.json`, `themeConfig.ts`, and more.
+    * Updates `package.json` with required NPM dependencies.
+    
+* **Architecture Setup**:
+    * Creates the `Modules/` directory structure.
+    * Generates `modules.json` and `menuItems.ts`.
+    
+* **Dependency Management**:
+    * Automatically configures `wikimedia/composer-merge-plugin` in `composer.json` to allow Modules to have their own dependencies.
+    
+* **Authentication**:
+    * Automated setup and publication of **Laravel Sanctum**.
+    
+* **Routing**:
+    * Injects the SPA "Catch-all" route in `routes/web.php`.
+    
+
+#### 🛠 Usage
+
+To upgrade and install the stack on a fresh Laravel project:
+
+```bash
+# 1. Update the package
+composer update baracod/larastarterkit
+
+# 2. Run the new installer
+php artisan larastarterkit:install
+
+# 3. Finalize setup
+npm install
+npm run dev
+
+```
+## v0.0.1 - Initial Alpha Release - 2025-12-27
 
 ### 🎉 Initial Release of Larastarterkit
 
@@ -12,16 +58,22 @@ This package provides a powerful Modular Monolith starter kit for Laravel 11/12,
 #### ✨ Key Features available in v0.0.1
 
 * **Modular Architecture**: Built on top of `nwidart/laravel-modules`.
+  
 * **Fullstack Generators**:
-    * `php artisan module:make <Name>`: Generates Backend (Laravel) and Frontend (Vue/Vuetify) structure.
-    
+  
+  * `php artisan module:make <Name>`: Generates Backend (Laravel) and Frontend (Vue/Vuetify) structure.
+  
 * **Authentication**:
-    * Pre-configured **Laravel Sanctum**.
-    * **Role-Based Access Control (RBAC)** (Roles & Permissions system).
-    
+  
+  * Pre-configured **Laravel Sanctum**.
+  * **Role-Based Access Control (RBAC)** (Roles & Permissions system).
+  
 * **Stubs System**: Customizable stubs for Controllers, Models, and Vue components.
+  
 * **API Documentation**: Integrated **Swagger UI** setup.
+  
 * **Translation**: Auto-translation tools using Google API.
+  
 
 #### 📋 Requirements
 
@@ -33,5 +85,6 @@ This package provides a powerful Modular Monolith starter kit for Laravel 11/12,
 
 ```bash
 composer require baracod/larastarterkit
+
 
 ```
