@@ -1,21 +1,39 @@
-# This is my package larastarterkit
+# Larastarterkit
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/baracod/larastarterkit.svg?style=flat-square)](https://packagist.org/packages/baracod/larastarterkit)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/baracod/larastarterkit/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/baracod/larastarterkit/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/baracod/larastarterkit/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/baracod/larastarterkit/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/baracod/larastarterkit.svg?style=flat-square)](https://packagist.org/packages/baracod/larastarterkit)
+[![Tests](https://img.shields.io/github/actions/workflow/status/baracod/larastarterkit/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/baracod/larastarterkit/actions)
+[![License](https://img.shields.io/packagist/l/baracod/larastarterkit.svg?style=flat-square)](https://packagist.org/packages/baracod/larastarterkit)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+**Larastarterkit** is the ultimate Modular Monolith starter kit for Laravel. It empowers you to generate full-stack modules (Backend + Frontend) in seconds, enforcing a solid architecture based on `nwidart/laravel-modules`.
 
-## Support us
+Stop reinventing the wheel. Focus on your business logic, not the boilerplate.
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/larastarterkit.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/larastarterkit)
+---
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+## ✨ Features
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+*   **🚀 Modular Architecture**: Built on top of `nwidart/laravel-modules`. Separate your domain logic cleanly.
+*   **🎨 Fullstack Ready**: Generates **Vue 3** components, **Vuetify** UIs, and **TypeScript** definitions automatically.
+*   **🔐 Auth & Permissions**: Includes a pre-configured Auth module with **Sanctum**, Role-Based Access Control (RBAC), and menu management.
+*   **🛠 Powerful Generators**:
+    *   `module:make` : Scaffolds a complete module (API, Web, Vue).
+    *   Generators for Models, Controllers, Requests, and Routes.
+*   **📄 Auto-Documentation**: Integrated **Swagger UI**. Your API documentation is generated automatically.
+*   **🌍 Auto-Translation**: Internationalize your app instantly using the **Google Translate API** (Free tier supported).
+*   **📝 Stub Overrides**: Fully customizable templates. Bring your own code style.
 
-## Installation
+---
+
+## 📋 Requirements
+
+*   PHP `^8.3`
+*   Laravel `11.x` or `12.x`
+*   Composer
+
+---
+
+## 📦 Installation
 
 You can install the package via composer:
 
@@ -23,62 +41,97 @@ You can install the package via composer:
 composer require baracod/larastarterkit
 ```
 
-You can publish and run the migrations with:
+After installation, you can publish the configuration file (optional but recommended for customization):
 
 ```bash
-php artisan vendor:publish --tag="larastarterkit-migrations"
-php artisan migrate
+php artisan vendor:publish --tag=larastarterkit-modules-config
 ```
 
-You can publish the config file with:
+---
+
+## 🚀 Usage
+
+### creating a New Module
+
+The magic happens with a single command. To create a fully working module named `Blog`:
 
 ```bash
-php artisan vendor:publish --tag="larastarterkit-config"
+php artisan module:make Blog
 ```
 
-This is the contents of the published config file:
+This command will:
+1.  Saffold the directory structure in `Modules/Blog`.
+2.  Generate the **Service Provider**, **Routes** (API & Web), and **Composer** file.
+3.  Register the module in `Modules/modules.json`.
+4.  Generate the default **Vue.js** frontend structure.
+
+### Generating Resources
+
+You can also programmatically generate resources (useful for seeders or custom scripts):
 
 ```php
-return [
-];
+use Baracod\Larastarterkit\Generator\ModuleGenerator;
+use Baracod\Larastarterkit\Generator\ModelGen;
+
+// 1. Initialize Module
+$moduleGen = new ModuleGenerator('Ecommerce');
+$moduleGen->generate();
+
+// 2. Generate a Model from a DB Table
+$modelGen = new ModelGen();
+$module = $moduleGen->getModuleOfTable('products');
+$modelGen->generateModelFromTable('products', $module);
 ```
 
-Optionally, you can publish the views using
+---
 
-```bash
-php artisan vendor:publish --tag="larastarterkit-views"
-```
+## 🔧 Configuration & Stubs
 
-## Usage
+Larastarterkit is designed to be customizable. You can override any file generated by the package.
 
-```php
-$larastarterkit = new Baracod\Larastarterkit();
-echo $larastarterkit->echoPhrase('Hello, Baracod!');
-```
+1.  **Publish Stubs**:
+    ```bash
+    php artisan vendor:publish --tag=larastarterkit-stubs
+    ```
+2.  **Edit Templates**:
+    Go to `stubs/larastarterkit/` in your project root and modify the files (e.g., `controller.stub`, `vue-component.stub`). The package will prioritize your custom stubs automatically.
 
-## Testing
+---
+
+## 📚 Documentation
+
+For full documentation, guides, and API reference, please visit our official documentation:
+
+👉 **[Read the Documentation](https://baracod.github.io/larastarterkit)** *(Replace with your real URL)*
+
+---
+
+## 🧪 Testing
 
 ```bash
 composer test
 ```
 
-## Changelog
+---
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+## 🤝 Contributing
 
-## Contributing
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+1.  Fork the repository.
+2.  Create your feature branch (`git checkout -b feature/amazing-feature`).
+3.  Commit your changes (`git commit -m 'Add some amazing feature'`).
+4.  Push to the branch (`git push origin feature/amazing-feature`).
+5.  Open a Pull Request.
 
-## Security Vulnerabilities
+---
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [OMBA BYAMUNGU BARAKA](https://github.com/baracod)
-- [All Contributors](../../contributors)
-
-## License
+## 📄 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+---
+
+<div align="center">
+    <b>Made with ❤️ by <a href="https://github.com/baracod">Baracod</a></b>
+</div>
