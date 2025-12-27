@@ -2,6 +2,25 @@
 
 All notable changes to `larastarterkit` will be documented in this file.
 
+## v0.0.3 Fix: Auth module installation logic - 2025-12-27
+
+### 🐛 Bug Fix
+
+This release fixes a critical issue in the `larastarterkit:install` command where the **Auth module** was not being generated correctly during the initial setup.
+
+#### What's Fixed?
+
+* **Auth Module**: The installer now correctly triggers the generation of the `Auth` module (Sanctum, Permissions, Login/Register logic) after the main scaffolding.
+
+#### 🛠 How to Update
+
+If you already installed v0.0.2 and are missing the Auth module, please update the package and re-run the installer:
+
+```bash
+composer update baracod/larastarterkit
+php artisan larastarterkit:install
+
+```
 ## v0.0.2 - Automated Installer & Fullstack Scaffolding - 2025-12-27
 
 ### 🚀 v0.0.2: The "Zero-Config" Update
@@ -11,26 +30,32 @@ This release introduces a powerful new installation command that completely auto
 #### ✨ New Features
 
 * **New Installer Command**: Introduced `php artisan larastarterkit:install`.
-    * This single command handles the entire project setup from A to Z.
-    
+  
+  * This single command handles the entire project setup from A to Z.
+  
 * **Frontend Scaffolding**:
-    * Automatically copies the full **Vue 3 + Vuetify + TypeScript** architecture.
-    * Installs `vite.config.ts`, `tsconfig.json`, `themeConfig.ts`, and more.
-    * Updates `package.json` with required NPM dependencies.
-    
+  
+  * Automatically copies the full **Vue 3 + Vuetify + TypeScript** architecture.
+  * Installs `vite.config.ts`, `tsconfig.json`, `themeConfig.ts`, and more.
+  * Updates `package.json` with required NPM dependencies.
+  
 * **Architecture Setup**:
-    * Creates the `Modules/` directory structure.
-    * Generates `modules.json` and `menuItems.ts`.
-    
+  
+  * Creates the `Modules/` directory structure.
+  * Generates `modules.json` and `menuItems.ts`.
+  
 * **Dependency Management**:
-    * Automatically configures `wikimedia/composer-merge-plugin` in `composer.json` to allow Modules to have their own dependencies.
-    
+  
+  * Automatically configures `wikimedia/composer-merge-plugin` in `composer.json` to allow Modules to have their own dependencies.
+  
 * **Authentication**:
-    * Automated setup and publication of **Laravel Sanctum**.
-    
+  
+  * Automated setup and publication of **Laravel Sanctum**.
+  
 * **Routing**:
-    * Injects the SPA "Catch-all" route in `routes/web.php`.
-    
+  
+  * Injects the SPA "Catch-all" route in `routes/web.php`.
+  
 
 #### 🛠 Usage
 
@@ -46,6 +71,7 @@ php artisan larastarterkit:install
 # 3. Finalize setup
 npm install
 npm run dev
+
 
 ```
 ## v0.0.1 - Initial Alpha Release - 2025-12-27
@@ -85,6 +111,7 @@ This package provides a powerful Modular Monolith starter kit for Laravel 11/12,
 
 ```bash
 composer require baracod/larastarterkit
+
 
 
 ```
