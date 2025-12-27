@@ -1,0 +1,33 @@
+[
+    {
+        "title": "Auth.user.menuTitle",
+        "to": {
+            "name": "auth-users"
+        },
+        "icon": {
+            "icon": "bx-file-blank"
+        },
+        "action": "access",
+        "subject": "auth_users"
+    },
+    {
+        "title": "Auth.role.menuTitle",
+        "to": {
+            "name": "auth-roles"
+        },
+        "icon": {
+            "icon": "bx-file-blank"
+        },
+        "action": "access",
+        "subject": "auth_roles"
+    },
+    {
+        "title": "Auth.Todo List",
+        "to": {
+            "name": "todolist"
+        },
+        "icon": {
+            "icon": "bx-check-square"
+        }
+    }
+]

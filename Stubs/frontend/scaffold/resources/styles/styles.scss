@@ -1,0 +1,125 @@
+// Write your overrides
+// @import "./variables";
+html {
+  overflow: auto auto !important;
+}
+//cette une manière de personnaliser la variable $list-subheader-padding-start dans la dernière version de vue  
+.v-list-subheader {
+  padding-left: 20px;
+  padding-right: 20px ;
+}
+
+.layout-navbar {
+  inset-block-start: 0.25rem !important;
+  padding-inline: 0.25rem !important;
+
+  .navbar-content-container {
+    block-size: auto !important;
+    padding-block: 0.25rem !important;
+    padding-inline: 1.5rem 0.5rem !important;
+  }
+}
+
+.layout-vertical-nav-collapsed {
+  .layout-navbar {
+    .navbar-content-container {
+      padding-block: 0.25rem !important;
+      padding-inline: 1rem 0.5rem !important;
+    }
+  }
+}
+
+.layout-page-content {
+  margin-block: 0 !important;
+  margin-inline: 0 !important;
+
+  .v-card.vh-full {
+    display: flex !important;
+    overflow: auto !important;
+    flex-direction: column !important;
+    max-block-size: calc(100dvh - 80px) !important;
+    min-block-size: calc(100dvh - 80px) !important;
+    padding-block: 0.25rem !important;
+    padding-inline: 0.25rem !important;
+
+    .v-card-title {
+      padding: 0 !important;
+      margin: 0 !important;
+      margin-block: 0.25rem 0.5rem !important;
+      margin-inline: 0.5rem 0.25rem !important;
+    }
+
+    .v-card-text {
+      flex-grow: 1 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      margin-block: 0 !important;
+      margin-inline: 0 !important;
+    }
+  }
+}
+
+.v-table.vh-full {
+  align-items: stretch !important;
+  max-block-size: calc(100dvh - 122px) !important;
+  min-block-size: calc(100dvh - 122px) !important;
+
+  &.v-data-table {
+    .v-table__wrapper {
+      flex: auto !important;
+      flex-grow: 1 !important;
+
+      table {
+        block-size: 100% !important;
+        min-block-size: 100% !important;
+      }
+    }
+
+    .v-data-table-footer {
+      padding: 0.25rem;
+      margin: 0;
+    }
+  }
+}
+
+.layout-nav-type-vertical .layout-vertical-nav {
+  .nav-section-title > :first-child {
+    margin-inline: 0.1rem;
+    padding-inline: 0.2rem 0.1rem;
+  }
+
+  .nav-link {
+    > :first-child {
+      margin-inline: 0.3rem 0.4rem;
+      padding-inline: 0.3rem 0.3rem;
+    }
+
+    .router-link-exact-active::after {
+      block-size: 2.625rem;
+      border-end-start-radius: 0.3rem;
+      border-start-start-radius: 0.3rem;
+      inline-size: 0.2rem;
+      inset-inline-end: -0.4rem;
+    }
+  }
+
+  .nav-link.nav-group > :first-child {
+    margin-inline: 0.3rem 0.4rem;
+    padding-inline: 0.3rem 0.3rem;
+  }
+
+  .nav-group.active:not(.nav-group .nav-group) > :first-child::after {
+    block-size: 2.625rem;
+    border-end-start-radius: 0.3rem;
+    border-start-start-radius: 0.3rem;
+    inline-size: 0.2rem;
+    inset-inline-end: -0.4rem;
+  }
+
+  .nav-header {
+    margin-inline: 0;
+    min-block-size: 3rem;
+    padding-block: 0 0.2rem;
+    padding-inline: 1rem;
+  }
+}

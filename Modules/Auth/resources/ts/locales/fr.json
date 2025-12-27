@@ -1,0 +1,142 @@
+{
+    "user": {
+        "menuTitle": "Utilisateurs",
+        "menuDescription": "Gestion des utilisateurs du système.",
+        "title": "Utilisateur",
+        "titlePlural": "Utilisateurs",
+        "field": {
+            "id": "Identifiant",
+            "name": "Nom",
+            "username": "Nom d'utilisateur",
+            "email": "Adresse e-mail",
+            "additionalInfo": "Informations supplémentaires",
+            "avatar": "Avatar",
+            "emailVerifiedAt": "E-mail vérifié à",
+            "password": "Mot de passe",
+            "rememberToken": "Token de rappel",
+            "active": "Actif",
+            "createdAt": "Créé à",
+            "updatedAt": "Mis à jour à",
+            "roles": "Rôles"
+        },
+        "labels": {
+            "changePassword": {
+                "titleForm": "Changer le mot de passe",
+                "newPassword": "Nouveau mot de passe",
+                "confirmPassword": "Confirmer le mot de passe",
+                "warningPasswordFormaTitle": "Assurez-vous que ces exigences sont respectées",
+                "actionChangePassword": "Changer le mot de passe",
+                "passwordMismatch": "Le champ 'Nouveau mot de passe' doit être identique au champ 'Confirmer le mot de passe'.",
+                "minLength": "Le mot de passe doit contenir au moins 8 caractères.",
+                "uppercase": "Le mot de passe doit contenir au moins une majuscule.",
+                "symbol": "Le mot de passe doit contenir au moins un symbole.",
+                "invalid": "Le mot de passe doit comporter au moins 8 caractères, une majuscule et un symbole.",
+                "mismatch": "Les deux mots de passe ne correspondent pas."
+            }
+        },
+        "action": {
+            "editRoles": "Modifier Roles",
+            "valide": "Valider",
+            "addOrRemoveRole": "Ajouter & Supprimer un rôle",
+            "suspend": "Suspendre",
+            "unsuspend": "Réactiver"
+        }
+    },
+    "role": {
+        "menuTitle": "Rôles & Permissions",
+        "menuDescription": "Gérer les rôles et leurs permissions.",
+        "title": "Rôle",
+        "titlePlural": "Rôles",
+        "field": {
+            "id": "Identifiant",
+            "name": "Nom",
+            "displayName": "Nom affiché",
+            "description": "Description",
+            "order": "Ordre",
+            "isOwner": "Propriétaire",
+            "createdAt": "Créé le",
+            "permissions_count": "Permissions",
+            "users_count": "Utilisateurs"
+        }
+    },
+    "permission": {
+        "menuTitle": "Permissions",
+        "menuDescription": "Gérer les permissions d'accès.",
+        "title": "Permission",
+        "titlePlural": "Permissions",
+        "field": {
+            "id": "Identifiant",
+            "key": "Clé",
+            "action": "Action",
+            "subject": "Sujet",
+            "description": "Description",
+            "tableName": "Nom de la table",
+            "alwaysAllow": "Toujours autoriser",
+            "isPublic": "Publique",
+            "createdAt": "Créé le",
+            "updatedAt": "Mis à jour le"
+        }
+    },
+    "pages": {
+        "login": {
+            "title": "Connexion",
+            "welcome": "Bienvenue sur :app ! 👋🏻",
+            "subtitle": "Connectez-vous à votre compte pour démarrer l’aventure.",
+            "email": "Adresse e-mail",
+            "password": "Mot de passe",
+            "rememberMe": "Se souvenir de moi",
+            "forgotPassword": "Mot de passe oublié ?",
+            "action": {
+                "signIn": "Se connecter"
+            },
+            "noAccount": "Vous n'avez pas de compte ?",
+            "createAccount": "Créer un compte"
+        },
+        "forgotPassword": {
+            "title": "Mot de passe oublié",
+            "subtitle": "Entrez votre adresse e-mail pour recevoir un lien de réinitialisation du mot de passe.",
+            "email": "Adresse e-mail",
+            "action": {
+                "sendResetLink": "Envoyer le lien de réinitialisation"
+            },
+            "backToLogin": "Retour à la connexion",
+            "dialog": {
+                "resetEmailSentTitle": "E-mail de réinitialisation envoyé",
+                "resetEmailSentMessage": "Des instructions pour réinitialiser votre mot de passe ont été envoyées à :email. Veuillez vérifier votre boîte de réception.",
+                "resetEmailErrorTitle": "Erreur d'envoi de l'e-mail",
+                "resetEmailErrorMessage": "Une erreur s'est produite lors de l'envoi de l'e-mail de réinitialisation. Veuillez vérifier si votre adresse e-mail est correcte et réessayer."
+            }
+        },
+        "resetPassword": {
+            "title": "Réinitialiser le mot de passe",
+            "subtitle": "Entrez un nouveau mot de passe pour votre compte.",
+            "email": "Adresse e-mail",
+            "newPassword": "Nouveau mot de passe",
+            "confirmPassword": "Confirmer le mot de passe",
+            "action": {
+                "resetPassword": "Réinitialiser le mot de passe"
+            },
+            "backToLogin": "Retour à la connexion",
+            "dialog": {
+                "resetPasswordSuccessTitle": "Mot de passe réinitialisé",
+                "resetPasswordSuccessMessage": "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+                "resetPasswordErrorTitle": "Erreur de réinitialisation du mot de passe",
+                "resetPasswordErrorMessage": "Une erreur s'est produite lors de la réinitialisation de votre mot de passe. Veuillez réessayer."
+            }
+        }
+    },
+    "message": {
+        "noRoles": "Aucun rôle assigné à cet utilisateur.",
+        "changePasswordSuccess": "Mot de passe changé avec succès.",
+        "changePasswordError": "Erreur lors du changement de mot de passe.",
+        "changePasswordRule": "Le mot de passe doit comporter au moins 8 caractères, une majuscule et un symbole.",
+        "detachPermissions": {
+            "title": "Permissions détachées.",
+            "message": "Les permissions ont été retirées des rôles avec succès."
+        },
+        "attachPermissions": {
+            "title": "Permissions attachées.",
+            "message": "Les permissions ont été ajoutées aux rôles avec succès."
+        }
+    }
+}

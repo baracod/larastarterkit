@@ -1,0 +1,176 @@
+<script setup lang="ts">
+import { avatarText } from '@core/utils/formatters'
+import type { IUser } from '@auth/types/entities'
+
+const { t } = useI18n({ useScope: 'global' })
+const ability = useAbility()
+const router = useRouter()
+const user = useCookie<IUser>('userData')
+
+const logout = async () => {
+  try {
+    const res = await $api('/auth/logout', {
+      method: 'GET',
+      onResponseError({ rs }) {
+        console.log('LOGOUT ERROR : ', rs)
+      },
+    })
+
+    console.log('LOGOUT : ', res?.data)
+
+    // useStorage('userAbilityRules', []).value = null
+    // ability.update([])
+    // useCookie('userData').value = null
+    // useCookie('accessToken').value = null
+
+    // Redirect to `to` query if exist or redirect to index route
+    // ❗ nextTick is required to wait for DOM updates and later redirect
+    await nextTick(() => {
+      router.replace({ name: 'auth-login' })
+    })
+  }
+  catch (err) {
+    console.error(err)
+  }
+  finally {
+    useCookie('userData').value = null
+    useCookie('accessToken').value = null
+    useStorage('userAbilityRules', []).value = null
+    ability.update([])
+  }
+}
+
+// const role = computed((() => {
+//   if (user.value.roles)
+//     return user.value.roles.map!.name
+
+//   return ''
+// }))
+
+const toProfile = async () => {
+  await router.replace({ name: 'auth-users-id', params: { id: user.value.id } })
+}
+</script>
+
+<template>
+  <VBadge
+    dot
+    bordered
+    location="bottom right"
+    offset-x="3"
+    offset-y="3"
+    color="success"
+  >
+    <VAvatar
+      class="cursor-pointer"
+      color="primary"
+      variant="tonal"
+    >
+      <VImg
+        v-if="user.avatar"
+        :src="user.avatar"
+      />
+      <span
+        v-else
+        class="text-5xl font-weight-medium"
+      >
+        {{ avatarText(user.name) }}
+      </span>
+      <!-- SECTION Menu -->
+      <VMenu
+        activator="parent"
+        width="230"
+        location="bottom end"
+        offset="14px"
+      >
+        <VList>
+          <!-- 👉 User Avatar & Name -->
+          <VListItem>
+            <template #prepend>
+              <VListItemAction start>
+                <VBadge
+                  dot
+                  location="bottom right"
+                  offset-x="3"
+                  offset-y="3"
+                  color="success"
+                >
+                  <VAvatar
+                    v-if="user.avatar"
+                    color="primary"
+                    variant="tonal"
+                  >
+                    <VImg :src="user.avatar" />
+                  </VAvatar>
+                </VBadge>
+              </VListItemAction>
+            </template>
+
+            <VListItemTitle class="font-weight-semibold">
+              {{ user.name }}
+            </VListItemTitle>
+            <VListItemSubtitle>
+              <span
+                v-for="role in user.roles"
+                :key="role.id"
+                class="ma-1"
+              >
+                {{ role.name }}
+              </span>
+            </VListItemSubtitle>
+          </VListItem>
+
+          <VDivider class="my-2" />
+
+          <!-- 👉 Profile -->
+          <VListItem
+            link
+            @click="toProfile"
+          >
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="bx-user"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Profile</VListItemTitle>
+          </VListItem>
+
+          <!-- 👉 Settings -->
+          <VListItem link>
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="bx-cog"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Settings</VListItemTitle>
+          </VListItem>
+
+          <!-- Divider -->
+          <VDivider class="my-2" />
+
+          <!-- 👉 Logout -->
+          <VListItem @click="logout">
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="bx-log-out"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>
+              {{ t('action.logout') }}
+            </VListItemTitle>
+          </VListItem>
+        </VList>
+      </VMenu>
+      <!-- !SECTION -->
+    </VAvatar>
+  </VBadge>
+</template>

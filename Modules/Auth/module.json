@@ -1,0 +1,106 @@
+{
+    "name": "Auth",
+    "alias": "auth",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Auth\\Providers\\AuthServiceProvider"
+    ],
+    "files": [],
+    "module": "Auth",
+    "models": {
+        "auth-user": {
+            "name": "User",
+            "key": "user",
+            "namespace": "Modules\\Auth\\Models",
+            "tableName": "auth_users",
+            "moduleName": "Auth",
+            "fillable": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "defaultValue": null,
+                    "customizedType": ""
+                },
+                {
+                    "name": "username",
+                    "type": "string",
+                    "defaultValue": "NULL",
+                    "customizedType": ""
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "defaultValue": null,
+                    "customizedType": ""
+                },
+                {
+                    "name": "additional_info",
+                    "type": "string",
+                    "defaultValue": "NULL",
+                    "customizedType": ""
+                },
+                {
+                    "name": "avatar",
+                    "type": "string",
+                    "defaultValue": "'photos/shares/default-user.png'",
+                    "customizedType": ""
+                },
+                {
+                    "name": "email_verified_at",
+                    "type": "datetime",
+                    "defaultValue": "NULL",
+                    "customizedType": ""
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "defaultValue": null,
+                    "customizedType": ""
+                },
+                {
+                    "name": "remember_token",
+                    "type": "string",
+                    "defaultValue": "NULL",
+                    "customizedType": ""
+                },
+                {
+                    "name": "active",
+                    "type": "boolean",
+                    "defaultValue": "1",
+                    "customizedType": ""
+                }
+            ],
+            "relations": [],
+            "path": "/var/www/akhademie3/Modules/Auth/app/Models/User.php",
+            "fqcn": "Modules\\Auth\\Models\\User",
+            "backend": {
+                "hasModel": false,
+                "hasController": false,
+                "hasRequest": false,
+                "hasRoute": false,
+                "hasPermission": false,
+                "apiRoute": null
+            },
+            "frontend": {
+                "hasType": false,
+                "hasApi": false,
+                "hasLang": false,
+                "hasAddOrEditComponent": false,
+                "hasReadComponent": false,
+                "hasIndex": false,
+                "hasMenu": false,
+                "hasPermission": false,
+                "fields": [],
+                "casl": {
+                    "create": false,
+                    "read": false,
+                    "update": false,
+                    "delete": false,
+                    "access": false
+                }
+            }
+        }
+    }
+}
