@@ -190,6 +190,7 @@ class LarastarterkitInstallCommand extends Command
         $filesToCopy = [
             'modules.json',
             'menuItems.ts',
+            'Auth',
         ];
 
         foreach ($filesToCopy as $file) {
