@@ -103,7 +103,7 @@ class LarastarterkitInstallCommand extends Command
         $this->line('  - composer.json mis à jour.');
     }
 
-    protected function installScaffolding()
+    protected function _installScaffolding()
     {
         $this->info('📂 Copie de l\'architecture Vue/Vuetify...');
 
@@ -132,14 +132,99 @@ class LarastarterkitInstallCommand extends Command
         }
     }
 
+    /**
+     * Orchestrateur principal pour l'installation des fichiers de base.
+     */
+    protected function installScaffolding()
+    {
+        // 1. Installation du Backend (Configs Laravel, JSON modules, etc.)
+        $this->installBackendScaffolding();
+
+        // 2. Installation du Frontend (Vue, Vite, TS)
+        $this->installFrontendScaffolding();
+    }
+
+    /**
+     * Gère la copie des fichiers liés à l'architecture Frontend (Vue/Vuetify).
+     */
+    protected function installFrontendScaffolding()
+    {
+        $this->info('🎨 Copie de l\'architecture Frontend (Vue/Vuetify)...');
+
+        $filesystem = new Filesystem;
+        $stubPath = __DIR__.'/../../Stubs/frontend/scaffold';
+
+        // 1. Copie du dossier Resources (Vue App)
+        if ($filesystem->exists($stubPath.'/resources')) {
+            // On utilise copyDirectory pour copier le dossier entier
+            $filesystem->copyDirectory($stubPath.'/resources', resource_path());
+            $this->line('  - Dossier resources/ mis à jour.');
+        }
+
+        // 2. Copie des fichiers de configuration racine (Vite, TS, etc.)
+        $filesToCopy = [
+            'vite.config.ts',
+            'tsconfig.json',
+            'themeConfig.ts',
+            'vite-module-loader.ts',
+            'shims.d.ts',
+        ];
+
+        foreach ($filesToCopy as $file) {
+            $source = $stubPath.'/'.$file;
+            $destination = base_path($file);
+
+            if ($filesystem->exists($source)) {
+                $filesystem->copy($source, $destination);
+                $this->line("  - $file copié.");
+            }
+        }
+    }
+
+    /**
+     * Gère la copie des fichiers liés au Backend et à la structure Laravel/Modules.
+     */
+    protected function installBackendScaffolding()
+    {
+        $this->info('⚙️  Copie de l\'architecture Backend...');
+
+        $filesystem = new Filesystem;
+        // Nouveau chemin pour les stubs backend
+        $stubPath = dirname(__DIR__, 2). '/Stubs/backend/scaffold';
+
+        // Liste des fichiers Backend à copier à la racine
+        $filesToCopy = [
+            'modules_statuses.json',
+            // Tu pourras ajouter d'autres fichiers ici plus tard (ex: docker-compose.yml, phpunit.xml custom...)
+        ];
+
+        foreach ($filesToCopy as $file) {
+            $source = $stubPath.'/'.$file;
+            $destination = base_path($file);
+
+            if ($filesystem->exists($source)) {
+                // On vérifie si on doit écraser ou non.
+                // Pour modules_statuses.json, on préfère souvent ne pas écraser si l'utilisateur a déjà activé/désactivé des modules.
+                if (! $filesystem->exists($destination)) {
+                    $filesystem->copy($source, $destination);
+                    $this->line("  - $file copié à la racine.");
+                } else {
+                    $this->line("  - $file existe déjà, ignoré.");
+                }
+            } else {
+                // Optionnel : Warning si le stub manque (utile pour le dev)
+                // $this->warn("  ⚠️ Stub backend introuvable : $file");
+            }
+        }
+
+    }
+
     protected function updatePackageJson()
     {
         $this->info('📦 Mise à jour de package.json...');
         // Note: Assure-toi que la méthode mergePackageJson est bien présente dans ta classe (je l'ai condensée ici pour la lisibilité)
         $this->mergePackageJson(__DIR__.'/../../Stubs/frontend/scaffold/package.json');
     }
-
-    // ... (Garde tes méthodes existantes mergePackageJson, installSpaRoute et installSanctum telles quelles) ...
 
     protected function mergePackageJson($stubPackagePath)
     {
@@ -178,36 +263,69 @@ class LarastarterkitInstallCommand extends Command
 
         $filesystem = new Filesystem;
         $modulesPath = base_path('Modules');
+        // Assure-toi que ce chemin pointe bien vers le dossier parent contenant "Auth", "modules.json", etc.
         $stubPath = __DIR__.'/../../Stubs/frontend';
 
-        // Création du dossier Modules s'il n'existe pas
+        // 1. Création du dossier racine Modules s'il n'existe pas
         if (! $filesystem->exists($modulesPath)) {
             $filesystem->makeDirectory($modulesPath, 0755, true);
             $this->line('  - Répertoire Modules/ créé.');
         }
 
-        // Liste des fichiers à copier dans Modules/
+        // ---------------------------------------------------------
+        // 2. Copie des FICHIERS (modules.json, menuItems.ts, etc.)
+        // ---------------------------------------------------------
         $filesToCopy = [
             'modules.json',
             'menuItems.ts',
-            'Auth',
         ];
 
         foreach ($filesToCopy as $file) {
             $source = $stubPath.'/'.$file;
             $destination = $modulesPath.'/'.$file;
 
-            if ($filesystem->exists($source)) {
-                // On ne copie que si la destination n'existe pas pour ne pas écraser la config user
-                if (! $filesystem->exists($destination)) {
-                    $filesystem->copy($source, $destination);
-                    $this->line("  - $file copié dans Modules/.");
-                } else {
-                    $this->line("  - $file existe déjà, ignoré.");
-                }
-            } else {
-                $this->warn("  ⚠️  Stub non trouvé : $source");
+            if (! $filesystem->exists($source)) {
+                $this->warn("  ⚠️  Fichier Stub non trouvé : $source");
+
+                continue;
             }
+
+            if ($filesystem->exists($destination)) {
+                $this->line("  - Fichier $file existe déjà, ignoré.");
+
+                continue;
+            }
+
+            $filesystem->copy($source, $destination);
+            $this->line("  - Fichier $file copié.");
+        }
+
+        // ---------------------------------------------------------
+        // 3. Copie des DOSSIERS (Modules de base comme Auth)
+        // ---------------------------------------------------------
+        $modulesToCopy = [
+            'Auth',
+        ];
+
+        foreach ($modulesToCopy as $moduleFolderName) {
+            $source = __DIR__.'/../../Modules/'.$moduleFolderName;
+            $destination = $modulesPath.'/'.$moduleFolderName;
+
+            if (! $filesystem->exists($source)) {
+                $this->warn("  ⚠️  Dossier Stub non trouvé : $source");
+
+                continue;
+            }
+
+            if ($filesystem->exists($destination)) {
+                $this->line("  - Module $moduleFolderName existe déjà, ignoré.");
+
+                continue;
+            }
+
+            // CORRECTION ICI : Utilisation de copyDirectory pour les dossiers
+            $filesystem->copyDirectory($source, $destination);
+            $this->line("  - Module $moduleFolderName installé avec succès.");
         }
     }
 
