@@ -190,7 +190,7 @@ class LarastarterkitInstallCommand extends Command
 
         $filesystem = new Filesystem;
         // Nouveau chemin pour les stubs backend
-        $stubPath = dirname(__DIR__, 2). '/Stubs/backend/scaffold';
+        $stubPath = dirname(__DIR__, 2).'/Stubs/backend/scaffold';
 
         // Liste des fichiers Backend à copier à la racine
         $filesToCopy = [
