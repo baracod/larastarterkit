@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["resources/ts/*"],
+      "@core/*": ["resources/ts/@core/*"],
+      "@layouts/*": ["resources/ts/@layouts/*"],
+      "@images/*": ["resources/images/*"],
+      "@styles/*": ["resources/styles/*"],
+      "@configured-variables": ["resources/styles/variables/_template.scss"],
+      "@axios": ["resources/ts/plugins/axios.ts"]
+    },
+    "types": ["vite/client", "vite-plugin-vue-layouts/client", "unplugin-vue-router/client"]
+  },
+  "include": [
+    "resources/**/*.ts",
+    "resources/**/*.d.ts",
+    "resources/**/*.tsx",
+    "resources/**/*.vue",
+    "vite.config.ts",
+    "vite-module-loader.ts",
+    "themeConfig.ts"
+  ],
+  "exclude": ["node_modules", "vendor", "storage", "bootstrap/cache"]
+}

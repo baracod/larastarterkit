@@ -1,0 +1,19 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // Appeler les seeders des modules
+        $this->call([
+            \Modules\Auth\Database\Seeders\AuthSeeder::class,
+        ]);
+    }
+}
