@@ -206,7 +206,24 @@ class LarastarterkitInstallCommand extends Command
             }
         }
 
-        // 3. Copie des fichiers de configuration racine (Vite, TS, etc.)
+        // 3. Gestion de vite.config.js -> vite.config.ts
+        $viteConfigJsPath = base_path('vite.config.js');
+        if ($filesystem->exists($viteConfigJsPath)) {
+            $shouldDelete = $this->option('force') || $this->confirm(
+                '⚠️  vite.config.js détecté. Supprimer pour utiliser vite.config.ts ?',
+                true
+            );
+
+            if ($shouldDelete) {
+                $this->createBackup($viteConfigJsPath);
+                $filesystem->delete($viteConfigJsPath);
+                $this->line('  ✅ vite.config.js supprimé (remplacé par vite.config.ts).');
+            } else {
+                $this->warn('  ⚠️  vite.config.js conservé. Conflit possible avec vite.config.ts.');
+            }
+        }
+
+        // 4. Copie des fichiers de configuration racine (Vite, TS, etc.)
         $filesToCopy = [
             'vite.config.ts',
             'tsconfig.json',
@@ -456,16 +473,46 @@ class LarastarterkitInstallCommand extends Command
 
     protected function installSpaRoute()
     {
-        $routeContent = "\nRoute::get('/{any}', function () {\n    return view('application');\n})->where('any', '.*');\n";
         $webRoutesPath = base_path('routes/web.php');
 
-        if (file_exists($webRoutesPath)) {
-            $content = file_get_contents($webRoutesPath);
-            if (! str_contains($content, "view('application')")) {
-                file_put_contents($webRoutesPath, $routeContent, FILE_APPEND);
-                $this->info('🔗 Route SPA ajoutée à routes/web.php');
+        if (!file_exists($webRoutesPath)) {
+            $this->warn('  ⚠️  routes/web.php introuvable.');
+            return;
+        }
+
+        $content = file_get_contents($webRoutesPath);
+
+        // Vérifier si la route SPA n'existe pas déjà
+        if (str_contains($content, "view('application')")) {
+            $this->line('  ℹ️  Route SPA déjà présente dans routes/web.php');
+            return;
+        }
+
+        $routeContent = "\nRoute::get('/{any}', function () {\n    return view('application');\n})->where('any', '.*');\n";
+
+        // Trouver la position après le dernier 'use' statement
+        $lines = explode("\n", $content);
+        $lastUseIndex = -1;
+
+        foreach ($lines as $index => $line) {
+            $trimmedLine = trim($line);
+            if (preg_match('/^use\s+/', $trimmedLine)) {
+                $lastUseIndex = $index;
             }
         }
+
+        // Si on a trouvé des 'use' statements, insérer après
+        if ($lastUseIndex >= 0) {
+            // Insérer après le dernier use (avec une ligne vide)
+            array_splice($lines, $lastUseIndex + 1, 0, [$routeContent]);
+            $newContent = implode("\n", $lines);
+        } else {
+            // Sinon, ajouter à la fin du fichier
+            $newContent = rtrim($content) . $routeContent;
+        }
+
+        file_put_contents($webRoutesPath, $newContent);
+        $this->info('🔗 Route SPA ajoutée à routes/web.php');
     }
 
     protected function installSanctum()
