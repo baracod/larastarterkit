@@ -543,6 +543,15 @@ class ModuleGen
      */
     public function generateController(string $model): void
     {
-        // TODO: Implémenter la génération contrôleur (artisan make:controller … --module=)
+        $this->ensureExists(refreshCaches: false);
+
+        $code = Artisan::call('module:make-controller', [
+            'controller' => $model,
+            'module' => $this->moduleName,
+        ]);
+
+        if ($code !== 0) {
+            throw new RuntimeException("Échec de 'module:make-controller {$model} {$this->moduleName}' (code {$code}).");
+        }
     }
 }

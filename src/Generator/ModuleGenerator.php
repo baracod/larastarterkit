@@ -3,6 +3,7 @@
 namespace Baracod\Larastarterkit\Generator;
 
 use Baracod\Larastarterkit\Generator\Utils\ConsoleTrait;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
@@ -111,11 +112,10 @@ class ModuleGenerator
             return $this;
         }
 
-        $command = sprintf('php artisan module:make %s', escapeshellarg($this->moduleName));
-        exec($command, $output, $returnCode);
-
-        // Affichage du résultat de la commande (à adapter selon vos besoins)
-        echo implode("\n", $output);
+        $returnCode = Artisan::call('module:make', ['name' => $this->moduleName]);
+        if ($returnCode !== 0) {
+            throw new RuntimeException("La commande 'module:make {$this->moduleName}' a échoué (code {$returnCode}).");
+        }
         $this->generatePermissions();
 
         $moduleData = [
@@ -129,13 +129,24 @@ class ModuleGenerator
         ];
 
         $pathModuleMenuItems = (base_path('Modules/modules.json'));
-        if (! File::exists($pathModuleMenuItems)) {
-            $moduleItems = [];
+        $moduleItems = [];
+        if (File::exists($pathModuleMenuItems)) {
+            $decoded = json_decode((string) File::get($pathModuleMenuItems), true);
+            if (is_array($decoded)) {
+                $moduleItems = array_values($decoded);
+            }
         }
 
-        $moduleItems[] = $moduleData;
-        $moduleItems = json_encode(array_values($moduleItems), JSON_PRETTY_PRINT);
-        File::put($pathModuleMenuItems, $moduleItems);
+        $already = collect($moduleItems)->firstWhere('title', $this->moduleName);
+        if (! $already) {
+            $moduleItems[] = $moduleData;
+        }
+
+        File::ensureDirectoryExists(dirname($pathModuleMenuItems));
+        File::put(
+            $pathModuleMenuItems,
+            json_encode(array_values($moduleItems), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+        );
 
         // Met à jour la propriété $module après génération
         $this->module = Module::find($this->moduleName);
@@ -165,27 +176,37 @@ class ModuleGenerator
         }
 
         $action = 'access';
-        $description = "Accéder aux module {$this->moduleName}";
+        $description = "Accéder au module {$this->moduleName}";
         $permissionKey = $action.'_'.Str::lower($this->moduleName);
-        DB::table('auth_permissions')->where('key', $permissionKey)->delete();
         $oldPermission = DB::table('auth_permissions')->where('key', $permissionKey)->first();
 
         // Vérifie si la permission existe déjà
         if ($oldPermission) {
             $this->consoleWriteMessage("🔁 La permission `{$permissionKey}` existe déjà.");
 
-            $pivotPermissionRole = DB::table('auth_role_permissions')->where('permission_id', $oldPermission->id)
-                ->where('role_id', $adminRole->id)
-                ->first();
-            if (empty($pivotPermissionRole)) {
-                $this->consoleWriteMessage('La permission n\'est pas encore attribuée à l\'administrateur, attribution en cours...');
-
-                DB::table('auth_role_permissions')->insert([
-                    'role_id' => $adminRole->id,
-                    'permission_id' => $oldPermission->id,
+            DB::table('auth_permissions')
+                ->where('id', $oldPermission->id)
+                ->update([
+                    'description' => $description,
+                    'subject' => Str::lower($this->moduleName),
                 ]);
 
-                $this->consoleWriteSuccess("✅ Permission `{$permissionKey}` attribuée à l'administrateur.");
+            if (isset($adminRole)) {
+                $pivotPermissionRole = DB::table('auth_role_permissions')
+                    ->where('permission_id', $oldPermission->id)
+                    ->where('role_id', $adminRole->id)
+                    ->exists();
+
+                if (! $pivotPermissionRole) {
+                    $this->consoleWriteMessage('La permission n\'est pas encore attribuée à l\'administrateur, attribution en cours...');
+
+                    DB::table('auth_role_permissions')->insert([
+                        'role_id' => $adminRole->id,
+                        'permission_id' => $oldPermission->id,
+                    ]);
+
+                    $this->consoleWriteSuccess("✅ Permission `{$permissionKey}` attribuée à l'administrateur.");
+                }
             }
 
             return;
@@ -208,7 +229,7 @@ class ModuleGenerator
             ]);
         }
 
-        $this->consoleWriteSuccess("✅ Permissions générées avec succès pour `{$this->module}`.");
+        $this->consoleWriteSuccess("✅ Permissions générées avec succès pour `{$this->moduleName}`.");
     }
 
     public function delete(bool $confirmation = false): bool

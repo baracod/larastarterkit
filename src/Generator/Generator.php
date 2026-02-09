@@ -48,7 +48,6 @@ class Generator
         $this->moduleName = $moduleName;
         // L'instanciation de ModuleGenerator déclenche sa création s'il n'existe pas.
         $this->tableName = $tableName;
-        $this->moduleName = $moduleName;
         $this->module = new ModuleGenerator($moduleName);
         $this->model = new ModelGenerator($modelName, $tableName, $moduleName);
         $this->controller = new ControllerGenerator($tableName, $modelName, $moduleName, $moduleName);
