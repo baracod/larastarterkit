@@ -54,8 +54,9 @@ class LarastarterkitInstallCommand extends Command
 
             return self::SUCCESS;
         } catch (\Throwable $e) {
-            $this->error('❌ Erreur durant l\'installation : ' . $e->getMessage());
+            $this->error('❌ Erreur durant l\'installation : '.$e->getMessage());
             $this->rollbackChanges();
+
             return self::FAILURE;
         }
     }
@@ -88,11 +89,13 @@ class LarastarterkitInstallCommand extends Command
 
         if (! file_exists($composerPath)) {
             $this->warn('  ⚠️  composer.json introuvable, ignoré.');
+
             return;
         }
 
         if ($this->option('dry-run')) {
             $this->line('  [DRY-RUN] composer.json serait modifié');
+
             return;
         }
 
@@ -100,7 +103,7 @@ class LarastarterkitInstallCommand extends Command
         $composer = json_decode($content, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->error('  ❌ Erreur de lecture composer.json : ' . json_last_error_msg());
+            $this->error('  ❌ Erreur de lecture composer.json : '.json_last_error_msg());
             throw new \RuntimeException('composer.json invalide');
         }
 
@@ -170,6 +173,7 @@ class LarastarterkitInstallCommand extends Command
 
         if ($this->option('dry-run')) {
             $this->line('  [DRY-RUN] Fichiers frontend seraient copiés');
+
             return;
         }
 
@@ -238,6 +242,7 @@ class LarastarterkitInstallCommand extends Command
 
             if (! $filesystem->exists($source)) {
                 $this->warn("  ⚠️  Fichier stub manquant : $file");
+
                 continue;
             }
 
@@ -305,7 +310,7 @@ class LarastarterkitInstallCommand extends Command
         if ($filesystem->exists($databaseSeederStub)) {
             $shouldCopy = true;
 
-            if ($filesystem->exists($databaseSeederDest) && !$this->option('force')) {
+            if ($filesystem->exists($databaseSeederDest) && ! $this->option('force')) {
                 $shouldCopy = $this->confirm(
                     '⚠️  DatabaseSeeder.php existe déjà. Voulez-vous l\'écraser ?',
                     false
@@ -317,9 +322,9 @@ class LarastarterkitInstallCommand extends Command
                     $this->createBackup($databaseSeederDest);
                 }
                 $filesystem->copy($databaseSeederStub, $databaseSeederDest);
-                $this->line("  ✅ DatabaseSeeder.php mis à jour.");
+                $this->line('  ✅ DatabaseSeeder.php mis à jour.');
             } else {
-                $this->line("  ⏭️  DatabaseSeeder.php ignoré.");
+                $this->line('  ⏭️  DatabaseSeeder.php ignoré.');
             }
         }
 
@@ -336,11 +341,13 @@ class LarastarterkitInstallCommand extends Command
     {
         if (! file_exists($stubPackagePath)) {
             $this->warn('  ⚠️  package.json stub introuvable.');
+
             return;
         }
 
         if ($this->option('dry-run')) {
             $this->line('  [DRY-RUN] package.json serait modifié');
+
             return;
         }
 
@@ -348,7 +355,8 @@ class LarastarterkitInstallCommand extends Command
         $stubPackages = json_decode($stubContent, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->error('  ❌ Stub package.json invalide : ' . json_last_error_msg());
+            $this->error('  ❌ Stub package.json invalide : '.json_last_error_msg());
+
             return;
         }
 
@@ -361,7 +369,8 @@ class LarastarterkitInstallCommand extends Command
             $decoded = json_decode($appContent, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->error('  ❌ package.json invalide : ' . json_last_error_msg());
+                $this->error('  ❌ package.json invalide : '.json_last_error_msg());
+
                 return;
             }
             $appPackages = $decoded;
@@ -460,7 +469,7 @@ class LarastarterkitInstallCommand extends Command
         }
 
         // Exécuter composer dump-autoload pour enregistrer les nouveaux modules
-        if (!$this->option('dry-run')) {
+        if (! $this->option('dry-run')) {
             $this->info('🔄 Régénération de l\'autoloader Composer...');
             exec('composer dump-autoload', $output, $returnCode);
             if ($returnCode === 0) {
@@ -475,8 +484,9 @@ class LarastarterkitInstallCommand extends Command
     {
         $webRoutesPath = base_path('routes/web.php');
 
-        if (!file_exists($webRoutesPath)) {
+        if (! file_exists($webRoutesPath)) {
             $this->warn('  ⚠️  routes/web.php introuvable.');
+
             return;
         }
 
@@ -485,6 +495,7 @@ class LarastarterkitInstallCommand extends Command
         // Vérifier si la route SPA n'existe pas déjà
         if (str_contains($content, "view('application')")) {
             $this->line('  ℹ️  Route SPA déjà présente dans routes/web.php');
+
             return;
         }
 
@@ -508,7 +519,7 @@ class LarastarterkitInstallCommand extends Command
             $newContent = implode("\n", $lines);
         } else {
             // Sinon, ajouter à la fin du fichier
-            $newContent = rtrim($content) . $routeContent;
+            $newContent = rtrim($content).$routeContent;
         }
 
         file_put_contents($webRoutesPath, $newContent);
@@ -521,6 +532,7 @@ class LarastarterkitInstallCommand extends Command
 
         if ($this->option('dry-run')) {
             $this->line('  [DRY-RUN] Sanctum serait publié et migré');
+
             return;
         }
 
@@ -540,7 +552,7 @@ class LarastarterkitInstallCommand extends Command
     protected function createBackup(string $path, bool $isDirectory = false): void
     {
         $filesystem = new Filesystem;
-        $backupPath = $path . '.backup.' . date('YmdHis');
+        $backupPath = $path.'.backup.'.date('YmdHis');
 
         if ($isDirectory) {
             $filesystem->copyDirectory($path, $backupPath);
