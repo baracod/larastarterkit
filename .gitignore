@@ -1,0 +1,32 @@
+# Local configuration and credentials
+.env*
+!.env.example
+auth.json
+/.secrets/
+
+# Dependencies and generated frontend files
+/vendor/
+/node_modules/
+/.larastarterkit/
+/public/build/
+/public/hot
+/public/storage
+/public/docs
+/auto-imports.d.ts
+/components.d.ts
+/typed-router.d.ts
+
+# Local databases, caches, logs and backups
+/database/*.sqlite*
+/.phpunit.cache/
+/.phpunit.result.cache
+/storage/*.key
+/backups/
+*.log
+
+# Editor and operating-system files
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
