@@ -16,11 +16,20 @@ auth.json
 /components.d.ts
 /typed-router.d.ts
 
+# Development sources and release artifacts do not belong to this skeleton
+/packages/
+/skeleton/
+/dist/
+/labo/
+
 # Local databases, caches, logs and backups
 /database/*.sqlite*
 /.phpunit.cache/
 /.phpunit.result.cache
-/storage/*.key
+/coverage/
+/storage/**
+!/storage/**/
+!/storage/**/.gitignore
 /backups/
 *.log
 
