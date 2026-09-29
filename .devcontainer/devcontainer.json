@@ -1,0 +1,29 @@
+{
+    "name": "Laravel Dev Container",
+    // Pointe vers votre fichier docker-compose
+    "dockerComposeFile": "docker-compose.yml",
+    // Le nom du service dans lequel VS Code doit se connecter.
+    // C'est le service 'app' où se trouve votre code Laravel.
+    "service": "app",
+    // Le dossier de travail à l'intérieur du conteneur
+    "workspaceFolder": "/workspace",
+    // Commandes à exécuter APRÈS la création de l'environnement
+    "postCreateCommand": "composer install && cp .env.example .env && php artisan key:generate && php artisan migrate --seed",
+    // Personnalisation de VS Code à l'intérieur du conteneur
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client", // IntelliSense pour PHP
+                "onecentlin.laravel-blade", // Support pour Blade
+                "bradlc.vscode-tailwindcss" // Si vous utilisez Tailwind
+            ]
+        }
+    },
+    // Transfère les ports pour que vous puissiez accéder à votre site et à phpMyAdmin
+    "forwardPorts": [
+        8000,
+        8080
+    ],
+    // Exécuter en tant qu'utilisateur non-root pour éviter les problèmes de permissions
+    "remoteUser": "vscode"
+}

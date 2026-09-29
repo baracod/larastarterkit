@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "mdi-account-key",
+    "title": "Auth",
+    "action": "access",
+    "subject": "auth",
+    "to": {
+      "name": "auth"
+    },
+    "module": "Auth"
+  },
+  {
+    "icon": "mdi-cog",
+    "title": "Admin",
+    "action": "access",
+    "subject": "admin",
+    "to": {
+      "name": "admin"
+    },
+    "module": "Admin"
+  },
+  {
+    "icon": "mdi-book-open",
+    "title": "Documentation",
+    "action": "browse",
+    "subject": "documentation",
+    "to": {
+      "name": "documentation"
+    },
+    "module": "Documentation"
+  }
+]

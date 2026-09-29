@@ -1,0 +1,7 @@
+<template>
+  <VCard>
+    <VCardText>
+      bienvenu dans le module  $LOWER_NAME$
+    </VCardText>
+  </VCard>
+</template>

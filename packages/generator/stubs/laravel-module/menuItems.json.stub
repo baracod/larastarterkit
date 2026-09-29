@@ -1,0 +1,13 @@
+[
+    {
+        "title": "dashboard",
+        "to": {
+            "name": "$LOWER_NAME$"
+        },
+        "icon": {
+            "icon": "bx-home-alt"
+        }
+    }
+   
+]
+

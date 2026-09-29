@@ -1,0 +1,19 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.zip binary
+*.php text diff=php
+*.css text diff=css
+*.scss text diff=css
+*.md text diff=markdown
+*.lock text -diff
+pnpm-lock.yaml text -diff

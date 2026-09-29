@@ -1,0 +1,415 @@
+{
+  "user": {
+    "menuTitle": "Utilisateurs",
+    "menuDescription": "Gestion des utilisateurs du système.",
+    "title": "Utilisateur",
+    "titlePlural": "Utilisateurs",
+    "forceReset": {
+      "title": "Forcer le changement de mot de passe",
+      "subtitle": "Envoyer un lien à {name} ({email}) pour choisir un nouveau mot de passe. Le changement sera obligatoire avant de poursuivre dans l’application.",
+      "action": "Réinitialiser par e-mail",
+      "mustChangeOnNextLogin": "Obliger à changer au prochain login",
+      "success": "Le lien de réinitialisation a été mis en file d’envoi.",
+      "error": "Erreur lors de la réinitialisation du mot de passe."
+    },
+    "field": {
+      "id": "Identifiant",
+      "name": "Nom",
+      "username": "Nom d'utilisateur",
+      "email": "Adresse e-mail",
+      "additionalInfo": "Informations supplémentaires",
+      "avatar": "Avatar",
+      "emailVerifiedAt": "E-mail vérifié à",
+      "password": "Mot de passe",
+      "rememberToken": "Token de rappel",
+      "active": "Actif",
+      "createdAt": "Créé à",
+      "updatedAt": "Mis à jour à",
+      "roles": "Rôles"
+    },
+    "labels": {
+      "changePassword": {
+        "titleForm": "Changer le mot de passe",
+        "newPassword": "Nouveau mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "warningPasswordFormaTitle": "Assurez-vous que ces exigences sont respectées",
+        "actionChangePassword": "Changer le mot de passe",
+        "passwordMismatch": "Le champ 'Nouveau mot de passe' doit être identique au champ 'Confirmer le mot de passe'.",
+        "minLength": "Le mot de passe doit contenir au moins 8 caractères.",
+        "uppercase": "Le mot de passe doit contenir au moins une majuscule.",
+        "symbol": "Le mot de passe doit contenir au moins un symbole.",
+        "invalid": "Le mot de passe doit comporter au moins 8 caractères, une majuscule et un symbole.",
+        "mismatch": "Les deux mots de passe ne correspondent pas."
+      }
+    },
+    "action": {
+      "editRoles": "Modifier Roles",
+      "valide": "Valider",
+      "addOrRemoveRole": "Ajouter & Supprimer un rôle",
+      "suspend": "Suspendre",
+      "unsuspend": "Réactiver"
+    }
+  },
+  "role": {
+    "menuTitle": "Rôles & Permissions",
+    "menuDescription": "Gérer les rôles et leurs permissions.",
+    "title": "Rôle",
+    "titlePlural": "Rôles",
+    "field": {
+      "id": "Identifiant",
+      "name": "Nom",
+      "displayName": "Nom affiché",
+      "description": "Description",
+      "order": "Ordre",
+      "isOwner": "Propriétaire",
+      "createdAt": "Créé le",
+      "permissions_count": "Permissions",
+      "users_count": "Utilisateurs"
+    }
+  },
+  "permission": {
+    "menuTitle": "Permissions",
+    "menuDescription": "Gérer les permissions d'accès.",
+    "title": "Permission",
+    "titlePlural": "Permissions",
+    "field": {
+      "id": "Identifiant",
+      "key": "Clé",
+      "action": "Action",
+      "subject": "Sujet",
+      "description": "Description",
+      "tableName": "Nom de la table",
+      "alwaysAllow": "Toujours autoriser",
+      "isPublic": "Publique",
+      "createdAt": "Créé le",
+      "updatedAt": "Mis à jour le"
+    }
+  },
+  "profile": {
+    "title": "Profil utilisateur",
+    "subtitle": "Gérez vos informations, notifications, paramètres et sécurité.",
+    "tabs": {
+      "general": "Informations générales",
+      "notifications": "Notifications",
+      "settings": "Paramètres",
+      "modules": "Modules",
+      "security": "Sécurité"
+    },
+    "fields": {
+      "name": "Nom",
+      "email": "Adresse e-mail",
+      "username": "Nom d'utilisateur",
+      "status": "Statut"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    }
+  },
+  "notifications": {
+    "title": "Notifications utilisateur",
+    "unreadCounter": "Non lues",
+    "empty": "Aucune notification pour le moment.",
+    "emptyMessage": "Aucun message complémentaire.",
+    "status": {
+      "read": "Lue",
+      "unread": "Non lue"
+    },
+    "filters": {
+      "label": "Filtrer",
+      "all": "Toutes",
+      "read": "Lues",
+      "unread": "Non lues"
+    },
+    "sort": {
+      "label": "Tri",
+      "newest": "Plus récentes",
+      "oldest": "Plus anciennes"
+    },
+    "actions": {
+      "markRead": "Marquer comme lue",
+      "markAllRead": "Tout marquer comme lu"
+    },
+    "feedback": {
+      "successTitle": "Succès",
+      "errorTitle": "Erreur",
+      "loadError": "Impossible de charger les notifications.",
+      "markReadSuccess": "Notification marquée comme lue.",
+      "markReadError": "Échec du marquage de la notification.",
+      "markAllReadSuccess": "Toutes les notifications ont été marquées comme lues.",
+      "markAllReadError": "Impossible de marquer toutes les notifications comme lues."
+    }
+  },
+  "settings": {
+    "title": "Paramètres utilisateur",
+    "searchPlaceholder": "Rechercher un paramètre...",
+    "empty": "Aucun paramètre à afficher.",
+    "categories": {
+      "general": "Général",
+      "appearance": "Apparence",
+      "notifications": "Notifications",
+      "dashboard": "Tableau de bord"
+    },
+    "values": {
+      "enabled": "Activé",
+      "disabled": "Désactivé"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
+    "dialog": {
+      "title": "Modifier le paramètre",
+      "value": "Valeur"
+    },
+    "feedback": {
+      "successTitle": "Succès",
+      "errorTitle": "Erreur",
+      "loadError": "Impossible de charger les paramètres.",
+      "updateSuccess": "Paramètre mis à jour avec succès.",
+      "updateError": "Impossible de mettre à jour le paramètre."
+    },
+    "catalog": {
+      "theme": {
+        "label": "Thème",
+        "description": "Choisissez le thème de l'interface utilisateur."
+      },
+      "language": {
+        "label": "Langue",
+        "description": "Définissez votre langue préférée."
+      },
+      "notificationEmail": {
+        "label": "Notifications e-mail",
+        "description": "Recevoir les notifications importantes par e-mail."
+      },
+      "notificationPush": {
+        "label": "Notifications push",
+        "description": "Recevoir les notifications en temps réel."
+      },
+      "dashboardDefaultView": {
+        "label": "Vue par défaut du tableau de bord",
+        "description": "Sélectionnez la vue affichée à l'ouverture du tableau de bord."
+      },
+      "timezone": {
+        "label": "Fuseau horaire",
+        "description": "Définissez votre fuseau horaire de travail."
+      }
+    }
+  },
+  "modules": {
+    "title": "Paramètres modules",
+    "subtitle": "Affectations et configurations applicables à cet utilisateur.",
+    "readonly": "Seul un administrateur peut modifier ces paramètres.",
+    "actions": {
+      "save": "Enregistrer"
+    },
+    "feedback": {
+      "loadError": "Impossible de charger les paramètres modules.",
+      "updateSuccess": "Paramètres modules mis à jour avec succès.",
+      "updateError": "Impossible de mettre à jour les paramètres modules."
+    },
+    "base": {
+      "location": {
+        "title": "Localisation Géographique",
+        "subtitle": "Limiter les provinces, territoires, zones, sites et puits accessibles.",
+        "all": "Tout",
+        "fields": {
+          "provinces": "Provinces autorisées",
+          "territories": "Territoires autorisés",
+          "zones": "Zones autorisées",
+          "sites": "Sites autorisés",
+          "pits": "Puits autorisés"
+        }
+      }
+    }
+  },
+  "security": {
+    "title": "Sécurité du compte",
+    "description": "Changez votre mot de passe avec des règles renforcées pour protéger votre compte.",
+    "fields": {
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmation du mot de passe"
+    },
+    "actions": {
+      "updatePassword": "Mettre à jour le mot de passe",
+      "reset": "Réinitialiser"
+    },
+    "validation": {
+      "title": "Exigences de sécurité",
+      "currentPasswordRequired": "Le mot de passe actuel est requis.",
+      "newPasswordRequired": "Le nouveau mot de passe est requis.",
+      "confirmationRequired": "La confirmation est requise.",
+      "confirmationMismatch": "La confirmation ne correspond pas.",
+      "confirmationMatch": "Le mot de passe et sa confirmation correspondent.",
+      "minLength": "Au moins 8 caractères.",
+      "mixedCase": "Au moins une majuscule et une minuscule.",
+      "number": "Au moins un chiffre.",
+      "symbol": "Au moins un caractère spécial."
+    },
+    "feedback": {
+      "successTitle": "Succès",
+      "errorTitle": "Erreur",
+      "formInvalid": "Veuillez corriger les erreurs du formulaire.",
+      "passwordUpdated": "Votre mot de passe a été mis à jour avec succès.",
+      "currentPasswordIncorrect": "Le mot de passe actuel est incorrect.",
+      "confirmationMismatch": "La confirmation du mot de passe est invalide.",
+      "genericError": "Une erreur est survenue lors de la mise à jour du mot de passe."
+    }
+  },
+  "pages": {
+    "login": {
+      "title": "Connexion",
+      "welcome": "Bienvenue sur :app ! 👋🏻",
+      "subtitle": "Connectez-vous à votre compte pour démarrer l’aventure.",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "action": {
+        "signIn": "Se connecter"
+      },
+      "noAccount": "Vous n'avez pas de compte ?",
+      "createAccount": "Créer un compte"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Entrez votre adresse e-mail pour recevoir un lien de réinitialisation du mot de passe.",
+      "email": "Adresse e-mail",
+      "action": {
+        "sendResetLink": "Envoyer le lien de réinitialisation"
+      },
+      "validation": {
+        "emailRequired": "L'adresse e-mail est requise.",
+        "emailInvalid": "Veuillez entrer une adresse e-mail valide."
+      },
+      "backToLogin": "Retour à la connexion",
+      "dialog": {
+        "resetEmailSentTitle": "E-mail de réinitialisation envoyé",
+        "resetEmailSentMessage": "Des instructions pour réinitialiser votre mot de passe ont été envoyées à :email. Veuillez vérifier votre boîte de réception.",
+        "resetEmailErrorTitle": "Erreur d'envoi de l'e-mail",
+        "resetEmailErrorMessage": "Une erreur s'est produite lors de l'envoi de l'e-mail de réinitialisation. Veuillez vérifier si votre adresse e-mail est correcte et réessayer."
+      }
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "subtitle": "Entrez un nouveau mot de passe pour votre compte.",
+      "email": "Adresse e-mail",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "action": {
+        "resetPassword": "Réinitialiser le mot de passe"
+      },
+      "backToLogin": "Retour à la connexion",
+      "dialog": {
+        "resetPasswordSuccessTitle": "Mot de passe réinitialisé",
+        "resetPasswordSuccessMessage": "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+        "resetPasswordErrorTitle": "Erreur de réinitialisation du mot de passe",
+        "resetPasswordErrorMessage": "Une erreur s'est produite lors de la réinitialisation de votre mot de passe. Veuillez réessayer."
+      }
+    },
+    "changePassword": {
+      "title": "Changer le mot de passe",
+      "subtitle": "Sécurisez votre compte avec un nouveau mot de passe fort.",
+      "forcedWarning": "Vous devez changer votre mot de passe avant de pouvoir accéder à l'application.",
+      "action": {
+        "submit": "Mettre à jour le mot de passe"
+      },
+      "backToLogin": "Retour à la connexion"
+    }
+  },
+  "message": {
+    "noRoles": "Aucun rôle assigné à cet utilisateur.",
+    "changePasswordSuccess": "Mot de passe changé avec succès.",
+    "changePasswordError": "Erreur lors du changement de mot de passe.",
+    "changePasswordRule": "Le mot de passe doit comporter au moins 8 caractères, une majuscule et un symbole.",
+    "detachPermissions": {
+      "title": "Permissions détachées.",
+      "message": "Les permissions ont été retirées des rôles avec succès."
+    },
+    "attachPermissions": {
+      "title": "Permissions attachées.",
+      "message": "Les permissions ont été ajoutées aux rôles avec succès."
+    }
+  },
+  "access": {
+    "brandLabel": "Traçabilité de l’or",
+    "brandTitle": "Votre espace de travail",
+    "brandDescription": "Une application modulaire adaptée à vos projets.",
+    "origin": "Comptes et profils",
+    "operations": "Modules réutilisables",
+    "verification": "Accès sécurisés",
+    "loginTitle": "Connexion",
+    "loginDescription": "Connectez-vous à votre espace de travail STARTER.",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "remember": "Se souvenir de moi",
+    "forgotLink": "Mot de passe oublié ?",
+    "loginAction": "Se connecter",
+    "authorizedOnly": "Votre compte et ses accès sont attribués par votre administrateur.",
+    "showPassword": "Afficher : {field}",
+    "hidePassword": "Masquer : {field}",
+    "required": "Ce champ est obligatoire.",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "invalidCredentials": "Adresse e-mail ou mot de passe incorrect.",
+    "tooManyAttempts": "Trop de tentatives. Patientez quelques minutes avant de réessayer.",
+    "suspended": "Ce compte est désactivé. Contactez votre administrateur.",
+    "expiredSession": "La session a expiré. Actualisez la page avant de réessayer.",
+    "requestError": "La demande a échoué. Vérifiez votre connexion et réessayez.",
+    "forgotTitle": "Retrouver votre accès",
+    "forgotDescription": "Indiquez l’adresse e-mail associée à votre compte.",
+    "sendLink": "Envoyer le lien",
+    "emailSent": "Si cette adresse correspond à un compte, vous recevrez un lien de réinitialisation. Consultez aussi vos courriers indésirables.",
+    "backToLogin": "Retour à la connexion",
+    "resetTitle": "Nouveau mot de passe",
+    "resetDescription": "Choisissez un mot de passe respectant les critères ci-dessous, puis confirmez-le.",
+    "passwordReset": "Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.",
+    "invalidLink": "Ce lien est incomplet, expiré ou invalide. Demandez un nouveau lien de réinitialisation.",
+    "newLink": "Demander un nouveau lien",
+    "resetAction": "Réinitialiser le mot de passe",
+    "changeTitle": "Changer le mot de passe",
+    "changeRequired": "Vous devez remplacer votre mot de passe avant de continuer.",
+    "changeDescription": "Saisissez votre mot de passe actuel, puis choisissez votre nouveau mot de passe.",
+    "changeAction": "Enregistrer le mot de passe",
+    "continue": "Continuer vers l’application",
+    "backToApp": "Retour à l’application",
+    "accountTitle": "Obtenir un compte",
+    "accountDescription": "La création des comptes est gérée par les administrateurs de votre organisation. Contactez votre responsable pour obtenir un compte et les accès nécessaires à votre activité."
+  },
+  "design": {
+    "navigation": "Gestion des accès",
+    "title": "Comptes et accès",
+    "overviewHint": "Gérez les utilisateurs et les droits nécessaires à leurs activités.",
+    "auth_usersHint": "Identifiez les utilisateurs, leur statut et leurs rôles.",
+    "auth_rolesHint": "Regroupez les permissions par responsabilité métier.",
+    "auth_permissionsHint": "Consultez les actions autorisées sur chaque ressource.",
+    "search": "Rechercher dans la liste",
+    "searchRoles": "Rechercher un rôle",
+    "searchPermissions": "Rechercher une permission",
+    "selectedRoles": "Rôles sélectionnés",
+    "chooseRoles": "Sélectionnez un ou plusieurs rôles pour consulter leurs permissions.",
+    "formErrors": "Vérifiez les champs signalés avant de réessayer.",
+    "keepPassword": "Laissez vide pour conserver le mot de passe actuel.",
+    "newPasswordHint": "Au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un symbole.",
+    "details": "Consulter les détails",
+    "attachPermissions": "Attacher les permissions",
+    "detachPermissions": "Détacher les permissions"
+  },
+  "editProfile": {
+    "title": "Modifier le profil",
+    "description": "Modifiez l’identité et la photo. L’activation, le mot de passe et les rôles se gèrent dans « Compte et rôles ».",
+    "account": "Compte et rôles",
+    "imageFormat": "Choisissez une image JPEG, PNG ou GIF.",
+    "imageHelp": "JPEG, PNG ou GIF. La photo est redimensionnée avant l’envoi (2 Mo maximum après optimisation).",
+    "imageSize": "La photo reste trop volumineuse. Choisissez une image plus petite."
+  },
+  "accountMail": {
+    "sendInstructions": "Envoyer les instructions de connexion",
+    "queued": "Les instructions ont été mises en file d’envoi.",
+    "failed": "Impossible de mettre les instructions en file d’envoi. Réessayez.",
+    "changePassword": "Changer mon mot de passe",
+    "language": "Langue de l’e-mail",
+    "send": "Envoyer"
+  }
+}

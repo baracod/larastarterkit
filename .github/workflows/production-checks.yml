@@ -1,0 +1,73 @@
+name: Production checks
+on:
+  pull_request:
+    branches: [dev, prod]
+  push:
+    branches: [dev, prod]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_DATABASE: startert_test
+          MARIADB_ROOT_PASSWORD: ci-password
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_DATABASE: startert_test
+      DB_USERNAME: root
+      DB_PASSWORD: ci-password
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: bcmath, gd, intl, mbstring, pdo_mysql, pdo_sqlite, zip, pcntl
+          coverage: none
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+      # First-install hooks of composer-merge-plugin can run an implicit update.
+      - run: |
+          sha256sum composer.lock > /tmp/composer-lock.sha256
+          composer install --no-interaction --prefer-dist --no-plugins --no-scripts
+          composer dump-autoload --no-interaction --optimize
+          sha256sum --check /tmp/composer-lock.sha256
+      - run: |
+          cp .env.example .env
+          php artisan key:generate --no-interaction
+          php artisan migrate --force --no-interaction
+          php artisan db:seed --class=DatabaseSeeder --force --no-interaction
+      - run: pnpm install --frozen-lockfile
+      # Build generates the Vue routing and auto-import declarations used by checks.
+      - run: pnpm run build
+      - run: pnpm exec eslint . -c .eslintrc.cjs --ext .ts,.js,.cjs,.vue,.tsx,.jsx
+      - run: pnpm run typecheck
+      - run: vendor/bin/phpunit
+      - run: DB_CONNECTION=sqlite DB_DATABASE=:memory: vendor/bin/phpunit
+      - run: pnpm --dir Modules/Documentation install --frozen-lockfile
+      - run: pnpm --dir Modules/Documentation run docs:build
+      - run: composer audit --locked --no-interaction
+      - run: pnpm audit --prod
+      - name: Build production images
+        run: |
+          docker build -f docker/prod/php/Dockerfile.prod -t starter-app:ci .

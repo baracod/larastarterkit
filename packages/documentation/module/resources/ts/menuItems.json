@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Documentation.dashboard",
+    "to": {
+      "name": "documentation"
+    },
+    "icon": {
+      "icon": "tabler-layout-dashboard"
+    },
+    "action": "browse",
+    "subject": "documentation",
+    "preserveQuery": [
+      "doc",
+      "edition"
+    ]
+  },
+  {
+    "title": "Documentation.collectionsTitle",
+    "to": {
+      "name": "documentation-collections"
+    },
+    "icon": {
+      "icon": "tabler-books"
+    },
+    "action": "browse",
+    "subject": "documentation",
+    "preserveQuery": [
+      "doc",
+      "edition"
+    ]
+  },
+  {
+    "title": "Documentation.writing",
+    "to": {
+      "name": "documentation-editor"
+    },
+    "icon": {
+      "icon": "tabler-writing"
+    },
+    "action": "browse",
+    "subject": "documentation",
+    "preserveQuery": [
+      "doc",
+      "edition"
+    ]
+  },
+  {
+    "title": "Documentation.mediaLibrary",
+    "to": {
+      "name": "documentation-media"
+    },
+    "icon": {
+      "icon": "tabler-photo"
+    },
+    "action": "browse",
+    "subject": "documentation",
+    "preserveQuery": [
+      "doc",
+      "edition"
+    ]
+  },
+  {
+    "title": "Documentation.publications",
+    "to": {
+      "name": "documentation-publications"
+    },
+    "icon": {
+      "icon": "tabler-cloud-upload"
+    },
+    "action": "browse",
+    "subject": "documentation",
+    "preserveQuery": [
+      "doc",
+      "edition"
+    ]
+  },
+  {
+    "title": "Documentation.configuration",
+    "to": {
+      "name": "documentation-configuration"
+    },
+    "icon": {
+      "icon": "tabler-settings"
+    },
+    "action": "browse",
+    "subject": "documentation",
+    "preserveQuery": [
+      "doc",
+      "edition"
+    ]
+  }
+]

@@ -1,0 +1,68 @@
+// Interface labels of the public portal, chosen by the "locale" site setting.
+export const portalLabels = {
+  fr: {
+    lang: 'fr-FR',
+    catalogue: 'Documentations',
+    skipToContent: 'Aller au contenu',
+    appearance: 'Apparence',
+    lightTheme: 'Passer au thème clair',
+    darkTheme: 'Passer au thème sombre',
+    outline: 'Sur cette page',
+    previous: 'Page précédente',
+    next: 'Page suivante',
+    sidebarMenu: 'Sommaire',
+    returnToTop: 'Retour en haut',
+    search: 'Rechercher',
+    searchAria: 'Rechercher dans la documentation',
+    searchDialog: 'Recherche documentaire',
+    searchPlaceholder: 'Rechercher un titre ou un contenu…',
+    closeSearch: 'Fermer la recherche',
+    noResults: 'Aucun résultat.',
+    searchIn: 'Recherchez dans cette édition.',
+    searchPortal: 'Recherchez dans le portail.',
+    allDocs: 'Toutes les documentations',
+    edition: 'Édition',
+    copy: 'Copier',
+    copied: 'Copié !',
+    copyAria: 'Copier le code',
+    selectCode: 'Sélectionnez le code',
+    navigate: 'naviguer',
+    open: 'ouvrir',
+  },
+  en: {
+    lang: 'en-US',
+    catalogue: 'Documentation',
+    skipToContent: 'Skip to content',
+    appearance: 'Appearance',
+    lightTheme: 'Switch to light theme',
+    darkTheme: 'Switch to dark theme',
+    outline: 'On this page',
+    previous: 'Previous page',
+    next: 'Next page',
+    sidebarMenu: 'Menu',
+    returnToTop: 'Return to top',
+    search: 'Search',
+    searchAria: 'Search the documentation',
+    searchDialog: 'Documentation search',
+    searchPlaceholder: 'Search a title or content…',
+    closeSearch: 'Close search',
+    noResults: 'No results.',
+    searchIn: 'Search this edition.',
+    searchPortal: 'Search the portal.',
+    allDocs: 'All documentation',
+    edition: 'Edition',
+    copy: 'Copy',
+    copied: 'Copied!',
+    copyAria: 'Copy code',
+    selectCode: 'Select the code',
+    navigate: 'navigate',
+    open: 'open',
+  },
+} as const
+
+export type PortalLocale = keyof typeof portalLabels
+export type PortalLabels = (typeof portalLabels)[PortalLocale]
+
+export function labelsFor(locale?: string): PortalLabels {
+  return portalLabels[(locale as PortalLocale) in portalLabels ? locale as PortalLocale : 'fr']
+}

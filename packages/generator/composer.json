@@ -1,0 +1,23 @@
+{
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "baracod/larastarterkit-core": "^1.0@RC",
+        "laravel/ai": "^1.0"
+    },
+    "name": "baracod/larastarterkit-generator",
+    "description": "Developer tooling for Larastarterkit",
+    "autoload": {
+        "psr-4": {
+            "Baracod\\Larastarterkit\\Generator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Baracod\\Larastarterkit\\Generator\\GeneratorServiceProvider"
+            ]
+        }
+    }
+}

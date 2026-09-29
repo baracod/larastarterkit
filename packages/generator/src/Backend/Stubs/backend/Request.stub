@@ -1,0 +1,60 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
+
+class {{ modelName }}Request extends FormRequest
+{
+    /**
+     * L'autorisation est portée par les routes (middleware ability:*).
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+{{ validationRules }}
+        ];
+    }
+
+    /**
+     * Identifiant de l'enregistrement modifié (null à la création), pour les règles unique.
+     */
+    private function recordId(): mixed
+    {
+        $parameters = $this->route()?->parameters() ?? [];
+
+        return $parameters === [] ? null : end($parameters);
+    }
+
+    /**
+     * Format attendu par le frontend : une erreur par champ, avec la règle en échec.
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = [];
+        $failed = $validator->failed();
+
+        foreach ($validator->errors()->getMessages() as $field => $messages) {
+            $rule = array_key_first($failed[$field] ?? []);
+            $errors[$field] = $rule === null
+                ? $messages[0]
+                : ['key' => strtolower($rule), 'message' => $messages[0]];
+        }
+
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation failed',
+            'errors' => $errors,
+        ], 422));
+    }
+}

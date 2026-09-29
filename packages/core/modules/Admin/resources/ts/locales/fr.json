@@ -1,0 +1,150 @@
+{
+  "dashboard": {
+    "title": "Administration",
+    "active_modules": "Modules Actifs",
+    "total_modules": "Total Modules",
+    "unread_notifications": "Notifications Non Lues",
+    "real_time": "Temps Réel",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté"
+  },
+  "modules": {
+    "title": "Gestion des Modules",
+    "management": "Gestion des Modules",
+    "primary": "Module Primaire",
+    "secondary": "Module Secondaire",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "status": "Statut",
+    "actions": "Actions",
+    "toggle_success": "Statut mis à jour avec succès",
+    "confirm_toggle": "Êtes-vous sûr de vouloir changer le statut de ce module ?"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "center": "Centre de Notifications",
+    "mark_all_read": "Tout marquer comme lu",
+    "no_notifications": "Aucune notification",
+    "unread": "Notifications Non Lues"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "global": "Paramètres Globaux",
+    "save_success": "Enregistré avec succès"
+  },
+  "adminSetting": {
+    "menuTitle": "Paramètres d'administration",
+    "menuDescription": "Gérez les paramètres globaux de l'application.",
+    "title": "Paramètre d'administration",
+    "titlePlural": "Paramètres d'administration",
+    "field": {
+      "type": "Type",
+      "module": "Module",
+      "userId": "Identifiant utilisateur",
+      "key": "Clé",
+      "value": "Valeur",
+      "valueType": "Type de valeur",
+      "label": "Libellé",
+      "description": "Description",
+      "inputType": "Type d'entrée",
+      "options": "Options",
+      "defaultValue": "Valeur par défaut",
+      "isPublic": "Public"
+    }
+  },
+  "connections": {
+    "title": "Connexions et services",
+    "description": "Vérifiez les services utilisés par l’application depuis le serveur Laravel.",
+    "checkAll": "Tout vérifier",
+    "check": "Vérifier la connexion",
+    "retry": "Réessayer",
+    "loading": "Chargement des connexions",
+    "database": "Base de données",
+    "storage": "Stockage",
+    "databaseDescription": "Exécute une requête de lecture sur la connexion principale, sans modifier les données.",
+    "storageDescription": "Crée, relit puis supprime un fichier temporaire sur le stockage sélectionné : local, S3/R2 ou autre service configuré.",
+    "connection": "Connexion",
+    "network": "Réseau",
+    "contract": "Contrat",
+    "disk": "Stockage à vérifier",
+    "notaryDisabled": "La notarisation automatique est désactivée. La connexion peut tout de même être vérifiée.",
+    "notConfigured": "Non configuré",
+    "notTested": "Pas encore vérifié",
+    "checking": "Vérification en cours…",
+    "duration": "Temps de réponse : {ms} ms",
+    "checkedAt": "Dernier contrôle : {date}",
+    "requestFailed": "Impossible de lancer le diagnostic. Vérifiez votre session, vos droits et la disponibilité de l’application, puis réessayez.",
+    "status": {
+      "ok": "Connexion opérationnelle",
+      "error": "Vérification échouée",
+      "not_configured": "Configuration incomplète"
+    },
+    "codes": {
+      "database_ok": "La base de données répond à la requête de lecture.",
+      "database_unavailable": "La base ne répond pas. Vérifiez le service, les paramètres de connexion et les droits d’accès.",
+      "storage_ok": "Écriture, relecture et suppression du fichier temporaire réussies.",
+      "storage_configuration_missing": "Complétez la configuration du stockage. Pour S3/R2, un bucket et une région sont nécessaires.",
+      "storage_driver_missing": "Le pilote S3/R2 est absent du serveur. Installez league/flysystem-aws-s3-v3 avant de vérifier cette connexion.",
+      "storage_unavailable": "Le stockage ne répond pas ou refuse l’accès. Vérifiez sa configuration et les autorisations.",
+      "storage_write_failed": "Impossible d’écrire le fichier temporaire. Vérifiez les droits d’écriture.",
+      "storage_read_failed": "La relecture du fichier temporaire a échoué.",
+      "storage_cleanup_failed": "La suppression du fichier temporaire n’a pas pu être confirmée. Vérifiez les droits de suppression dans le dossier .starter-diagnostics.",
+      "mail_ok": "Le serveur SMTP accepte la connexion et la commande de contrôle. La livraison des e-mails n’est pas vérifiée.",
+      "mail_local_only": "Le mode log ou array conserve les messages localement. Configurez un service SMTP pour vérifier une connexion mail externe.",
+      "mail_unsupported": "Le diagnostic de connexion est disponible pour SMTP. Le service mail configuré utilise un autre transport et n’a pas été vérifié.",
+      "mail_configuration_missing": "Complétez la configuration du service mail, notamment le serveur SMTP et son port.",
+      "mail_unavailable": "La connexion SMTP a échoué. Vérifiez le serveur, le port, les identifiants et les paramètres TLS.",
+      "push_ok": "L’API de diffusion accepte l’authentification et la lecture des canaux. La livraison des notifications n’est pas vérifiée.",
+      "push_configuration_missing": "Aucun service push externe utilisable n’est configuré. Configurez le broadcasting et les identifiants du fournisseur.",
+      "push_driver_missing": "Le pilote Pusher/Reverb est absent du serveur. Installez le pilote du fournisseur avant de vérifier cette connexion.",
+      "push_unsupported": "Le diagnostic de connexion prend en charge Pusher et Reverb. Le fournisseur configuré n’a pas été vérifié.",
+      "push_unavailable": "Le service push ne répond pas ou refuse la requête. Vérifiez ses identifiants, son adresse et ses autorisations.",
+      "horizon_ok": "Redis répond et Horizon déclare des workers actifs pour la file principale. L’exécution effective des jobs n’a pas été testée.",
+      "horizon_queue_not_redis": "La file principale n’utilise pas Redis. Horizon ne prend en charge que les files Redis.",
+      "horizon_inactive": "Aucun superviseur Horizon récent n’est détecté pour cet environnement. Vérifiez le démarrage du service worker.",
+      "horizon_paused": "Un superviseur Horizon est en pause ou n’est pas en cours d’exécution.",
+      "horizon_no_workers": "Horizon est présent, mais aucun worker actif n’est déclaré pour la file principale. Vérifiez les files et les processus configurés.",
+      "horizon_unavailable": "Redis ou les informations Horizon sont inaccessibles. Vérifiez la connexion Redis et la configuration Horizon.",
+      "scheduler_ok": "Signal récent reçu du scheduler.",
+      "scheduler_inactive": "Aucun signal récent. Vérifiez le conteneur scheduler et son cache partagé avec le web.",
+      "scheduler_shared_cache_required": "Configurez un cache partagé entre web et scheduler (Redis recommandé).",
+      "scheduler_unavailable": "Impossible de lire le signal du scheduler."
+    },
+    "mail": "Mail",
+    "mailer": "Service mail",
+    "mailDescription": "Ouvre une session SMTP avec la configuration de l’application. Aucun e-mail n’est envoyé.",
+    "push": "Notifications push",
+    "horizon": "Horizon et files d’attente",
+    "queue": "File surveillée",
+    "workers": "Workers déclarés sur cette file : {count}",
+    "pushDescription": "Vérifie l’accès à l’API du service de diffusion Pusher/Reverb et l’état du client temps réel dans ce navigateur. Aucune notification n’est envoyée.",
+    "horizonDescription": "Vérifie Redis et les derniers signaux de présence des superviseurs et workers Horizon sur la file principale. Aucun job n’est exécuté.",
+    "pushClient": {
+      "connected": "Le client temps réel du navigateur est connecté. La réception d’une notification n’a pas été testée.",
+      "disconnected": "Le client temps réel du navigateur est présent mais sa connexion n’est pas confirmée.",
+      "missing": "Le client temps réel n’est pas initialisé dans ce navigateur. Les notifications push ne peuvent pas y être reçues."
+    },
+    "scheduler": "Scheduler",
+    "schedulerDescription": "Vérifie un signal écrit chaque minute dans le cache partagé. Ne garantit pas la réussite de chaque tâche.",
+    "overviewLabel": "État des services",
+    "sharedCache": "Cache partagé",
+    "summary": {
+      "total": "Services",
+      "operational": "Opérationnels",
+      "attention": "À vérifier",
+      "pending": "Non vérifiés"
+    },
+    "badges": {
+      "ok": "Connecté",
+      "error": "Échec",
+      "warning": "À vérifier",
+      "pending": "Non vérifié",
+      "checking": "Vérification…"
+    }
+  },
+  "documents": {
+    "title": "Documents : import et génération",
+    "description": "Choisissez, pour chaque étape, l’import de documents, leur génération par STARTER ou les deux.",
+    "configure": "Configurer les documents"
+  }
+}

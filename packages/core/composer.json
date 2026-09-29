@@ -1,0 +1,50 @@
+{
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.4",
+    "barryvdh/laravel-dompdf": "^3.1",
+    "dcblogdev/laravel-module-generator": "^2.0",
+    "doctrine/inflector": "^2.0",
+    "laravel/framework": "^12.0",
+    "laravel/horizon": "^5.44",
+    "laravel/mcp": "^1.0",
+    "laravel/reverb": "^1.0",
+    "laravel/sanctum": "^4.0",
+    "nnjeim/world": "^1.1",
+    "nwidart/laravel-modules": "^11.1",
+    "php-mcp/laravel": "^3.1",
+    "react/http": "*",
+    "simplesoftwareio/simple-qrcode": "^4.2",
+    "spatie/laravel-activitylog": "^4.10",
+    "tailflow/laravel-orion": "^2.23"
+  },
+  "name": "baracod/larastarterkit-core",
+  "description": "Shared Laravel infrastructure with Auth and Admin modules",
+  "autoload": {
+    "psr-4": {
+      "Baracod\\Larastarterkit\\Core\\": "src/",
+      "Modules\\Auth\\": "modules/Auth/app/",
+      "Modules\\Admin\\": "modules/Admin/app/",
+      "Modules\\Auth\\Database\\Factories\\": "modules/Auth/database/factories/",
+      "Modules\\Auth\\Database\\Seeders\\": "modules/Auth/database/seeders/",
+      "Modules\\Admin\\Database\\Seeders\\": "modules/Admin/database/seeders/"
+    },
+    "files": [
+      "src/Helpers/helpers.php"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Baracod\\Larastarterkit\\Core\\Providers\\CoreServiceProvider"
+      ]
+    },
+    "larastarterkit": {
+      "modules": [
+        "modules/Auth",
+        "modules/Admin"
+      ]
+    }
+  }
+}

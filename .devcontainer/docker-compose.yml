@@ -1,0 +1,61 @@
+# .devcontainer/docker-compose.yml
+version: '3.8'
+
+services:
+  # --- 1. Le service pour votre application Laravel ---
+  app:
+    # On utilise une image pré-configurée pour les Dev Containers avec PHP/Node
+    # Vous pouvez choisir la version de PHP qui vous convient (ex: :8.2, :8.1)
+    image: mcr.microsoft.com/devcontainers/php:0-8.3
+    
+    # Le volume monte votre code local (tout le projet) dans le conteneur
+    # Le premier '.' signifie "le dossier où se trouve docker-compose.yml"
+    # Comme il est dans .devcontainer, on utilise '..:/workspace' pour remonter d'un niveau
+    volumes:
+      - ..:/workspace:cached
+      
+    # Garde le conteneur en vie
+    command: sleep infinity
+    
+    # Le nom du réseau pour que les conteneurs puissent se parler
+    networks:
+      - laravel-net
+
+  # --- 2. Le service pour la base de données MariaDB ---
+  db:
+    image: mariadb:10.8 # Choisissez votre version de MariaDB
+    environment:
+      # !! TRÈS IMPORTANT !!
+      # Ces variables sont utilisées pour créer la base de données et l'utilisateur
+      MYSQL_ROOT_PASSWORD: rootpassword  # Mot de passe root (uniquement pour l'init)
+      MYSQL_DATABASE: laravel          # Nom de votre base de données
+      MYSQL_USER: laraveluser          # Nom de l'utilisateur de l'app
+      MYSQL_PASSWORD: password         # Mot de passe de l'utilisateur de l'app
+    volumes:
+      # Ce volume persiste les données de la base de données même si vous recréez le conteneur
+      # "mariadb-data" est un nom que Docker gèrera pour vous
+      - ../.docker/mariadb/data:/var/lib/mysql
+    networks:
+      - laravel-net
+
+  # --- 3. Le service pour phpMyAdmin ---
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db        # Indique à phpMyAdmin de se connecter au service nommé 'db'
+      PMA_PORT: 3306
+    ports:
+      # Mappe le port 8080 de votre PC au port 80 du conteneur phpMyAdmin
+      - "8080:80"
+    networks:
+      - laravel-net
+
+# Définit le réseau partagé
+networks:
+  laravel-net:
+    driver: bridge
+
+# Définit le volume nommé pour la persistance des données DB
+volumes:
+  mariadb-data:
+    driver: local

@@ -1,0 +1,12 @@
+{
+  "name": "larastarterkit-documentation-frontend",
+  "private": true,
+  "dependencies": {
+    "mermaid": "^11.17.2",
+    "prismjs": "^1.30.0",
+    "vitepress": "1.6.4",
+    "vitepress-plugin-mermaid": "2.0.17",
+    "vue": "3.5.22"
+  },
+  "type": "module"
+}

@@ -1,0 +1,150 @@
+{
+  "dashboard": {
+    "title": "Administration",
+    "active_modules": "Active Modules",
+    "total_modules": "Total Modules",
+    "unread_notifications": "Unread Notifications",
+    "real_time": "Real Time",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "modules": {
+    "title": "Modules Management",
+    "management": "Modules Management",
+    "primary": "Primary Module",
+    "secondary": "Secondary Module",
+    "enable": "Enable",
+    "disable": "Disable",
+    "status": "Status",
+    "actions": "Actions",
+    "toggle_success": "Status updated successfully",
+    "confirm_toggle": "Are you sure you want to change this module status?"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "center": "Notification Center",
+    "mark_all_read": "Mark all as read",
+    "no_notifications": "No notifications",
+    "unread": "Unread Notifications"
+  },
+  "settings": {
+    "title": "Settings",
+    "global": "Global Settings",
+    "save_success": "Saved successfully"
+  },
+  "adminSetting": {
+    "menuTitle": "Admin Settings",
+    "menuDescription": "Manage global application settings.",
+    "title": "Admin Setting",
+    "titlePlural": "Admin Settings",
+    "field": {
+      "type": "Type",
+      "module": "Module",
+      "userId": "User ID",
+      "key": "Key",
+      "value": "Value",
+      "valueType": "Value Type",
+      "label": "Label",
+      "description": "Description",
+      "inputType": "Input Type",
+      "options": "Options",
+      "defaultValue": "Default Value",
+      "isPublic": "Public"
+    }
+  },
+  "connections": {
+    "title": "Connections and services",
+    "description": "Check the services used by the application from the Laravel server.",
+    "checkAll": "Check all",
+    "check": "Check connection",
+    "retry": "Try again",
+    "loading": "Loading connections",
+    "database": "Database",
+    "storage": "Storage",
+    "databaseDescription": "Runs a read query on the primary connection without changing any data.",
+    "storageDescription": "Creates, reads and deletes a temporary file on the selected storage: local, S3/R2 or another configured service.",
+    "connection": "Connection",
+    "network": "Network",
+    "contract": "Contract",
+    "disk": "Storage to check",
+    "notaryDisabled": "Automatic notarization is disabled. The connection can still be checked.",
+    "notConfigured": "Not configured",
+    "notTested": "Not checked yet",
+    "checking": "Checking…",
+    "duration": "Response time: {ms} ms",
+    "checkedAt": "Last check: {date}",
+    "requestFailed": "Unable to run the diagnostic. Check your session, permissions and application availability, then try again.",
+    "status": {
+      "ok": "Connection operational",
+      "error": "Check failed",
+      "not_configured": "Configuration incomplete"
+    },
+    "codes": {
+      "database_ok": "The database responded to the read query.",
+      "database_unavailable": "The database did not respond. Check the service, connection settings and permissions.",
+      "storage_ok": "The temporary file was written, read and deleted successfully.",
+      "storage_configuration_missing": "Complete the storage configuration. S3/R2 requires a bucket and region.",
+      "storage_driver_missing": "The S3/R2 driver is missing on the server. Install league/flysystem-aws-s3-v3 before checking this connection.",
+      "storage_unavailable": "Storage is unavailable or access was denied. Check the configuration and permissions.",
+      "storage_write_failed": "Unable to write the temporary file. Check write permissions.",
+      "storage_read_failed": "The temporary file could not be read back correctly.",
+      "storage_cleanup_failed": "Deletion of the temporary file could not be confirmed. Check delete permissions in the .starter-diagnostics folder.",
+      "mail_ok": "The SMTP server accepts the connection and the check command. Email delivery has not been verified.",
+      "mail_local_only": "The log or array driver keeps messages locally. Configure an SMTP service to check an external mail connection.",
+      "mail_unsupported": "Connection diagnostics support SMTP. The configured mail service uses a different transport and has not been checked.",
+      "mail_configuration_missing": "Complete the mail service configuration, including the SMTP server and port.",
+      "mail_unavailable": "The SMTP connection failed. Check the server, port, credentials and TLS settings.",
+      "push_ok": "The broadcasting API accepts authentication and channel listing. Notification delivery has not been verified.",
+      "push_configuration_missing": "No usable external push service is configured. Configure broadcasting and the provider credentials.",
+      "push_driver_missing": "The Pusher/Reverb driver is missing on the server. Install the provider driver before checking this connection.",
+      "push_unsupported": "Connection diagnostics support Pusher and Reverb. The configured provider has not been checked.",
+      "push_unavailable": "The push service is unavailable or rejected the request. Check its credentials, address and permissions.",
+      "horizon_ok": "Redis responds and Horizon reports active workers for the main queue. Actual job execution has not been tested.",
+      "horizon_queue_not_redis": "The main queue does not use Redis. Horizon only supports Redis queues.",
+      "horizon_inactive": "No recent Horizon supervisor is detected for this environment. Check that the worker service is running.",
+      "horizon_paused": "A Horizon supervisor is paused or is not running.",
+      "horizon_no_workers": "Horizon is present but no active worker is reported for the main queue. Check the configured queues and processes.",
+      "horizon_unavailable": "Redis or Horizon metadata is inaccessible. Check the Redis connection and Horizon configuration.",
+      "scheduler_ok": "Recent scheduler heartbeat received.",
+      "scheduler_inactive": "No recent heartbeat. Check the scheduler container and shared cache.",
+      "scheduler_shared_cache_required": "Configure shared cache between web and scheduler (Redis recommended).",
+      "scheduler_unavailable": "Unable to read scheduler heartbeat."
+    },
+    "mail": "Mail",
+    "mailer": "Mail service",
+    "mailDescription": "Opens an SMTP session using the application configuration. No email is sent.",
+    "push": "Push notifications",
+    "horizon": "Horizon and queues",
+    "queue": "Monitored queue",
+    "workers": "Workers reported for this queue: {count}",
+    "pushDescription": "Checks access to the Pusher/Reverb broadcasting API and the realtime client status in this browser. No notification is sent.",
+    "horizonDescription": "Checks Redis and recent Horizon supervisor and worker heartbeats for the main queue. No job is executed.",
+    "pushClient": {
+      "connected": "The browser realtime client is connected. Notification reception has not been tested.",
+      "disconnected": "The browser realtime client is present but its connection has not been confirmed.",
+      "missing": "The realtime client is not initialized in this browser. It cannot receive push notifications."
+    },
+    "scheduler": "Scheduler",
+    "schedulerDescription": "Checks a heartbeat written every minute to shared cache. Does not guarantee that every task succeeds.",
+    "overviewLabel": "Service health",
+    "sharedCache": "Shared cache",
+    "summary": {
+      "total": "Services",
+      "operational": "Operational",
+      "attention": "Need attention",
+      "pending": "Unchecked"
+    },
+    "badges": {
+      "ok": "Connected",
+      "error": "Failed",
+      "warning": "Needs attention",
+      "pending": "Unchecked",
+      "checking": "Checking…"
+    }
+  },
+  "documents": {
+    "title": "Documents: upload and generation",
+    "description": "Choose document upload, STARTER generation or both for each step.",
+    "configure": "Configure documents"
+  }
+}

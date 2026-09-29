@@ -1,0 +1,140 @@
+{
+  "name": "Admin",
+  "alias": "admin",
+  "description": "",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\Admin\\Providers\\AdminServiceProvider"
+  ],
+  "files": [],
+  "module": "Admin",
+  "models": {
+    "admin-setting": {
+      "name": "AdminSetting",
+      "key": "admin-setting",
+      "namespace": "Modules\\Admin\\Models",
+      "tableName": "admin_settings",
+      "moduleName": "Admin",
+      "fillable": [
+        {
+          "name": "type",
+          "type": "json",
+          "defaultValue": "'system'",
+          "customizedType": ""
+        },
+        {
+          "name": "module",
+          "type": "string",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "defaultValue": null,
+          "customizedType": ""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "value_type",
+          "type": "string",
+          "defaultValue": "'string'",
+          "customizedType": ""
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "input_type",
+          "type": "string",
+          "defaultValue": "'text'",
+          "customizedType": ""
+        },
+        {
+          "name": "options",
+          "type": "string",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "default_value",
+          "type": "string",
+          "defaultValue": "NULL",
+          "customizedType": ""
+        },
+        {
+          "name": "is_public",
+          "type": "boolean",
+          "defaultValue": "0",
+          "customizedType": ""
+        }
+      ],
+      "relations": [],
+      "fqcn": "Modules\\Admin\\Models\\AdminSetting",
+      "backend": {
+        "hasModel": true,
+        "hasController": true,
+        "hasRequest": false,
+        "hasRoute": false,
+        "hasPermission": false,
+        "apiRoute": null
+      },
+      "frontend": {
+        "hasType": false,
+        "hasApi": false,
+        "hasLang": false,
+        "hasAddOrEditComponent": false,
+        "hasReadComponent": false,
+        "hasIndex": false,
+        "hasMenu": false,
+        "hasPermission": false,
+        "fields": [],
+        "casl": {
+          "create": false,
+          "read": false,
+          "update": false,
+          "delete": false,
+          "access": false
+        }
+      }
+    }
+  },
+  "frontend": {
+    "path": "resources/ts"
+  },
+  "upgradeSeeders": [
+    "Modules\\Admin\\Database\\Seeders\\PermissionSeeder",
+    "Modules\\Admin\\Database\\Seeders\\SettingSeeder"
+  ],
+  "navigation": {
+    "icon": "mdi-cog",
+    "title": "Admin",
+    "action": "access",
+    "subject": "admin",
+    "to": {
+      "name": "admin"
+    },
+    "module": "Admin"
+  }
+}

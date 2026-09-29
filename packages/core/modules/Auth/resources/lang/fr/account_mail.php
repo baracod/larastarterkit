@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'greeting' => 'Bonjour :name,',
+    'login_subject' => 'Nouvelle connexion à votre compte :app',
+    'login_body' => 'Une connexion réussie à votre compte :app vient d’être enregistrée.',
+    'time' => 'Date et heure : :time',
+    'ip' => 'Adresse IP : :ip',
+    'device' => 'Navigateur déclaré : :device',
+    'unexpected' => 'Si vous n’êtes pas à l’origine de cette opération, réinitialisez votre mot de passe et contactez votre administrateur.',
+    'reset_action' => 'Demander un lien de réinitialisation',
+    'password_subject' => 'Votre mot de passe :app a été modifié',
+    'password_admin' => 'Un administrateur a réinitialisé le mot de passe de votre compte.',
+    'password_changed' => 'Le mot de passe de votre compte a été modifié avec succès.',
+    'must_change' => 'Un changement de mot de passe sera demandé à votre prochaine connexion.',
+    'no_password' => 'Aucun mot de passe n’est transmis par e-mail. Pour choisir un nouveau mot de passe, utilisez « Mot de passe oublié ? » sur la page de connexion.',
+    'instructions_subject' => 'Comment vous connecter à :app',
+    'instructions_intro' => 'Voici les étapes pour accéder à votre espace :app.',
+    'instructions_email' => '1. Ouvrez la page de connexion et utilisez votre adresse : :email',
+    'instructions_password' => '2. Saisissez votre mot de passe personnel. Ne le partagez avec personne.',
+    'instructions_forgot' => '3. Pour définir ou retrouver votre accès, ouvrez : :url ; saisissez votre adresse e-mail, puis suivez le lien reçu pour choisir votre mot de passe.',
+    'instructions_change' => '4. Une fois connecté, le menu de votre profil propose « Changer mon mot de passe ». Si un changement est imposé, suivez l’écran affiché.',
+    'instructions_access' => 'Vos menus dépendent de votre rôle, de votre site et de votre organisation. Si votre compte est désactivé ou si un accès manque, contactez votre administrateur.',
+    'login_action' => 'Se connecter à :app',
+    'instructions_queued' => 'Les instructions de connexion ont été mises en file d’envoi.',
+];

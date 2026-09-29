@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'greeting' => 'Hello :name,',
+    'login_subject' => 'New sign-in to your :app account',
+    'login_body' => 'A successful sign-in to your :app account has been recorded.',
+    'time' => 'Date and time: :time',
+    'ip' => 'IP address: :ip',
+    'device' => 'Reported browser: :device',
+    'unexpected' => 'If you did not perform this action, reset your password and contact your administrator.',
+    'reset_action' => 'Request a password reset link',
+    'password_subject' => 'Your :app password has changed',
+    'password_admin' => 'An administrator has reset your account password.',
+    'password_changed' => 'Your account password was changed successfully.',
+    'must_change' => 'You will be asked to change your password on your next sign-in.',
+    'no_password' => 'Passwords are never sent by email. To choose a new password, use “Forgot password?” on the sign-in page.',
+    'instructions_subject' => 'How to sign in to :app',
+    'instructions_intro' => 'Follow these steps to access your :app workspace.',
+    'instructions_email' => '1. Open the sign-in page and use your email address: :email',
+    'instructions_password' => '2. Enter your personal password. Do not share it.',
+    'instructions_forgot' => '3. To set or recover your password, open :url ; enter your email address, then follow the link you receive to choose your password.',
+    'instructions_change' => '4. Once signed in, choose “Change my password” from your profile menu. If a password change is required, follow the screen instructions.',
+    'instructions_access' => 'Available menus depend on your role, site and organization. Contact your administrator if your account is disabled or access is missing.',
+    'login_action' => 'Sign in to :app',
+    'instructions_queued' => 'Sign-in instructions have been queued for delivery.',
+];

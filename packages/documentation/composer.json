@@ -1,0 +1,23 @@
+{
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.4",
+    "baracod/larastarterkit-core": "^1.0@RC"
+  },
+  "name": "baracod/larastarterkit-documentation",
+  "description": "Versioned Markdown documentation CMS and VitePress publishing",
+  "autoload": {
+    "psr-4": {
+      "Modules\\Documentation\\": "module/app/",
+      "Modules\\Documentation\\Database\\Seeders\\": "module/database/seeders/"
+    }
+  },
+  "extra": {
+    "larastarterkit": {
+      "modules": [
+        "module"
+      ]
+    }
+  }
+}

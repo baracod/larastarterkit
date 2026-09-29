@@ -1,0 +1,27 @@
+{
+  "name": "Documentation",
+  "alias": "documentation",
+  "description": "Documentation module",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\Documentation\\Providers\\DocumentationServiceProvider"
+  ],
+  "files": [],
+  "frontend": {
+    "path": "resources/ts"
+  },
+  "upgradeSeeders": [
+    "Modules\\Documentation\\Database\\Seeders\\PermissionSeeder"
+  ],
+  "navigation": {
+    "icon": "mdi-book-open",
+    "title": "Documentation",
+    "action": "browse",
+    "subject": "documentation",
+    "to": {
+      "name": "documentation"
+    },
+    "module": "Documentation"
+  }
+}

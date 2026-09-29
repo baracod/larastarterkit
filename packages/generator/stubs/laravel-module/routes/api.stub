@@ -1,0 +1,21 @@
+<?php
+
+use Baracod\Larastarterkit\Core\Http\Middleware\EnsureModuleEnabled;
+use Illuminate\Support\Facades\Route;
+
+/*
+ *--------------------------------------------------------------------------
+ * API du module $STUDLY_NAME$ : /api/v1/$LOWER_NAME$/...
+ *--------------------------------------------------------------------------
+ *
+ * Chargées par le RouteServiceProvider du module (groupe "api", préfixe "api").
+ * Le générateur CRUD insère les nouvelles ressources avant le marqueur //{{ next-route }}.
+ * Chaque ressource porte ses propres contrôles d'accès (ability:browse|add|edit|delete,<table>).
+ *
+*/
+
+Route::middleware(['auth:sanctum', 'active', 'must_change_pass', EnsureModuleEnabled::class.':$STUDLY_NAME$'])
+    ->prefix('v1/$LOWER_NAME$')
+    ->group(function () {
+        //{{ next-route }}
+    });

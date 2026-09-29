@@ -1,0 +1,9 @@
+{
+  "name": "starter/documentation",
+  "autoload": {
+    "psr-4": {
+      "Modules\\Documentation\\": "app/",
+      "Modules\\Documentation\\Database\\Seeders\\": "database/seeders/"
+    }
+  }
+}

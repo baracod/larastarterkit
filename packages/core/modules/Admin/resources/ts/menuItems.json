@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Admin.modules.title",
+    "to": {
+      "name": "admin-modules"
+    },
+    "icon": {
+      "icon": "mdi-package-variant-closed"
+    }
+  },
+  {
+    "title": "Admin.notifications.title",
+    "to": {
+      "name": "admin-notifications"
+    },
+    "icon": {
+      "icon": "mdi-bell-outline"
+    }
+  },
+  {
+    "title": "Admin.settings.title",
+    "to": {
+      "name": "admin-settings"
+    },
+    "icon": {
+      "icon": "mdi-cog-outline"
+    }
+  },
+  {
+    "title": "Admin.adminSetting.menuTitle",
+    "to": {
+      "name": "admin-adminsettings"
+    },
+    "icon": {
+      "icon": "bx-file-blank"
+    },
+    "action": "access",
+    "subject": "admin_settings"
+  },
+  {
+    "title": "Admin.connections.title",
+    "to": {
+      "name": "admin-connections"
+    },
+    "icon": {
+      "icon": "mdi-lan-connect"
+    },
+    "action": "administrator"
+  }
+]

@@ -1,0 +1,61 @@
+<script lang="ts" setup>
+import { themeConfig } from '@themeConfig'
+
+// Components
+import Footer from '@/components/Footer.vue'
+import NavbarThemeSwitcher from '@/components/NavbarThemeSwitcher.vue'
+import UserProfile from '@auth/components/UserProfile.vue'
+import NavBarI18n from '@core/components/I18n.vue'
+import { HorizontalNavLayout } from '@layouts'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+
+const navItems = useModuleMenu()
+</script>
+
+<template>
+  <HorizontalNavLayout :nav-items="navItems">
+    <!-- 👉 navbar -->
+    <template #navbar>
+      <RouterLink
+        to="/"
+        class="app-logo d-flex align-center gap-x-2"
+      >
+        <VNodeRenderer :nodes="themeConfig.app.logo" />
+
+        <h1 class="app-logo-title">
+          {{ themeConfig.app.title }}
+        </h1>
+      </RouterLink>
+      <ModuleNavbarExtension />
+      <VSpacer />
+
+      <NavBarI18n
+        v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
+        :languages="themeConfig.app.i18n.langConfig"
+      />
+
+      <NavbarThemeSwitcher class="me-2" />
+      <UserProfile />
+    </template>
+
+    <!-- 👉 Pages -->
+    <slot />
+
+    <!-- 👉 Footer -->
+    <template #footer>
+      <Footer />
+    </template>
+
+    <!-- 👉 Customizer -->
+    <!-- <TheCustomizer /> -->
+  </HorizontalNavLayout>
+</template>
+
+<style lang="scss" scoped>
+.app-logo-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  line-height: 1.75rem;
+}
+</style>

@@ -1,0 +1,84 @@
+<script setup lang="ts">
+import { {{ modelName }}API } from '../api/{{ modelName }}'
+import type { {{ modelName }}Payload } from '../api/{{ modelName }}'
+import type { I{{ modelName }} } from '../types/entities'
+{{ imports }}
+
+const props = defineProps<{ modelValue: boolean; item?: I{{ modelName }}; viewOnly: boolean }>()
+const emit = defineEmits<{ 'update:modelValue': [value: boolean]; 'saved': [] }>()
+
+const { t } = useI18n()
+const { formatErrorMessagesForm } = useTranslater()
+
+const emptyForm = (): {{ modelName }}Payload => ({{ defaultValues }})
+const form = ref<{{ modelName }}Payload>(emptyForm())
+const loading = ref(false)
+const errorMessage = ref<Record<string, string | string[]>>({})
+
+{{ relationLists }}
+watch(() => props.item, item => {
+  form.value = item ? { ...item } : emptyForm()
+  errorMessage.value = {}
+}, { immediate: true })
+{{ onMounted }}
+async function save() {
+  errorMessage.value = {}
+  loading.value = true
+  try {
+    if (form.value.id)
+      await {{ modelName }}API.update(form.value.id, form.value)
+    else
+      await {{ modelName }}API.create(form.value)
+    emit('saved')
+    emit('update:modelValue', false)
+  }
+  catch (error: any) {
+    errorMessage.value = formatErrorMessagesForm(error?.data?.errors ?? {}, '{{ moduleName }}.{{ modelNameCamelCase }}')
+  }
+  finally {
+    loading.value = false
+  }
+}
+</script>
+
+<template>
+  <VDialog
+    :model-value="modelValue"
+    max-width="820"
+    @update:model-value="emit('update:modelValue', $event)"
+  >
+    <VCard>
+      <VCardTitle v-if="viewOnly">
+        {{ t('{{ moduleName }}.{{ modelNameCamelCase }}.title') }}
+      </VCardTitle>
+      <VCardTitle v-else>
+        {{ item?.id ? t('action.edit') : t('action.add') }} · {{ t('{{ moduleName }}.{{ modelNameCamelCase }}.title') }}
+      </VCardTitle>
+      <VCardText>
+        <VForm @submit.prevent="save">
+          <VRow class="mb-2">
+            {{ formFields }}
+          </VRow>
+        </VForm>
+      </VCardText>
+      <VCardActions>
+        <VSpacer />
+        <VBtn
+          variant="outlined"
+          color="secondary"
+          @click="emit('update:modelValue', false)"
+        >
+          {{ t('action.cancel') }}
+        </VBtn>
+        <VBtn
+          v-if="!viewOnly"
+          :loading="loading"
+          variant="elevated"
+          @click="save"
+        >
+          {{ item?.id ? t('action.edit') : t('action.add') }}
+        </VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
+</template>

@@ -1,0 +1,138 @@
+x-app: &app
+  image: starter-app:${STARTER_IMAGE_TAG:-local}
+  build:
+    context: .
+    dockerfile: docker/prod/php/Dockerfile.prod
+  restart: unless-stopped
+  init: true
+  env_file: .env.production
+  environment: &app-env
+    APP_ENV: production
+    APP_DEBUG: "false"
+    MCP_HTTP_INTEGRATED_ENABLED: "false"
+    MCP_HTTP_DEDICATED_ENABLED: "false"
+    MCP_STDIO_ENABLED: "false"
+    APP_URL: https://${APP_DOMAIN:?Set APP_DOMAIN in .env.production}
+    LOG_CHANNEL: stderr
+    DB_CONNECTION: mysql
+    DB_HOST: db
+    REDIS_HOST: redis
+    QUEUE_CONNECTION: redis
+    CACHE_STORE: redis
+    SESSION_DRIVER: redis
+    SESSION_SECURE_COOKIE: "true"
+    SANCTUM_STATEFUL_DOMAINS: ${APP_DOMAIN:?Set APP_DOMAIN}
+    REDIS_QUEUE_RETRY_AFTER: "360"
+  volumes: [storage_data:/var/www/html/storage]
+  networks: [internal]
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  stop_grace_period: 300s
+
+services:
+  migrate:
+    <<: *app
+    profiles: [maintenance]
+    restart: 'no'
+    entrypoint: [starter-maintenance]
+    command: [migrate]
+    environment:
+      <<: *app-env
+      DB_USERNAME: root
+      DB_PASSWORD_FILE: /run/secrets/DB_ROOT_PASSWORD
+      STARTER_RUNTIME_DB_USERNAME: ${DB_USERNAME:?Set a dedicated runtime DB_USERNAME}
+  app:
+    <<: *app
+    networks: [internal, egress]
+    healthcheck:
+      test: [CMD, php, -r, "exit(@file_get_contents('http://127.0.0.1/up') === false ? 1 : 0);"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+  worker:
+    <<: *app
+    stop_signal: SIGTERM
+    user: www-data
+    command: [php, artisan, horizon, --no-interaction]
+    networks: [internal, egress]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, php, artisan, horizon:status, --no-interaction]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  scheduler:
+    <<: *app
+    stop_signal: SIGTERM
+    user: www-data
+    command: [php, artisan, schedule:work, --no-interaction]
+    depends_on:
+      app:
+        condition: service_healthy
+  gateway:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?Set APP_DOMAIN}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./docker/prod/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [internal, egress]
+    depends_on:
+      app:
+        condition: service_healthy
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:?Set DB_DATABASE}
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/DB_ROOT_PASSWORD
+    secrets: [DB_ROOT_PASSWORD]
+    volumes: [db_data:/var/lib/mysql]
+    networks: [internal]
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 10
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: [sh, -ec, 'exec redis-server --appendonly yes --requirepass "$$(cat /run/secrets/REDIS_PASSWORD)"']
+    secrets: [REDIS_PASSWORD]
+    volumes: [redis_data:/data]
+    networks: [internal]
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$(cat /run/secrets/REDIS_PASSWORD)" redis-cli ping | grep -q PONG']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  internal:
+    internal: true
+  egress: {}
+volumes:
+  storage_data: {}
+  db_data: {}
+  redis_data: {}
+  caddy_data: {}
+  caddy_config: {}
+secrets:
+  APP_KEY:
+    file: ./.secrets/APP_KEY
+  DB_PASSWORD:
+    file: ./.secrets/DB_PASSWORD
+  DB_ROOT_PASSWORD:
+    file: ./.secrets/DB_ROOT_PASSWORD
+  REDIS_PASSWORD:
+    file: ./.secrets/REDIS_PASSWORD

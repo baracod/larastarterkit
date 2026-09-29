@@ -1,0 +1,2508 @@
+{
+    "table": "countries",
+    "unique_by": [
+        "id"
+    ],
+    "rows": [
+        {
+            "id": 1,
+            "iso2": "AF",
+            "name": "Afghanistan",
+            "status": 1,
+            "phone_code": "93",
+            "iso3": "AFG",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 2,
+            "iso2": "AX",
+            "name": "Aland Islands",
+            "status": 1,
+            "phone_code": "358",
+            "iso3": "ALA",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 3,
+            "iso2": "AL",
+            "name": "Albania",
+            "status": 1,
+            "phone_code": "355",
+            "iso3": "ALB",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 4,
+            "iso2": "DZ",
+            "name": "Algeria",
+            "status": 1,
+            "phone_code": "213",
+            "iso3": "DZA",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 5,
+            "iso2": "AS",
+            "name": "American Samoa",
+            "status": 1,
+            "phone_code": "1684",
+            "iso3": "ASM",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 6,
+            "iso2": "AD",
+            "name": "Andorra",
+            "status": 1,
+            "phone_code": "376",
+            "iso3": "AND",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 7,
+            "iso2": "AO",
+            "name": "Angola",
+            "status": 1,
+            "phone_code": "244",
+            "iso3": "AGO",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 8,
+            "iso2": "AI",
+            "name": "Anguilla",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "AIA",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 9,
+            "iso2": "AQ",
+            "name": "Antarctica",
+            "status": 1,
+            "phone_code": "672",
+            "iso3": "ATA",
+            "region": "Polar",
+            "subregion": ""
+        },
+        {
+            "id": 10,
+            "iso2": "AG",
+            "name": "Antigua And Barbuda",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "ATG",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 11,
+            "iso2": "AR",
+            "name": "Argentina",
+            "status": 1,
+            "phone_code": "54",
+            "iso3": "ARG",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 12,
+            "iso2": "AM",
+            "name": "Armenia",
+            "status": 1,
+            "phone_code": "374",
+            "iso3": "ARM",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 13,
+            "iso2": "AW",
+            "name": "Aruba",
+            "status": 1,
+            "phone_code": "297",
+            "iso3": "ABW",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 14,
+            "iso2": "AU",
+            "name": "Australia",
+            "status": 1,
+            "phone_code": "61",
+            "iso3": "AUS",
+            "region": "Oceania",
+            "subregion": "Australia and New Zealand"
+        },
+        {
+            "id": 15,
+            "iso2": "AT",
+            "name": "Austria",
+            "status": 1,
+            "phone_code": "43",
+            "iso3": "AUT",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 16,
+            "iso2": "AZ",
+            "name": "Azerbaijan",
+            "status": 1,
+            "phone_code": "994",
+            "iso3": "AZE",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 17,
+            "iso2": "BH",
+            "name": "Bahrain",
+            "status": 1,
+            "phone_code": "973",
+            "iso3": "BHR",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 18,
+            "iso2": "BD",
+            "name": "Bangladesh",
+            "status": 1,
+            "phone_code": "880",
+            "iso3": "BGD",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 19,
+            "iso2": "BB",
+            "name": "Barbados",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "BRB",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 20,
+            "iso2": "BY",
+            "name": "Belarus",
+            "status": 1,
+            "phone_code": "375",
+            "iso3": "BLR",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 21,
+            "iso2": "BE",
+            "name": "Belgium",
+            "status": 1,
+            "phone_code": "32",
+            "iso3": "BEL",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 22,
+            "iso2": "BZ",
+            "name": "Belize",
+            "status": 1,
+            "phone_code": "501",
+            "iso3": "BLZ",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 23,
+            "iso2": "BJ",
+            "name": "Benin",
+            "status": 1,
+            "phone_code": "229",
+            "iso3": "BEN",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 24,
+            "iso2": "BM",
+            "name": "Bermuda",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "BMU",
+            "region": "Americas",
+            "subregion": "Northern America"
+        },
+        {
+            "id": 25,
+            "iso2": "BT",
+            "name": "Bhutan",
+            "status": 1,
+            "phone_code": "975",
+            "iso3": "BTN",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 26,
+            "iso2": "BO",
+            "name": "Bolivia",
+            "status": 1,
+            "phone_code": "591",
+            "iso3": "BOL",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 27,
+            "iso2": "BQ",
+            "name": "Bonaire, Sint Eustatius and Saba",
+            "status": 1,
+            "phone_code": "599",
+            "iso3": "BES",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 28,
+            "iso2": "BA",
+            "name": "Bosnia and Herzegovina",
+            "status": 1,
+            "phone_code": "387",
+            "iso3": "BIH",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 29,
+            "iso2": "BW",
+            "name": "Botswana",
+            "status": 1,
+            "phone_code": "267",
+            "iso3": "BWA",
+            "region": "Africa",
+            "subregion": "Southern Africa"
+        },
+        {
+            "id": 30,
+            "iso2": "BV",
+            "name": "Bouvet Island",
+            "status": 1,
+            "phone_code": "47",
+            "iso3": "BVT",
+            "region": "",
+            "subregion": ""
+        },
+        {
+            "id": 31,
+            "iso2": "BR",
+            "name": "Brazil",
+            "status": 1,
+            "phone_code": "55",
+            "iso3": "BRA",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 32,
+            "iso2": "IO",
+            "name": "British Indian Ocean Territory",
+            "status": 1,
+            "phone_code": "246",
+            "iso3": "IOT",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 33,
+            "iso2": "BN",
+            "name": "Brunei",
+            "status": 1,
+            "phone_code": "673",
+            "iso3": "BRN",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 34,
+            "iso2": "BG",
+            "name": "Bulgaria",
+            "status": 1,
+            "phone_code": "359",
+            "iso3": "BGR",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 35,
+            "iso2": "BF",
+            "name": "Burkina Faso",
+            "status": 1,
+            "phone_code": "226",
+            "iso3": "BFA",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 36,
+            "iso2": "BI",
+            "name": "Burundi",
+            "status": 1,
+            "phone_code": "257",
+            "iso3": "BDI",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 37,
+            "iso2": "KH",
+            "name": "Cambodia",
+            "status": 1,
+            "phone_code": "855",
+            "iso3": "KHM",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 38,
+            "iso2": "CM",
+            "name": "Cameroon",
+            "status": 1,
+            "phone_code": "237",
+            "iso3": "CMR",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 39,
+            "iso2": "CA",
+            "name": "Canada",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "CAN",
+            "region": "Americas",
+            "subregion": "Northern America"
+        },
+        {
+            "id": 40,
+            "iso2": "CV",
+            "name": "Cape Verde",
+            "status": 1,
+            "phone_code": "238",
+            "iso3": "CPV",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 41,
+            "iso2": "KY",
+            "name": "Cayman Islands",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "CYM",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 42,
+            "iso2": "CF",
+            "name": "Central African Republic",
+            "status": 1,
+            "phone_code": "236",
+            "iso3": "CAF",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 43,
+            "iso2": "TD",
+            "name": "Chad",
+            "status": 1,
+            "phone_code": "235",
+            "iso3": "TCD",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 44,
+            "iso2": "CL",
+            "name": "Chile",
+            "status": 1,
+            "phone_code": "56",
+            "iso3": "CHL",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 45,
+            "iso2": "CN",
+            "name": "China",
+            "status": 1,
+            "phone_code": "86",
+            "iso3": "CHN",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 46,
+            "iso2": "CX",
+            "name": "Christmas Island",
+            "status": 1,
+            "phone_code": "61",
+            "iso3": "CXR",
+            "region": "Oceania",
+            "subregion": "Australia and New Zealand"
+        },
+        {
+            "id": 47,
+            "iso2": "CC",
+            "name": "Cocos (Keeling) Islands",
+            "status": 1,
+            "phone_code": "61",
+            "iso3": "CCK",
+            "region": "Oceania",
+            "subregion": "Australia and New Zealand"
+        },
+        {
+            "id": 48,
+            "iso2": "CO",
+            "name": "Colombia",
+            "status": 1,
+            "phone_code": "57",
+            "iso3": "COL",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 49,
+            "iso2": "KM",
+            "name": "Comoros",
+            "status": 1,
+            "phone_code": "269",
+            "iso3": "COM",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 50,
+            "iso2": "CG",
+            "name": "Congo",
+            "status": 1,
+            "phone_code": "242",
+            "iso3": "COG",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 51,
+            "iso2": "CK",
+            "name": "Cook Islands",
+            "status": 1,
+            "phone_code": "682",
+            "iso3": "COK",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 52,
+            "iso2": "CR",
+            "name": "Costa Rica",
+            "status": 1,
+            "phone_code": "506",
+            "iso3": "CRI",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 53,
+            "iso2": "CI",
+            "name": "Cote D'Ivoire (Ivory Coast)",
+            "status": 1,
+            "phone_code": "225",
+            "iso3": "CIV",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 54,
+            "iso2": "HR",
+            "name": "Croatia",
+            "status": 1,
+            "phone_code": "385",
+            "iso3": "HRV",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 55,
+            "iso2": "CU",
+            "name": "Cuba",
+            "status": 1,
+            "phone_code": "53",
+            "iso3": "CUB",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 56,
+            "iso2": "CW",
+            "name": "Curaçao",
+            "status": 1,
+            "phone_code": "599",
+            "iso3": "CUW",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 57,
+            "iso2": "CY",
+            "name": "Cyprus",
+            "status": 1,
+            "phone_code": "357",
+            "iso3": "CYP",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 58,
+            "iso2": "CZ",
+            "name": "Czech Republic",
+            "status": 1,
+            "phone_code": "420",
+            "iso3": "CZE",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 59,
+            "iso2": "CD",
+            "name": "Democratic Republic of the Congo",
+            "status": 1,
+            "phone_code": "243",
+            "iso3": "COD",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 60,
+            "iso2": "DK",
+            "name": "Denmark",
+            "status": 1,
+            "phone_code": "45",
+            "iso3": "DNK",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 61,
+            "iso2": "DJ",
+            "name": "Djibouti",
+            "status": 1,
+            "phone_code": "253",
+            "iso3": "DJI",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 62,
+            "iso2": "DM",
+            "name": "Dominica",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "DMA",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 63,
+            "iso2": "DO",
+            "name": "Dominican Republic",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "DOM",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 64,
+            "iso2": "TL",
+            "name": "East Timor",
+            "status": 1,
+            "phone_code": "670",
+            "iso3": "TLS",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 65,
+            "iso2": "EC",
+            "name": "Ecuador",
+            "status": 1,
+            "phone_code": "593",
+            "iso3": "ECU",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 66,
+            "iso2": "EG",
+            "name": "Egypt",
+            "status": 1,
+            "phone_code": "20",
+            "iso3": "EGY",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 67,
+            "iso2": "SV",
+            "name": "El Salvador",
+            "status": 1,
+            "phone_code": "503",
+            "iso3": "SLV",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 68,
+            "iso2": "GQ",
+            "name": "Equatorial Guinea",
+            "status": 1,
+            "phone_code": "240",
+            "iso3": "GNQ",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 69,
+            "iso2": "ER",
+            "name": "Eritrea",
+            "status": 1,
+            "phone_code": "291",
+            "iso3": "ERI",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 70,
+            "iso2": "EE",
+            "name": "Estonia",
+            "status": 1,
+            "phone_code": "372",
+            "iso3": "EST",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 71,
+            "iso2": "ET",
+            "name": "Ethiopia",
+            "status": 1,
+            "phone_code": "251",
+            "iso3": "ETH",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 72,
+            "iso2": "FK",
+            "name": "Falkland Islands",
+            "status": 1,
+            "phone_code": "500",
+            "iso3": "FLK",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 73,
+            "iso2": "FO",
+            "name": "Faroe Islands",
+            "status": 1,
+            "phone_code": "298",
+            "iso3": "FRO",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 74,
+            "iso2": "FJ",
+            "name": "Fiji Islands",
+            "status": 1,
+            "phone_code": "679",
+            "iso3": "FJI",
+            "region": "Oceania",
+            "subregion": "Melanesia"
+        },
+        {
+            "id": 75,
+            "iso2": "FI",
+            "name": "Finland",
+            "status": 1,
+            "phone_code": "358",
+            "iso3": "FIN",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 76,
+            "iso2": "FR",
+            "name": "France",
+            "status": 1,
+            "phone_code": "33",
+            "iso3": "FRA",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 77,
+            "iso2": "GF",
+            "name": "French Guiana",
+            "status": 1,
+            "phone_code": "594",
+            "iso3": "GUF",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 78,
+            "iso2": "PF",
+            "name": "French Polynesia",
+            "status": 1,
+            "phone_code": "689",
+            "iso3": "PYF",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 79,
+            "iso2": "TF",
+            "name": "French Southern Territories",
+            "status": 1,
+            "phone_code": "262",
+            "iso3": "ATF",
+            "region": "Africa",
+            "subregion": "Southern Africa"
+        },
+        {
+            "id": 80,
+            "iso2": "GA",
+            "name": "Gabon",
+            "status": 1,
+            "phone_code": "241",
+            "iso3": "GAB",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 81,
+            "iso2": "GM",
+            "name": "Gambia The",
+            "status": 1,
+            "phone_code": "220",
+            "iso3": "GMB",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 82,
+            "iso2": "GE",
+            "name": "Georgia",
+            "status": 1,
+            "phone_code": "995",
+            "iso3": "GEO",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 83,
+            "iso2": "DE",
+            "name": "Germany",
+            "status": 1,
+            "phone_code": "49",
+            "iso3": "DEU",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 84,
+            "iso2": "GH",
+            "name": "Ghana",
+            "status": 1,
+            "phone_code": "233",
+            "iso3": "GHA",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 85,
+            "iso2": "GI",
+            "name": "Gibraltar",
+            "status": 1,
+            "phone_code": "350",
+            "iso3": "GIB",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 86,
+            "iso2": "GR",
+            "name": "Greece",
+            "status": 1,
+            "phone_code": "30",
+            "iso3": "GRC",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 87,
+            "iso2": "GL",
+            "name": "Greenland",
+            "status": 1,
+            "phone_code": "299",
+            "iso3": "GRL",
+            "region": "Americas",
+            "subregion": "Northern America"
+        },
+        {
+            "id": 88,
+            "iso2": "GD",
+            "name": "Grenada",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "GRD",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 89,
+            "iso2": "GP",
+            "name": "Guadeloupe",
+            "status": 1,
+            "phone_code": "590",
+            "iso3": "GLP",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 90,
+            "iso2": "GU",
+            "name": "Guam",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "GUM",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 91,
+            "iso2": "GT",
+            "name": "Guatemala",
+            "status": 1,
+            "phone_code": "502",
+            "iso3": "GTM",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 92,
+            "iso2": "GG",
+            "name": "Guernsey and Alderney",
+            "status": 1,
+            "phone_code": "44",
+            "iso3": "GGY",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 93,
+            "iso2": "GN",
+            "name": "Guinea",
+            "status": 1,
+            "phone_code": "224",
+            "iso3": "GIN",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 94,
+            "iso2": "GW",
+            "name": "Guinea-Bissau",
+            "status": 1,
+            "phone_code": "245",
+            "iso3": "GNB",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 95,
+            "iso2": "GY",
+            "name": "Guyana",
+            "status": 1,
+            "phone_code": "592",
+            "iso3": "GUY",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 96,
+            "iso2": "HT",
+            "name": "Haiti",
+            "status": 1,
+            "phone_code": "509",
+            "iso3": "HTI",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 97,
+            "iso2": "HM",
+            "name": "Heard Island and McDonald Islands",
+            "status": 1,
+            "phone_code": "672",
+            "iso3": "HMD",
+            "region": "",
+            "subregion": ""
+        },
+        {
+            "id": 98,
+            "iso2": "HN",
+            "name": "Honduras",
+            "status": 1,
+            "phone_code": "504",
+            "iso3": "HND",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 99,
+            "iso2": "HK",
+            "name": "Hong Kong S.A.R.",
+            "status": 1,
+            "phone_code": "852",
+            "iso3": "HKG",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 100,
+            "iso2": "HU",
+            "name": "Hungary",
+            "status": 1,
+            "phone_code": "36",
+            "iso3": "HUN",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 101,
+            "iso2": "IS",
+            "name": "Iceland",
+            "status": 1,
+            "phone_code": "354",
+            "iso3": "ISL",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 102,
+            "iso2": "IN",
+            "name": "India",
+            "status": 1,
+            "phone_code": "91",
+            "iso3": "IND",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 103,
+            "iso2": "ID",
+            "name": "Indonesia",
+            "status": 1,
+            "phone_code": "62",
+            "iso3": "IDN",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 104,
+            "iso2": "IR",
+            "name": "Iran",
+            "status": 1,
+            "phone_code": "98",
+            "iso3": "IRN",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 105,
+            "iso2": "IQ",
+            "name": "Iraq",
+            "status": 1,
+            "phone_code": "964",
+            "iso3": "IRQ",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 106,
+            "iso2": "IE",
+            "name": "Ireland",
+            "status": 1,
+            "phone_code": "353",
+            "iso3": "IRL",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 107,
+            "iso2": "IL",
+            "name": "Israel",
+            "status": 1,
+            "phone_code": "972",
+            "iso3": "ISR",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 108,
+            "iso2": "IT",
+            "name": "Italy",
+            "status": 1,
+            "phone_code": "39",
+            "iso3": "ITA",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 109,
+            "iso2": "JM",
+            "name": "Jamaica",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "JAM",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 110,
+            "iso2": "JP",
+            "name": "Japan",
+            "status": 1,
+            "phone_code": "81",
+            "iso3": "JPN",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 111,
+            "iso2": "JE",
+            "name": "Jersey",
+            "status": 1,
+            "phone_code": "44",
+            "iso3": "JEY",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 112,
+            "iso2": "JO",
+            "name": "Jordan",
+            "status": 1,
+            "phone_code": "962",
+            "iso3": "JOR",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 113,
+            "iso2": "KZ",
+            "name": "Kazakhstan",
+            "status": 1,
+            "phone_code": "7",
+            "iso3": "KAZ",
+            "region": "Asia",
+            "subregion": "Central Asia"
+        },
+        {
+            "id": 114,
+            "iso2": "KE",
+            "name": "Kenya",
+            "status": 1,
+            "phone_code": "254",
+            "iso3": "KEN",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 115,
+            "iso2": "KI",
+            "name": "Kiribati",
+            "status": 1,
+            "phone_code": "686",
+            "iso3": "KIR",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 116,
+            "iso2": "XK",
+            "name": "Kosovo",
+            "status": 1,
+            "phone_code": "383",
+            "iso3": "XKX",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 117,
+            "iso2": "KW",
+            "name": "Kuwait",
+            "status": 1,
+            "phone_code": "965",
+            "iso3": "KWT",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 118,
+            "iso2": "KG",
+            "name": "Kyrgyzstan",
+            "status": 1,
+            "phone_code": "996",
+            "iso3": "KGZ",
+            "region": "Asia",
+            "subregion": "Central Asia"
+        },
+        {
+            "id": 119,
+            "iso2": "LA",
+            "name": "Laos",
+            "status": 1,
+            "phone_code": "856",
+            "iso3": "LAO",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 120,
+            "iso2": "LV",
+            "name": "Latvia",
+            "status": 1,
+            "phone_code": "371",
+            "iso3": "LVA",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 121,
+            "iso2": "LB",
+            "name": "Lebanon",
+            "status": 1,
+            "phone_code": "961",
+            "iso3": "LBN",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 122,
+            "iso2": "LS",
+            "name": "Lesotho",
+            "status": 1,
+            "phone_code": "266",
+            "iso3": "LSO",
+            "region": "Africa",
+            "subregion": "Southern Africa"
+        },
+        {
+            "id": 123,
+            "iso2": "LR",
+            "name": "Liberia",
+            "status": 1,
+            "phone_code": "231",
+            "iso3": "LBR",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 124,
+            "iso2": "LY",
+            "name": "Libya",
+            "status": 1,
+            "phone_code": "218",
+            "iso3": "LBY",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 125,
+            "iso2": "LI",
+            "name": "Liechtenstein",
+            "status": 1,
+            "phone_code": "423",
+            "iso3": "LIE",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 126,
+            "iso2": "LT",
+            "name": "Lithuania",
+            "status": 1,
+            "phone_code": "370",
+            "iso3": "LTU",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 127,
+            "iso2": "LU",
+            "name": "Luxembourg",
+            "status": 1,
+            "phone_code": "352",
+            "iso3": "LUX",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 128,
+            "iso2": "MO",
+            "name": "Macau S.A.R.",
+            "status": 1,
+            "phone_code": "853",
+            "iso3": "MAC",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 129,
+            "iso2": "MK",
+            "name": "Macedonia",
+            "status": 1,
+            "phone_code": "389",
+            "iso3": "MKD",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 130,
+            "iso2": "MG",
+            "name": "Madagascar",
+            "status": 1,
+            "phone_code": "261",
+            "iso3": "MDG",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 131,
+            "iso2": "MW",
+            "name": "Malawi",
+            "status": 1,
+            "phone_code": "265",
+            "iso3": "MWI",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 132,
+            "iso2": "MY",
+            "name": "Malaysia",
+            "status": 1,
+            "phone_code": "60",
+            "iso3": "MYS",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 133,
+            "iso2": "MV",
+            "name": "Maldives",
+            "status": 1,
+            "phone_code": "960",
+            "iso3": "MDV",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 134,
+            "iso2": "ML",
+            "name": "Mali",
+            "status": 1,
+            "phone_code": "223",
+            "iso3": "MLI",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 135,
+            "iso2": "MT",
+            "name": "Malta",
+            "status": 1,
+            "phone_code": "356",
+            "iso3": "MLT",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 136,
+            "iso2": "IM",
+            "name": "Man (Isle of)",
+            "status": 1,
+            "phone_code": "44",
+            "iso3": "IMN",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 137,
+            "iso2": "MH",
+            "name": "Marshall Islands",
+            "status": 1,
+            "phone_code": "692",
+            "iso3": "MHL",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 138,
+            "iso2": "MQ",
+            "name": "Martinique",
+            "status": 1,
+            "phone_code": "596",
+            "iso3": "MTQ",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 139,
+            "iso2": "MR",
+            "name": "Mauritania",
+            "status": 1,
+            "phone_code": "222",
+            "iso3": "MRT",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 140,
+            "iso2": "MU",
+            "name": "Mauritius",
+            "status": 1,
+            "phone_code": "230",
+            "iso3": "MUS",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 141,
+            "iso2": "YT",
+            "name": "Mayotte",
+            "status": 1,
+            "phone_code": "262",
+            "iso3": "MYT",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 142,
+            "iso2": "MX",
+            "name": "Mexico",
+            "status": 1,
+            "phone_code": "52",
+            "iso3": "MEX",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 143,
+            "iso2": "FM",
+            "name": "Micronesia",
+            "status": 1,
+            "phone_code": "691",
+            "iso3": "FSM",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 144,
+            "iso2": "MD",
+            "name": "Moldova",
+            "status": 1,
+            "phone_code": "373",
+            "iso3": "MDA",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 145,
+            "iso2": "MC",
+            "name": "Monaco",
+            "status": 1,
+            "phone_code": "377",
+            "iso3": "MCO",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 146,
+            "iso2": "MN",
+            "name": "Mongolia",
+            "status": 1,
+            "phone_code": "976",
+            "iso3": "MNG",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 147,
+            "iso2": "ME",
+            "name": "Montenegro",
+            "status": 1,
+            "phone_code": "382",
+            "iso3": "MNE",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 148,
+            "iso2": "MS",
+            "name": "Montserrat",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "MSR",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 149,
+            "iso2": "MA",
+            "name": "Morocco",
+            "status": 1,
+            "phone_code": "212",
+            "iso3": "MAR",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 150,
+            "iso2": "MZ",
+            "name": "Mozambique",
+            "status": 1,
+            "phone_code": "258",
+            "iso3": "MOZ",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 151,
+            "iso2": "MM",
+            "name": "Myanmar",
+            "status": 1,
+            "phone_code": "95",
+            "iso3": "MMR",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 152,
+            "iso2": "NA",
+            "name": "Namibia",
+            "status": 1,
+            "phone_code": "264",
+            "iso3": "NAM",
+            "region": "Africa",
+            "subregion": "Southern Africa"
+        },
+        {
+            "id": 153,
+            "iso2": "NR",
+            "name": "Nauru",
+            "status": 1,
+            "phone_code": "674",
+            "iso3": "NRU",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 154,
+            "iso2": "NP",
+            "name": "Nepal",
+            "status": 1,
+            "phone_code": "977",
+            "iso3": "NPL",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 155,
+            "iso2": "NL",
+            "name": "Netherlands",
+            "status": 1,
+            "phone_code": "31",
+            "iso3": "NLD",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 156,
+            "iso2": "NC",
+            "name": "New Caledonia",
+            "status": 1,
+            "phone_code": "687",
+            "iso3": "NCL",
+            "region": "Oceania",
+            "subregion": "Melanesia"
+        },
+        {
+            "id": 157,
+            "iso2": "NZ",
+            "name": "New Zealand",
+            "status": 1,
+            "phone_code": "64",
+            "iso3": "NZL",
+            "region": "Oceania",
+            "subregion": "Australia and New Zealand"
+        },
+        {
+            "id": 158,
+            "iso2": "NI",
+            "name": "Nicaragua",
+            "status": 1,
+            "phone_code": "505",
+            "iso3": "NIC",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 159,
+            "iso2": "NE",
+            "name": "Niger",
+            "status": 1,
+            "phone_code": "227",
+            "iso3": "NER",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 160,
+            "iso2": "NG",
+            "name": "Nigeria",
+            "status": 1,
+            "phone_code": "234",
+            "iso3": "NGA",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 161,
+            "iso2": "NU",
+            "name": "Niue",
+            "status": 1,
+            "phone_code": "683",
+            "iso3": "NIU",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 162,
+            "iso2": "NF",
+            "name": "Norfolk Island",
+            "status": 1,
+            "phone_code": "672",
+            "iso3": "NFK",
+            "region": "Oceania",
+            "subregion": "Australia and New Zealand"
+        },
+        {
+            "id": 163,
+            "iso2": "KP",
+            "name": "North Korea",
+            "status": 1,
+            "phone_code": "850",
+            "iso3": "PRK",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 164,
+            "iso2": "MP",
+            "name": "Northern Mariana Islands",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "MNP",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 165,
+            "iso2": "NO",
+            "name": "Norway",
+            "status": 1,
+            "phone_code": "47",
+            "iso3": "NOR",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 166,
+            "iso2": "OM",
+            "name": "Oman",
+            "status": 1,
+            "phone_code": "968",
+            "iso3": "OMN",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 167,
+            "iso2": "PK",
+            "name": "Pakistan",
+            "status": 1,
+            "phone_code": "92",
+            "iso3": "PAK",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 168,
+            "iso2": "PW",
+            "name": "Palau",
+            "status": 1,
+            "phone_code": "680",
+            "iso3": "PLW",
+            "region": "Oceania",
+            "subregion": "Micronesia"
+        },
+        {
+            "id": 169,
+            "iso2": "PS",
+            "name": "Palestinian Territory Occupied",
+            "status": 1,
+            "phone_code": "970",
+            "iso3": "PSE",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 170,
+            "iso2": "PA",
+            "name": "Panama",
+            "status": 1,
+            "phone_code": "507",
+            "iso3": "PAN",
+            "region": "Americas",
+            "subregion": "Central America"
+        },
+        {
+            "id": 171,
+            "iso2": "PG",
+            "name": "Papua new Guinea",
+            "status": 1,
+            "phone_code": "675",
+            "iso3": "PNG",
+            "region": "Oceania",
+            "subregion": "Melanesia"
+        },
+        {
+            "id": 172,
+            "iso2": "PY",
+            "name": "Paraguay",
+            "status": 1,
+            "phone_code": "595",
+            "iso3": "PRY",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 173,
+            "iso2": "PE",
+            "name": "Peru",
+            "status": 1,
+            "phone_code": "51",
+            "iso3": "PER",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 174,
+            "iso2": "PH",
+            "name": "Philippines",
+            "status": 1,
+            "phone_code": "63",
+            "iso3": "PHL",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 175,
+            "iso2": "PN",
+            "name": "Pitcairn Island",
+            "status": 1,
+            "phone_code": "870",
+            "iso3": "PCN",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 176,
+            "iso2": "PL",
+            "name": "Poland",
+            "status": 1,
+            "phone_code": "48",
+            "iso3": "POL",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 177,
+            "iso2": "PT",
+            "name": "Portugal",
+            "status": 1,
+            "phone_code": "351",
+            "iso3": "PRT",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 178,
+            "iso2": "PR",
+            "name": "Puerto Rico",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "PRI",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 179,
+            "iso2": "QA",
+            "name": "Qatar",
+            "status": 1,
+            "phone_code": "974",
+            "iso3": "QAT",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 180,
+            "iso2": "RE",
+            "name": "Reunion",
+            "status": 1,
+            "phone_code": "262",
+            "iso3": "REU",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 181,
+            "iso2": "RO",
+            "name": "Romania",
+            "status": 1,
+            "phone_code": "40",
+            "iso3": "ROU",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 182,
+            "iso2": "RU",
+            "name": "Russia",
+            "status": 1,
+            "phone_code": "7",
+            "iso3": "RUS",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 183,
+            "iso2": "RW",
+            "name": "Rwanda",
+            "status": 1,
+            "phone_code": "250",
+            "iso3": "RWA",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 184,
+            "iso2": "SH",
+            "name": "Saint Helena",
+            "status": 1,
+            "phone_code": "290",
+            "iso3": "SHN",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 185,
+            "iso2": "KN",
+            "name": "Saint Kitts And Nevis",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "KNA",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 186,
+            "iso2": "LC",
+            "name": "Saint Lucia",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "LCA",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 187,
+            "iso2": "PM",
+            "name": "Saint Pierre and Miquelon",
+            "status": 1,
+            "phone_code": "508",
+            "iso3": "SPM",
+            "region": "Americas",
+            "subregion": "Northern America"
+        },
+        {
+            "id": 188,
+            "iso2": "VC",
+            "name": "Saint Vincent And The Grenadines",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "VCT",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 189,
+            "iso2": "BL",
+            "name": "Saint-Barthelemy",
+            "status": 1,
+            "phone_code": "590",
+            "iso3": "BLM",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 190,
+            "iso2": "MF",
+            "name": "Saint-Martin (French part)",
+            "status": 1,
+            "phone_code": "590",
+            "iso3": "MAF",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 191,
+            "iso2": "WS",
+            "name": "Samoa",
+            "status": 1,
+            "phone_code": "685",
+            "iso3": "WSM",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 192,
+            "iso2": "SM",
+            "name": "San Marino",
+            "status": 1,
+            "phone_code": "378",
+            "iso3": "SMR",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 193,
+            "iso2": "ST",
+            "name": "Sao Tome and Principe",
+            "status": 1,
+            "phone_code": "239",
+            "iso3": "STP",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 194,
+            "iso2": "SA",
+            "name": "Saudi Arabia",
+            "status": 1,
+            "phone_code": "966",
+            "iso3": "SAU",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 195,
+            "iso2": "SN",
+            "name": "Senegal",
+            "status": 1,
+            "phone_code": "221",
+            "iso3": "SEN",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 196,
+            "iso2": "RS",
+            "name": "Serbia",
+            "status": 1,
+            "phone_code": "381",
+            "iso3": "SRB",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 197,
+            "iso2": "SC",
+            "name": "Seychelles",
+            "status": 1,
+            "phone_code": "248",
+            "iso3": "SYC",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 198,
+            "iso2": "SL",
+            "name": "Sierra Leone",
+            "status": 1,
+            "phone_code": "232",
+            "iso3": "SLE",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 199,
+            "iso2": "SG",
+            "name": "Singapore",
+            "status": 1,
+            "phone_code": "65",
+            "iso3": "SGP",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 200,
+            "iso2": "SX",
+            "name": "Sint Maarten (Dutch part)",
+            "status": 1,
+            "phone_code": "1721",
+            "iso3": "SXM",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 201,
+            "iso2": "SK",
+            "name": "Slovakia",
+            "status": 1,
+            "phone_code": "421",
+            "iso3": "SVK",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 202,
+            "iso2": "SI",
+            "name": "Slovenia",
+            "status": 1,
+            "phone_code": "386",
+            "iso3": "SVN",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 203,
+            "iso2": "SB",
+            "name": "Solomon Islands",
+            "status": 1,
+            "phone_code": "677",
+            "iso3": "SLB",
+            "region": "Oceania",
+            "subregion": "Melanesia"
+        },
+        {
+            "id": 204,
+            "iso2": "SO",
+            "name": "Somalia",
+            "status": 1,
+            "phone_code": "252",
+            "iso3": "SOM",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 205,
+            "iso2": "ZA",
+            "name": "South Africa",
+            "status": 1,
+            "phone_code": "27",
+            "iso3": "ZAF",
+            "region": "Africa",
+            "subregion": "Southern Africa"
+        },
+        {
+            "id": 206,
+            "iso2": "GS",
+            "name": "South Georgia",
+            "status": 1,
+            "phone_code": "500",
+            "iso3": "SGS",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 207,
+            "iso2": "KR",
+            "name": "South Korea",
+            "status": 1,
+            "phone_code": "82",
+            "iso3": "KOR",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 208,
+            "iso2": "SS",
+            "name": "South Sudan",
+            "status": 1,
+            "phone_code": "211",
+            "iso3": "SSD",
+            "region": "Africa",
+            "subregion": "Middle Africa"
+        },
+        {
+            "id": 209,
+            "iso2": "ES",
+            "name": "Spain",
+            "status": 1,
+            "phone_code": "34",
+            "iso3": "ESP",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 210,
+            "iso2": "LK",
+            "name": "Sri Lanka",
+            "status": 1,
+            "phone_code": "94",
+            "iso3": "LKA",
+            "region": "Asia",
+            "subregion": "Southern Asia"
+        },
+        {
+            "id": 211,
+            "iso2": "SD",
+            "name": "Sudan",
+            "status": 1,
+            "phone_code": "249",
+            "iso3": "SDN",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 212,
+            "iso2": "SR",
+            "name": "Suriname",
+            "status": 1,
+            "phone_code": "597",
+            "iso3": "SUR",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 213,
+            "iso2": "SJ",
+            "name": "Svalbard And Jan Mayen Islands",
+            "status": 1,
+            "phone_code": "47",
+            "iso3": "SJM",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 214,
+            "iso2": "SZ",
+            "name": "Swaziland",
+            "status": 1,
+            "phone_code": "268",
+            "iso3": "SWZ",
+            "region": "Africa",
+            "subregion": "Southern Africa"
+        },
+        {
+            "id": 215,
+            "iso2": "SE",
+            "name": "Sweden",
+            "status": 1,
+            "phone_code": "46",
+            "iso3": "SWE",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 216,
+            "iso2": "CH",
+            "name": "Switzerland",
+            "status": 1,
+            "phone_code": "41",
+            "iso3": "CHE",
+            "region": "Europe",
+            "subregion": "Western Europe"
+        },
+        {
+            "id": 217,
+            "iso2": "SY",
+            "name": "Syria",
+            "status": 1,
+            "phone_code": "963",
+            "iso3": "SYR",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 218,
+            "iso2": "TW",
+            "name": "Taiwan",
+            "status": 1,
+            "phone_code": "886",
+            "iso3": "TWN",
+            "region": "Asia",
+            "subregion": "Eastern Asia"
+        },
+        {
+            "id": 219,
+            "iso2": "TJ",
+            "name": "Tajikistan",
+            "status": 1,
+            "phone_code": "992",
+            "iso3": "TJK",
+            "region": "Asia",
+            "subregion": "Central Asia"
+        },
+        {
+            "id": 220,
+            "iso2": "TZ",
+            "name": "Tanzania",
+            "status": 1,
+            "phone_code": "255",
+            "iso3": "TZA",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 221,
+            "iso2": "TH",
+            "name": "Thailand",
+            "status": 1,
+            "phone_code": "66",
+            "iso3": "THA",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 222,
+            "iso2": "BS",
+            "name": "The Bahamas",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "BHS",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 223,
+            "iso2": "TG",
+            "name": "Togo",
+            "status": 1,
+            "phone_code": "228",
+            "iso3": "TGO",
+            "region": "Africa",
+            "subregion": "Western Africa"
+        },
+        {
+            "id": 224,
+            "iso2": "TK",
+            "name": "Tokelau",
+            "status": 1,
+            "phone_code": "690",
+            "iso3": "TKL",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 225,
+            "iso2": "TO",
+            "name": "Tonga",
+            "status": 1,
+            "phone_code": "676",
+            "iso3": "TON",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 226,
+            "iso2": "TT",
+            "name": "Trinidad And Tobago",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "TTO",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 227,
+            "iso2": "TN",
+            "name": "Tunisia",
+            "status": 1,
+            "phone_code": "216",
+            "iso3": "TUN",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 228,
+            "iso2": "TR",
+            "name": "Turkey",
+            "status": 1,
+            "phone_code": "90",
+            "iso3": "TUR",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 229,
+            "iso2": "TM",
+            "name": "Turkmenistan",
+            "status": 1,
+            "phone_code": "993",
+            "iso3": "TKM",
+            "region": "Asia",
+            "subregion": "Central Asia"
+        },
+        {
+            "id": 230,
+            "iso2": "TC",
+            "name": "Turks And Caicos Islands",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "TCA",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 231,
+            "iso2": "TV",
+            "name": "Tuvalu",
+            "status": 1,
+            "phone_code": "688",
+            "iso3": "TUV",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 232,
+            "iso2": "UG",
+            "name": "Uganda",
+            "status": 1,
+            "phone_code": "256",
+            "iso3": "UGA",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 233,
+            "iso2": "UA",
+            "name": "Ukraine",
+            "status": 1,
+            "phone_code": "380",
+            "iso3": "UKR",
+            "region": "Europe",
+            "subregion": "Eastern Europe"
+        },
+        {
+            "id": 234,
+            "iso2": "AE",
+            "name": "United Arab Emirates",
+            "status": 1,
+            "phone_code": "971",
+            "iso3": "ARE",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 235,
+            "iso2": "GB",
+            "name": "United Kingdom",
+            "status": 1,
+            "phone_code": "44",
+            "iso3": "GBR",
+            "region": "Europe",
+            "subregion": "Northern Europe"
+        },
+        {
+            "id": 236,
+            "iso2": "US",
+            "name": "United States",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "USA",
+            "region": "Americas",
+            "subregion": "Northern America"
+        },
+        {
+            "id": 237,
+            "iso2": "UM",
+            "name": "United States Minor Outlying Islands",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "UMI",
+            "region": "Americas",
+            "subregion": "Northern America"
+        },
+        {
+            "id": 238,
+            "iso2": "UY",
+            "name": "Uruguay",
+            "status": 1,
+            "phone_code": "598",
+            "iso3": "URY",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 239,
+            "iso2": "UZ",
+            "name": "Uzbekistan",
+            "status": 1,
+            "phone_code": "998",
+            "iso3": "UZB",
+            "region": "Asia",
+            "subregion": "Central Asia"
+        },
+        {
+            "id": 240,
+            "iso2": "VU",
+            "name": "Vanuatu",
+            "status": 1,
+            "phone_code": "678",
+            "iso3": "VUT",
+            "region": "Oceania",
+            "subregion": "Melanesia"
+        },
+        {
+            "id": 241,
+            "iso2": "VA",
+            "name": "Vatican City State (Holy See)",
+            "status": 1,
+            "phone_code": "379",
+            "iso3": "VAT",
+            "region": "Europe",
+            "subregion": "Southern Europe"
+        },
+        {
+            "id": 242,
+            "iso2": "VE",
+            "name": "Venezuela",
+            "status": 1,
+            "phone_code": "58",
+            "iso3": "VEN",
+            "region": "Americas",
+            "subregion": "South America"
+        },
+        {
+            "id": 243,
+            "iso2": "VN",
+            "name": "Vietnam",
+            "status": 1,
+            "phone_code": "84",
+            "iso3": "VNM",
+            "region": "Asia",
+            "subregion": "South-Eastern Asia"
+        },
+        {
+            "id": 244,
+            "iso2": "VG",
+            "name": "Virgin Islands (British)",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "VGB",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 245,
+            "iso2": "VI",
+            "name": "Virgin Islands (US)",
+            "status": 1,
+            "phone_code": "1",
+            "iso3": "VIR",
+            "region": "Americas",
+            "subregion": "Caribbean"
+        },
+        {
+            "id": 246,
+            "iso2": "WF",
+            "name": "Wallis And Futuna Islands",
+            "status": 1,
+            "phone_code": "681",
+            "iso3": "WLF",
+            "region": "Oceania",
+            "subregion": "Polynesia"
+        },
+        {
+            "id": 247,
+            "iso2": "EH",
+            "name": "Western Sahara",
+            "status": 1,
+            "phone_code": "212",
+            "iso3": "ESH",
+            "region": "Africa",
+            "subregion": "Northern Africa"
+        },
+        {
+            "id": 248,
+            "iso2": "YE",
+            "name": "Yemen",
+            "status": 1,
+            "phone_code": "967",
+            "iso3": "YEM",
+            "region": "Asia",
+            "subregion": "Western Asia"
+        },
+        {
+            "id": 249,
+            "iso2": "ZM",
+            "name": "Zambia",
+            "status": 1,
+            "phone_code": "260",
+            "iso3": "ZMB",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        },
+        {
+            "id": 250,
+            "iso2": "ZW",
+            "name": "Zimbabwe",
+            "status": 1,
+            "phone_code": "263",
+            "iso3": "ZWE",
+            "region": "Africa",
+            "subregion": "Eastern Africa"
+        }
+    ]
+}

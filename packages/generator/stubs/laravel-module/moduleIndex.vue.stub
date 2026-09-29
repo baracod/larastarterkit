@@ -1,0 +1,41 @@
+<script lang="ts" setup>
+import { can } from '@layouts/plugins/casl'
+import menuItems from '../menuItems.json'
+
+definePage({
+  meta: {
+    action: 'access',
+    subject: '$LOWER_NAME$',
+  },
+})
+
+const { t } = useI18n({ useScope: 'global' })
+
+// Accueil du module : une carte par entité du menu, selon les permissions de l'utilisateur.
+const entries = computed(() => (menuItems as Array<{ title: string; to: { name: string }; icon?: { icon: string }; action: string; subject: string }>)
+  .filter(item => can(item.action, item.subject)))
+</script>
+
+<template>
+  <div>
+    <h1 class="text-h4 mb-6">
+      $STUDLY_NAME$
+    </h1>
+    <VRow>
+      <VCol
+        v-for="entry in entries"
+        :key="entry.title"
+        cols="12"
+        sm="6"
+        lg="4"
+      >
+        <VCard :to="entry.to">
+          <VCardItem
+            :title="t(entry.title)"
+            :prepend-icon="entry.icon?.icon ?? 'bx-file-blank'"
+          />
+        </VCard>
+      </VCol>
+    </VRow>
+  </div>
+</template>

@@ -1,0 +1,125 @@
+name: starter-local
+
+x-laravel: &laravel
+  image: starter-app:local-test
+  build:
+    context: .
+    dockerfile: docker/prod/php/Dockerfile.prod
+  init: true
+  entrypoint: [sh, /var/www/html/docker/local/entrypoint.sh]
+  environment: &laravel-env
+    APP_NAME: STARTER
+    APP_ENV: local
+    APP_DEBUG: "false"
+    APP_KEY: ${LOCAL_APP_KEY:?Set LOCAL_APP_KEY in .env.docker.local}
+    APP_URL: http://localhost:${LOCAL_APP_PORT:-8088}
+    DB_CONNECTION: mysql
+    DB_HOST: db
+    DB_PORT: "3306"
+    DB_DATABASE: starter_docker_local
+    DB_USERNAME: starter
+    DB_PASSWORD: ${LOCAL_DB_PASSWORD:?Local database password required}
+    REDIS_HOST: redis
+    REDIS_PASSWORD: ${LOCAL_REDIS_PASSWORD:?Local Redis password required}
+    QUEUE_CONNECTION: redis
+    CACHE_STORE: redis
+    SESSION_DRIVER: redis
+    SESSION_SECURE_COOKIE: "false"
+    SANCTUM_STATEFUL_DOMAINS: localhost:${LOCAL_APP_PORT:-8088},127.0.0.1:${LOCAL_APP_PORT:-8088}
+    REDIS_QUEUE_RETRY_AFTER: "360"
+    LOG_CHANNEL: stderr
+    MAIL_MAILER: log
+    MCP_HTTP_INTEGRATED_ENABLED: "false"
+    MCP_HTTP_DEDICATED_ENABLED: "false"
+  volumes: [local_storage:/var/www/html/storage]
+  networks: [local]
+  stop_grace_period: 300s
+
+services:
+  initialize:
+    <<: *laravel
+    restart: "no"
+    command: [php, docker/local/initialize.php]
+    environment:
+      <<: *laravel-env
+      LOCAL_ADMIN_EMAIL: ${LOCAL_ADMIN_EMAIL:-super-admin@starter.local}
+      LOCAL_ADMIN_PASSWORD: ${LOCAL_ADMIN_PASSWORD:?Local administrator password required}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  app:
+    <<: *laravel
+    command: [apache2-foreground]
+    restart: unless-stopped
+    ports: ["127.0.0.1:${LOCAL_APP_PORT:-8088}:80"]
+    depends_on:
+      initialize:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, php, -r, "exit(@file_get_contents('http://127.0.0.1/up') === false ? 1 : 0);"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 10
+  worker:
+    <<: *laravel
+    stop_signal: SIGTERM
+    restart: unless-stopped
+    user: www-data
+    command: [php, artisan, horizon, --no-interaction]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, php, artisan, horizon:status, --no-interaction]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  scheduler:
+    <<: *laravel
+    stop_signal: SIGTERM
+    restart: unless-stopped
+    user: www-data
+    command: [php, artisan, schedule:work, --no-interaction]
+    depends_on:
+      app:
+        condition: service_healthy
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: starter_docker_local
+      MARIADB_USER: starter
+      MARIADB_PASSWORD: ${LOCAL_DB_PASSWORD:?Local database password required}
+      MARIADB_ROOT_PASSWORD: ${LOCAL_DB_ROOT_PASSWORD:?Local root password required}
+    volumes: [local_database:/var/lib/mysql]
+    networks: [local]
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 12
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    environment:
+      LOCAL_REDIS_PASSWORD: ${LOCAL_REDIS_PASSWORD:?Local Redis password required}
+    command: [sh, -ec, 'exec redis-server --appendonly yes --requirepass "$$LOCAL_REDIS_PASSWORD"']
+    volumes: [local_redis:/data]
+    networks: [local]
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$LOCAL_REDIS_PASSWORD" redis-cli ping | grep -q PONG']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  local: {}
+volumes:
+  local_database: {}
+  local_storage: {}
+  local_redis: {}
+  local_chain: {}

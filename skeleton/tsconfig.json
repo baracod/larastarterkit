@@ -1,0 +1,13 @@
+{
+  "extends": "./.larastarterkit/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "./*.d.ts",
+    "./resources/ts/**/*",
+    "./Modules/*/resources/ts/**/*",
+    "./vendor/baracod/larastarterkit-core/frontend/resources/ts/**/*"
+  ]
+}

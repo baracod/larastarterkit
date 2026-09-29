@@ -1,0 +1,390 @@
+{
+  "user": {
+    "menuTitle": "Users",
+    "menuDescription": "Manage system users.",
+    "title": "User",
+    "titlePlural": "Users",
+    "forceReset": {
+      "title": "Force Password Reset",
+      "subtitle": "Send a link to {name} ({email}) to choose a new password. A password change will be required before continuing in the application.",
+      "action": "Reset by email",
+      "mustChangeOnNextLogin": "Require change on next login",
+      "success": "The password reset link has been queued for delivery.",
+      "error": "Error resetting the password."
+    },
+    "field": {
+      "id": "ID",
+      "name": "Name",
+      "username": "Username",
+      "email": "Email Address",
+      "additionalInfo": "Additional Information",
+      "avatar": "Avatar",
+      "emailVerifiedAt": "Email Verified At",
+      "password": "Password",
+      "rememberToken": "Remember Token",
+      "active": "Active",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "roles": "Roles"
+    }
+  },
+  "role": {
+    "menuTitle": "Roles & Permissions",
+    "menuDescription": "Manage roles and their permissions.",
+    "title": "Role",
+    "titlePlural": "Roles",
+    "field": {
+      "id": "ID",
+      "name": "Name",
+      "displayName": "Display Name",
+      "description": "Description",
+      "order": "Order",
+      "isOwner": "Owner",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "permissions_count": "Permissions",
+      "users_count": "Users"
+    }
+  },
+  "permission": {
+    "menuTitle": "Permissions",
+    "menuDescription": "Manage access permissions.",
+    "title": "Permission",
+    "titlePlural": "Permissions",
+    "field": {
+      "id": "ID",
+      "key": "Key",
+      "action": "Action",
+      "subject": "Subject",
+      "description": "Description",
+      "tableName": "Table Name",
+      "alwaysAllow": "Always Allow",
+      "isPublic": "Public",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  },
+  "profile": {
+    "title": "User profile",
+    "subtitle": "Manage your information, notifications, settings and security.",
+    "tabs": {
+      "general": "General information",
+      "notifications": "Notifications",
+      "settings": "Settings",
+      "modules": "Modules",
+      "security": "Security"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "username": "Username",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "notifications": {
+    "title": "User notifications",
+    "unreadCounter": "Unread",
+    "empty": "No notifications yet.",
+    "emptyMessage": "No additional message.",
+    "status": {
+      "read": "Read",
+      "unread": "Unread"
+    },
+    "filters": {
+      "label": "Filter",
+      "all": "All",
+      "read": "Read",
+      "unread": "Unread"
+    },
+    "sort": {
+      "label": "Sort",
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+    "actions": {
+      "markRead": "Mark as read",
+      "markAllRead": "Mark all as read"
+    },
+    "feedback": {
+      "successTitle": "Success",
+      "errorTitle": "Error",
+      "loadError": "Unable to load notifications.",
+      "markReadSuccess": "Notification marked as read.",
+      "markReadError": "Failed to mark notification as read.",
+      "markAllReadSuccess": "All notifications have been marked as read.",
+      "markAllReadError": "Unable to mark all notifications as read."
+    }
+  },
+  "settings": {
+    "title": "User settings",
+    "searchPlaceholder": "Search settings...",
+    "empty": "No settings to display.",
+    "categories": {
+      "general": "General",
+      "appearance": "Appearance",
+      "notifications": "Notifications",
+      "dashboard": "Dashboard"
+    },
+    "values": {
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "actions": {
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "dialog": {
+      "title": "Edit setting",
+      "value": "Value"
+    },
+    "feedback": {
+      "successTitle": "Success",
+      "errorTitle": "Error",
+      "loadError": "Unable to load settings.",
+      "updateSuccess": "Setting updated successfully.",
+      "updateError": "Unable to update setting."
+    },
+    "catalog": {
+      "theme": {
+        "label": "Theme",
+        "description": "Choose your interface theme."
+      },
+      "language": {
+        "label": "Language",
+        "description": "Set your preferred language."
+      },
+      "notificationEmail": {
+        "label": "Email notifications",
+        "description": "Receive important notifications by email."
+      },
+      "notificationPush": {
+        "label": "Push notifications",
+        "description": "Receive real-time notifications."
+      },
+      "dashboardDefaultView": {
+        "label": "Default dashboard view",
+        "description": "Select the view displayed when opening the dashboard."
+      },
+      "timezone": {
+        "label": "Timezone",
+        "description": "Set your working timezone."
+      }
+    }
+  },
+  "modules": {
+    "title": "Module settings",
+    "subtitle": "Assignments and configuration applied to this user.",
+    "readonly": "Only an administrator can edit these settings.",
+    "actions": {
+      "save": "Save"
+    },
+    "feedback": {
+      "loadError": "Unable to load module settings.",
+      "updateSuccess": "Module settings updated successfully.",
+      "updateError": "Unable to update module settings."
+    },
+    "base": {
+      "location": {
+        "title": "Geographic Location",
+        "subtitle": "Limit accessible provinces, territories, zones, sites and pits.",
+        "all": "All",
+        "fields": {
+          "provinces": "Allowed provinces",
+          "territories": "Allowed territories",
+          "zones": "Allowed zones",
+          "sites": "Allowed sites",
+          "pits": "Allowed pits"
+        }
+      }
+    }
+  },
+  "security": {
+    "title": "Account security",
+    "description": "Change your password with strong rules to protect your account.",
+    "fields": {
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password"
+    },
+    "actions": {
+      "updatePassword": "Update password",
+      "reset": "Reset"
+    },
+    "validation": {
+      "title": "Security requirements",
+      "currentPasswordRequired": "Current password is required.",
+      "newPasswordRequired": "New password is required.",
+      "confirmationRequired": "Confirmation is required.",
+      "confirmationMismatch": "Confirmation does not match.",
+      "confirmationMatch": "Password and confirmation match.",
+      "minLength": "At least 8 characters.",
+      "mixedCase": "At least one uppercase and one lowercase letter.",
+      "number": "At least one number.",
+      "symbol": "At least one special character."
+    },
+    "feedback": {
+      "successTitle": "Success",
+      "errorTitle": "Error",
+      "formInvalid": "Please fix form errors.",
+      "passwordUpdated": "Your password has been updated successfully.",
+      "currentPasswordIncorrect": "Current password is incorrect.",
+      "confirmationMismatch": "Password confirmation is invalid.",
+      "genericError": "An error occurred while updating the password."
+    }
+  },
+  "pages": {
+    "login": {
+      "title": "Login",
+      "welcome": "Welcome to  :app 👋🏻",
+      "subtitle": "Please sign in to your account and start the adventure.",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "action": {
+        "signIn": "Sign in"
+      },
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create an account"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email address to receive a password reset link.",
+      "email": "Email address",
+      "action": {
+        "sendResetLink": "Send reset link"
+      },
+      "validation": {
+        "emailRequired": "Email address is required.",
+        "emailInvalid": "Please enter a valid email address."
+      },
+      "backToLogin": "Back to login"
+    },
+    "labels": {
+      "changePassword": {
+        "titleForm": "Change Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm Password",
+        "warningPasswordFormaTitle": "Ensure that these requirements are met",
+        "warningPasswordFormaText": "Minimum 8 characters long, uppercase & symbol",
+        "passwordMismatch": "The 'New Password' field must match the 'Confirm Password' field.",
+        "minLength": "Password must be at least 8 characters long.",
+        "uppercase": "Password must contain at least one uppercase letter.",
+        "symbol": "Password must include at least one symbol.",
+        "invalid": "Password must be at least 8 characters long, with one uppercase letter and one symbol.",
+        "mismatch": "Passwords do not match."
+      }
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "subtitle": "Secure your account with a strong new password.",
+      "forcedWarning": "You must change your password before accessing the application.",
+      "action": {
+        "submit": "Update password"
+      },
+      "backToLogin": "Back to login"
+    },
+    "action": {
+      "editRoles": "Modifier Roles",
+      "valide": "Valider"
+    }
+  },
+  "message": {
+    "noRoles": "No roles assigned to this user.",
+    "changePasswordSuccess": "Password changed successfully.",
+    "changePasswordError": "Error changing password.",
+    "changePasswordRule": "The password must contain at least 8 characters, an uppercase letter, and a symbol.",
+    "detachPermissions": {
+      "title": "Permissions detached.",
+      "message": "The permissions have been successfully removed from the roles."
+    },
+    "attachPermissions": {
+      "title": "Permissions attached.",
+      "message": "The permissions have been successfully added to the roles."
+    }
+  },
+  "access": {
+    "brandLabel": "Gold traceability",
+    "brandTitle": "Your workspace",
+    "brandDescription": "A modular application for your projects.",
+    "origin": "Accounts and profiles",
+    "operations": "Reusable modules",
+    "verification": "Secure access",
+    "loginTitle": "Sign in",
+    "loginDescription": "Sign in to your STARTER workspace.",
+    "email": "Email address",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgotLink": "Forgot password?",
+    "loginAction": "Sign in",
+    "authorizedOnly": "Your administrator assigns your account and access rights.",
+    "showPassword": "Show: {field}",
+    "hidePassword": "Hide: {field}",
+    "required": "This field is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "invalidCredentials": "Incorrect email address or password.",
+    "tooManyAttempts": "Too many attempts. Wait a few minutes before trying again.",
+    "suspended": "This account is disabled. Contact your administrator.",
+    "expiredSession": "Your session expired. Refresh the page and try again.",
+    "requestError": "The request failed. Check your connection and try again.",
+    "forgotTitle": "Recover your access",
+    "forgotDescription": "Enter the email address associated with your account.",
+    "sendLink": "Send reset link",
+    "emailSent": "If this address matches an account, you will receive a reset link. Check your spam folder too.",
+    "backToLogin": "Back to sign in",
+    "resetTitle": "New password",
+    "resetDescription": "Choose a password that meets the criteria below, then confirm it.",
+    "passwordReset": "Your password has been reset. You can now sign in.",
+    "invalidLink": "This link is incomplete, expired or invalid. Request a new password reset link.",
+    "newLink": "Request a new link",
+    "resetAction": "Reset password",
+    "changeTitle": "Change password",
+    "changeRequired": "You must replace your password before continuing.",
+    "changeDescription": "Enter your current password, then choose a new password.",
+    "changeAction": "Save password",
+    "continue": "Continue to the application",
+    "backToApp": "Back to the application",
+    "accountTitle": "Get an account",
+    "accountDescription": "Your organization’s administrators manage accounts. Contact your manager to obtain an account and the access rights needed for your work."
+  },
+  "design": {
+    "navigation": "Access management",
+    "title": "Accounts and access",
+    "overviewHint": "Manage users and the access rights required for their work.",
+    "auth_usersHint": "Identify users, account status and assigned roles.",
+    "auth_rolesHint": "Group permissions by business responsibility.",
+    "auth_permissionsHint": "Review allowed actions on each resource.",
+    "search": "Search this list",
+    "searchRoles": "Search roles",
+    "searchPermissions": "Search permissions",
+    "selectedRoles": "Selected roles",
+    "chooseRoles": "Select one or more roles to review their permissions.",
+    "formErrors": "Check the highlighted fields before trying again.",
+    "keepPassword": "Leave blank to keep the current password.",
+    "newPasswordHint": "At least 8 characters, with uppercase and lowercase letters, a number and a symbol.",
+    "details": "View details",
+    "attachPermissions": "Attach permissions",
+    "detachPermissions": "Detach permissions"
+  },
+  "editProfile": {
+    "title": "Edit profile",
+    "description": "Update identity and photo. Manage activation, password and roles in “Account and roles”.",
+    "account": "Account and roles",
+    "imageFormat": "Choose a JPEG, PNG or GIF image.",
+    "imageHelp": "JPEG, PNG or GIF. The photo is resized before upload (2 MB maximum after optimisation).",
+    "imageSize": "The photo is still too large. Choose a smaller image."
+  },
+  "accountMail": {
+    "sendInstructions": "Send sign-in instructions",
+    "queued": "The instructions have been queued for delivery.",
+    "failed": "Unable to queue the instructions. Please try again.",
+    "changePassword": "Change my password",
+    "language": "Email language",
+    "send": "Send"
+  }
+}

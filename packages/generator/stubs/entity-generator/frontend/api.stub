@@ -1,0 +1,42 @@
+import type { I{{ modelName }} } from '../types/entities'
+
+const baseUrl = '{{ baseUrl }}'
+
+/** Données saisies dans le formulaire : champs facultatifs et vides autorisés avant validation serveur. */
+export type {{ modelName }}Payload = { [K in keyof I{{ modelName }}]?: I{{ modelName }}[K] | null }
+
+export interface {{ modelName }}Query {
+  search?: string
+  sort?: string
+  direction?: 'asc' | 'desc'
+}
+
+export const {{ modelName }}API = {
+  async getAll(query: {{ modelName }}Query = {}): Promise<I{{ modelName }}[]> {
+    return await $api<I{{ modelName }}[]>(baseUrl, { query })
+  },
+
+  async getById(id: number): Promise<I{{ modelName }}> {
+    return await $api<I{{ modelName }}>(`${baseUrl}/${id}`)
+  },
+
+  async create(data: {{ modelName }}Payload): Promise<I{{ modelName }}> {
+    return await $api<I{{ modelName }}>(baseUrl, { method: 'POST', body: data })
+  },
+
+  async update(id: number, data: {{ modelName }}Payload): Promise<I{{ modelName }}> {
+    return await $api<I{{ modelName }}>(`${baseUrl}/${id}`, { method: 'PUT', body: data })
+  },
+
+  async delete(id: number): Promise<void> {
+    await $api(`${baseUrl}/${id}`, { method: 'DELETE' })
+  },
+
+  async deleteMultiple(ids: number[]): Promise<number> {
+    const response = await $api<{ deleted: number }>(`${baseUrl}/bulk-delete`, { method: 'POST', body: { ids } })
+
+    return response.deleted
+  },
+}
+
+export default {{ modelName }}API

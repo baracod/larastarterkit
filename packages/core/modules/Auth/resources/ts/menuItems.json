@@ -1,0 +1,35 @@
+[
+    {
+        "title": "Auth.user.titlePlural",
+        "to": {
+            "name": "auth-users"
+        },
+        "icon": {
+            "icon": "mdi-account-group-outline"
+        },
+        "action": "browse",
+        "subject": "auth_users"
+    },
+    {
+        "title": "Auth.role.titlePlural",
+        "to": {
+            "name": "auth-roles"
+        },
+        "icon": {
+            "icon": "mdi-shield-account-outline"
+        },
+        "action": "browse",
+        "subject": "auth_roles"
+    },
+    {
+        "title": "Auth.permission.titlePlural",
+        "to": {
+            "name": "auth-permissions"
+        },
+        "icon": {
+            "icon": "mdi-key-chain-variant"
+        },
+        "action": "browse",
+        "subject": "auth_permissions"
+    }
+]

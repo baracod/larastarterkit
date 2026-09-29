@@ -1,0 +1,35 @@
+# Attach to the same Laravel storage volume and database network as the application.
+# Configure the web application's DOCUMENTATION_URL with this site's /docs/ URL.
+services:
+  documentation-builder:
+    build:
+      context: .
+      dockerfile: docker/prod/php/Dockerfile.prod
+      target: dokploy-documentation-builder
+    env_file: ./docker/env/app.env
+    environment:
+      DOCUMENTATION_QUEUE_CONNECTION: documentation
+      DOCUMENTATION_PUBLIC_LINK: "false"
+    restart: unless-stopped
+    stop_grace_period: 310s
+    volumes:
+      - documentation_storage:/var/www/html/storage
+    networks: [application]
+  documentation-site:
+    build:
+      context: .
+      dockerfile: docker/prod/php/Dockerfile.prod
+      target: dokploy-documentation-cms
+    restart: unless-stopped
+    ports: ["127.0.0.1:${DOCUMENTATION_PORT:-8090}:80"]
+    volumes:
+      - documentation_storage:/srv/storage:ro
+    networks: [application]
+volumes:
+  documentation_storage:
+    external: true
+    name: ${DOCUMENTATION_STORAGE_VOLUME:?Existing Laravel storage volume required}
+networks:
+  application:
+    external: true
+    name: ${DOCUMENTATION_NETWORK:?Existing application network required}

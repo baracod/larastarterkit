@@ -1,0 +1,85 @@
+<?php
+
+namespace {{ controllerNamespace }};
+
+use {{ modelFqcn }};
+use {{ requestFqcn }};
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class {{ controllerName }}
+{
+    /** Colonnes interrogées par ?search= */
+    private const SEARCHABLE = [{{ searchable }}];
+
+    /** Colonnes acceptées par ?sort= (avec ?direction=asc|desc) */
+    private const SORTABLE = [{{ sortable }}];
+
+    /**
+     * Liste complète, ou paginée lorsque ?per_page= est fourni.
+     */
+    public function index(Request $request)
+    {
+        $query = {{ modelName }}::query(){{ eagerLoading }};
+
+        $search = trim((string) $request->query('search', ''));
+        if ($search !== '' && self::SEARCHABLE !== []) {
+            $pattern = '%'.addcslashes($search, '%_\\').'%';
+            $query->where(function ($where) use ($pattern) {
+                foreach (self::SEARCHABLE as $column) {
+                    $where->orWhere($column, 'like', $pattern);
+                }
+            });
+        }
+
+        $sort = in_array($request->query('sort'), self::SORTABLE, true) ? $request->query('sort') : 'id';
+        $query->orderBy($sort, $request->query('direction') === 'asc' ? 'asc' : 'desc');
+
+        return $request->filled('per_page')
+            ? $query->paginate(min(100, max(1, $request->integer('per_page'))))
+            : $query->get();
+    }
+
+    public function show($id)
+    {
+        return {{ modelName }}::query(){{ eagerLoading }}->findOrFail($id);
+    }
+
+    public function store({{ requestName }} $request): JsonResponse
+    {
+        $record = {{ modelName }}::create($request->validated());
+
+        return response()->json($record{{ loadRelations }}, 201);
+    }
+
+    public function update({{ requestName }} $request, $id)
+    {
+        $record = {{ modelName }}::findOrFail($id);
+        $record->update($request->validated());
+
+        return $record->refresh(){{ loadRelations }};
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        {{ modelName }}::findOrFail($id)->delete();
+
+        return response()->json(['message' => 'Deleted successfully']);
+    }
+
+    /**
+     * Suppression groupée : { "ids": [1, 2, 3] }. Les événements Eloquent (et la suppression logique) s'appliquent.
+     */
+    public function destroyMany(Request $request): JsonResponse
+    {
+        $ids = $request->validate([
+            'ids' => ['required', 'array', 'min:1', 'max:500'],
+            'ids.*' => ['integer', 'distinct'],
+        ])['ids'];
+
+        $deleted = DB::transaction(fn () => {{ modelName }}::query()->whereKey($ids)->get()->each->delete()->count());
+
+        return response()->json(['message' => 'Deleted successfully', 'deleted' => $deleted]);
+    }
+}
