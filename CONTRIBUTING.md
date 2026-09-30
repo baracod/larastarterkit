@@ -42,7 +42,9 @@ Ce dépôt est un monorepo : `packages/core`, `packages/generator` et `skeleton/
 Tous les packages partagent une seule version.
 
 1. Sur `dev` : `php bin/set-version.php 1.0.0-rc.4`, puis `composer update "baracod/*" --no-interaction`, mettre à jour `CHANGELOG.md`, commiter et fusionner dans `prod`.
-2. Sur GitHub, lancer le workflow « Split and release packages » sur `prod` avec la version. Il vérifie que `composer.json` porte cette version, tague core et generator, puis publie `skeleton/` sur `main` avec le même tag.
+2. Sur `prod` à jour, créer et pousser le tag de publication : `git tag release/1.0.0-rc.4` puis `git push origin release/1.0.0-rc.4`. Le workflow « Split and release packages » vérifie que le commit appartient à `prod` et que `composer.json` porte cette version, tague core et generator `1.0.0-rc.4`, puis publie `skeleton/` sur `main` avec le même tag.
+
+Le lancement manuel (« Run workflow ») n’est pas utilisé : GitHub l’exige sur la branche par défaut, `main`, qui ne contient que le squelette. Les tags `release/*` ne sont pas des numéros de version et sont ignorés par Packagist.
 
 Le workflow utilise le secret `SPLIT_ACCESS_TOKEN` : un jeton GitHub ayant les droits d’écriture (contents) sur `larastarterkit`, `larastarterkit-core` et `larastarterkit-generator`.
 
