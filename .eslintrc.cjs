@@ -132,7 +132,7 @@ module.exports = {
       ignore: [
         '~pages$',
         'virtual:generated-layouts',
-        '^virtual:larastarterkit$',
+        '^virtual:larastarterkit(/icons\\.css)?$',
         '#auth$',
         '#components$',
 
