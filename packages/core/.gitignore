@@ -1,0 +1,27 @@
+# Dependencies and generated files
+vendor/
+node_modules/
+dist/
+build/
+.vitepress/cache/
+.vitepress/.temp/
+.vitepress/dist/
+auto-imports.d.ts
+components.d.ts
+typed-router.d.ts
+**/plugins/iconify/icons.css
+
+# Local configuration and runtime data
+.env*
+!.env.example
+auth.json
+.phpunit.cache/
+.phpunit.result.cache
+coverage/
+*.log
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+*:Zone.Identifier
