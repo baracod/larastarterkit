@@ -19,21 +19,21 @@ class AdminSettingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'type.required' => 'Le champ type est obligatoire.',
-            'module.string' => 'Le champ module doit être une chaîne de caractères.',
-            'user_id.integer' => 'Le champ user_id doit être un entier.',
-            'key.string' => 'Le champ key doit être une chaîne de caractères.',
-            'value.string' => 'Le champ value doit être une chaîne de caractères.',
-            'value_type.required' => 'Le champ value_type est obligatoire.',
-            'value_type.string' => 'Le champ value_type doit être une chaîne de caractères.',
-            'label.string' => 'Le champ label doit être une chaîne de caractères.',
-            'description.string' => 'Le champ description doit être une chaîne de caractères.',
-            'input_type.required' => 'Le champ input_type est obligatoire.',
-            'input_type.string' => 'Le champ input_type doit être une chaîne de caractères.',
-            'options.string' => 'Le champ options doit être une chaîne de caractères.',
-            'default_value.string' => 'Le champ default_value doit être une chaîne de caractères.',
-            'is_public.required' => 'Le champ is_public est obligatoire.',
-            'is_public.boolean' => 'Le champ is_public doit être vrai ou faux.',
+            'type.required' => 'Le champ « type » est obligatoire.',
+            'module.string' => 'Le champ « module » doit être une chaîne de caractères.',
+            'user_id.integer' => 'Le champ « utilisateur » doit être un entier.',
+            'key.string' => 'Le champ « clé » doit être une chaîne de caractères.',
+            'value.string' => 'Le champ « valeur » doit être une chaîne de caractères.',
+            'value_type.required' => 'Le champ « type de valeur » est obligatoire.',
+            'value_type.string' => 'Le champ « type de valeur » doit être une chaîne de caractères.',
+            'label.string' => 'Le champ « libellé » doit être une chaîne de caractères.',
+            'description.string' => 'Le champ « description » doit être une chaîne de caractères.',
+            'input_type.required' => 'Le champ « type de saisie » est obligatoire.',
+            'input_type.string' => 'Le champ « type de saisie » doit être une chaîne de caractères.',
+            'options.string' => 'Le champ « options » doit être une chaîne de caractères.',
+            'default_value.string' => 'Le champ « valeur par défaut » doit être une chaîne de caractères.',
+            'is_public.required' => 'Le champ « public » est obligatoire.',
+            'is_public.boolean' => 'Le champ « public » doit être vrai ou faux.',
         ];
     }
 

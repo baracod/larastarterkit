@@ -23,10 +23,13 @@ const logout = () => authStore.logout()
 //   return ''
 // }))
 
-const toProfile = async () => {
+const openProfileTab = async (tab?: string) => {
   if (user.value)
-    await router.replace({ name: 'auth-users-id', params: { id: user.value.id } })
+    await router.replace({ name: 'auth-users-id', params: { id: user.value.id }, query: tab ? { tab } : {} })
 }
+
+const toProfile = () => openProfileTab()
+const toSettings = () => openProfileTab('settings')
 </script>
 
 <template>
@@ -123,11 +126,14 @@ const toProfile = async () => {
               />
             </template>
 
-            <VListItemTitle>Profile</VListItemTitle>
+            <VListItemTitle>{{ t('Auth.profile.title') }}</VListItemTitle>
           </VListItem>
 
           <!-- 👉 Settings -->
-          <VListItem link>
+          <VListItem
+            link
+            @click="toSettings"
+          >
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -136,7 +142,7 @@ const toProfile = async () => {
               />
             </template>
 
-            <VListItemTitle>Settings</VListItemTitle>
+            <VListItemTitle>{{ t('Auth.profile.tabs.settings') }}</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->

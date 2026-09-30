@@ -2,12 +2,13 @@
 import useNavigationStore from '@/stores'
 import { useAuthStore } from '@auth/stores'
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const navigation = useNavigationStore()
 const auth = useAuthStore()
 const visible = ref(false)
 const query = ref('')
-const items = computed(() => navigation.modules.filter(item => (auth.hasRole('administrator') || auth.can(item.action, item.subject)) && t(`navigation.moduleLabels.${item.title}`).toLowerCase().includes(query.value.toLowerCase())))
+const moduleLabel = (title: string) => te(`navigation.moduleLabels.${title}`) ? t(`navigation.moduleLabels.${title}`) : title
+const items = computed(() => navigation.modules.filter(item => (auth.hasRole('administrator') || auth.can(item.action, item.subject)) && [moduleLabel(item.title), item.title].some(label => label.toLowerCase().includes(query.value.trim().toLowerCase()))))
 
 useEventListener(document, 'keydown', (event: KeyboardEvent) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -40,11 +41,17 @@ useEventListener(document, 'keydown', (event: KeyboardEvent) => {
             v-for="item in items"
             :key="item.title"
             :to="item.to"
-            :title="t(`navigation.moduleLabels.${item.title}`)"
+            :title="moduleLabel(item.title)"
             :prepend-icon="item.icon"
             @click="visible = false"
           />
         </VList>
+        <p
+          v-if="!items.length"
+          class="text-medium-emphasis mb-0"
+        >
+          {{ t('starter.noResults') }}
+        </p>
       </VCardText>
     </VCard>
   </VDialog>

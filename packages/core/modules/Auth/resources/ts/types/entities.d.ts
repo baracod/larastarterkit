@@ -8,7 +8,7 @@ export interface IUser {
   email_verified_at?: string | null;
   password?: string;
   remember_token?: string | null;
-  active?: number | null;
+  active?: boolean | number | null;
   mustChangePassword?: boolean | null;
   passwordChangedAt?: string | null;
   created_at?: string | null;

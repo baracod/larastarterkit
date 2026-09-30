@@ -20,7 +20,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
       defaultLocale: 'fr',
       langConfig: [
         {
-          label: 'French',
+          label: 'Français',
           i18nLang: 'fr',
           isRTL: false,
         },

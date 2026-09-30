@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useNotificationStore } from '@admin/stores/notifications'
 import type { Notification } from '@layouts/types'
 
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
 
 // Filter state
@@ -74,13 +75,13 @@ const handleNotificationClick = (notification: Notification) => {
             value="all"
             size="x-small"
           >
-            All
+            {{ t('notifications.all') }}
           </VBtn>
           <VBtn
             value="unread"
             size="x-small"
           >
-            Unread
+            {{ t('notifications.unread') }}
           </VBtn>
         </VBtnToggle>
       </div>

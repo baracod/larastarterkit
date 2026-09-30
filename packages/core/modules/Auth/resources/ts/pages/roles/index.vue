@@ -47,6 +47,9 @@ const {
 
 const entity = 'role' as const // i18n key helper
 const openNewPermissionDialog = () => openPermissionEditDialog()
+
+// Bound to click handlers: never forward the click event as the edited role.
+const openNewRoleDialog = () => openRoleEditDialog()
 </script>
 
 <template>
@@ -81,7 +84,7 @@ const openNewPermissionDialog = () => openPermissionEditDialog()
               :title="t('action.add')"
               icon="mdi-plus-circle-outline"
               variant="tonal"
-              @click="openRoleEditDialog"
+              @click="openNewRoleDialog"
             />
           </div>
           <CoreFilterPanel

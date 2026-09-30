@@ -1,8 +1,8 @@
 # Dependencies and generated files
-vendor/
+/vendor/
 node_modules/
-dist/
-build/
+/dist/
+/build/
 .vitepress/cache/
 .vitepress/.temp/
 .vitepress/dist/

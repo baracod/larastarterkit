@@ -29,9 +29,16 @@
       min-block-size: variables.$vertical-nav-header-height;
 
       // TEMPLATE: Check if we need to move this to master
+      // Shrinkable so a long application name ellipsizes instead of sliding under the nav actions.
       .app-logo {
-        flex-shrink: 0;
+        overflow: hidden;
+        flex: 1 1 auto;
+        min-inline-size: 0;
         transition: transform 0.25s ease-in-out;
+
+        .app-logo-title {
+          min-inline-size: 0;
+        }
 
         @at-root {
           // Move logo a bit to align center with the icons in vertical nav mini variant

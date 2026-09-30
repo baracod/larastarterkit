@@ -32,10 +32,22 @@ pnpm run typecheck
 
 Développer sur `dev`, exécuter les vérifications ci-dessus, puis ouvrir une pull request de `dev` vers `prod`. `prod` représente le code stable ; aucun déploiement automatique n’est configuré. Les branches distantes et leurs protections sont à configurer sur GitHub.
 
-La publication Composer reste manuelle : les packages et le squelette doivent être distribués depuis leurs répertoires respectifs. Fusionner `dev` dans `prod` ne publie pas à lui seul une version Packagist. Les modules, leur frontend et le générateur restent inchangés.
+Ce dépôt est un monorepo : `packages/core`, `packages/generator` et `skeleton/` ne sont développés qu’ici. Les packages n’ont pas de dépôt Git local ; leurs dépôts GitHub (`larastarterkit-core`, `larastarterkit-generator`) sont des miroirs en lecture seule, alimentés par le workflow `.github/workflows/split.yml`. Ne pas y pousser directement. `packages/documentation` n’est pas encore publié.
+
+- Chaque push sur `prod` recopie core et generator sur la branche `main` de leur dépôt.
+- Fusionner `dev` dans `prod` ne crée aucune version Packagist.
+
+### Publier une version
+
+Tous les packages partagent une seule version.
+
+1. Sur `dev` : `php bin/set-version.php 1.0.0-rc.4`, puis `composer update "baracod/*" --no-interaction`, mettre à jour `CHANGELOG.md`, commiter et fusionner dans `prod`.
+2. Sur GitHub, lancer le workflow « Split and release packages » sur `prod` avec la version. Il vérifie que `composer.json` porte cette version, tague core et generator, puis publie `skeleton/` sur `main` avec le même tag.
+
+Le workflow utilise le secret `SPLIT_ACCESS_TOKEN` : un jeton GitHub ayant les droits d’écriture (contents) sur `larastarterkit`, `larastarterkit-core` et `larastarterkit-generator`.
 
 ### Branche de distribution
 
-`main` contient le contenu de `skeleton/`, accompagné de `LICENSE`, `THIRD_PARTY_NOTICES.md` et `CHANGELOG.md`. Son historique est indépendant. Ne pas fusionner directement `prod` dans `main` : reporter le squelette validé sur `main` par un commit normal, puis y créer le tag de version. Publier core et generator dans leurs dépôts Composer avant la version du squelette qui les référence. Les publications suivantes conservent cet historique.
+`main` contient le contenu de `skeleton/`, accompagné de `LICENSE`, `THIRD_PARTY_NOTICES.md` et `CHANGELOG.md`. Son historique est indépendant et n’est alimenté que par le workflow de publication : ne jamais y fusionner `dev` ou `prod`. Packagist lit `baracod/larastarterkit` depuis cette branche et ses tags.
 
 `main` est destinée à devenir la branche par défaut du dépôt GitHub. `dev` conserve les sources complètes et `prod` les sources validées.

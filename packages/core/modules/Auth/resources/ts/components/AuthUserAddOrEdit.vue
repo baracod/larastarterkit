@@ -19,7 +19,7 @@ const { t } = useI18n()
 const { formatErrorMessagesForm } = useTranslater()
 const { notify } = useNotify()
 const { passwordRules, emailRules } = useAuthForm()
-const form = ref<Partial<IUser>>({ name: '', username: '', email: '', additional_info: '', avatar: '', email_verified_at: '', password: '', remember_token: '', active: 0, created_at: '', updated_at: '' })
+const form = ref<Partial<IUser>>({ name: '', username: '', email: '', additional_info: '', avatar: '', email_verified_at: '', password: '', remember_token: '', active: true, created_at: '', updated_at: '' })
 const auth = useAuthStore()
 const canManageRoles = computed(() => auth.hasRole('administrator'))
 const loading = ref(false)
@@ -52,7 +52,7 @@ watch(() => [props.item, props.modelValue] as const, ([newItem, open]) => {
     selectedRoleIds.value = newItem.roles?.map(r => r.id) ?? []
   }
   else {
-    form.value = { name: '', username: '', email: '', additional_info: '', avatar: '', email_verified_at: '', password: '', remember_token: '', active: 0, created_at: '', updated_at: '' }
+    form.value = { name: '', username: '', email: '', additional_info: '', avatar: '', email_verified_at: '', password: '', remember_token: '', active: true, created_at: '', updated_at: '' }
     selectedRoleIds.value = []
   }
 }, { immediate: true })
@@ -80,7 +80,8 @@ const save = async () => {
       savedUser = await UserAPI.create({ ...payload, email_locale: emailLocale.value })
 
     const userId = savedUser?.id ?? form.value.id
-    if (userId && canManageRoles.value) {
+    const isNew = !form.value.id
+    if (userId && canManageRoles.value && !(isNew && !selectedRoleIds.value.length)) {
       form.value.id = userId
       await UserAPI.assignRoles(userId, selectedRoleIds.value)
     }

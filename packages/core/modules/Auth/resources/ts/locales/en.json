@@ -26,6 +26,13 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "roles": "Roles"
+    },
+    "action": {
+      "editRoles": "Edit roles",
+      "valide": "Validate",
+      "addOrRemoveRole": "Add & remove a role",
+      "suspend": "Suspend",
+      "unsuspend": "Reactivate"
     }
   },
   "role": {
@@ -386,5 +393,8 @@
     "changePassword": "Change my password",
     "language": "Email language",
     "send": "Send"
+  },
+  "assignments": {
+    "tab": "Module access"
   }
 }

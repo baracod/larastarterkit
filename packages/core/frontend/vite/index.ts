@@ -1,7 +1,6 @@
 // Builtins d'abord (règle import/order)
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import fs from 'node:fs'
 
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
@@ -16,6 +15,7 @@ import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
 import svgLoader from 'vite-svg-loader'
 
+import { iconsPlugin } from './icons'
 import { installedModules, modulePlugin } from './modules'
 
 const uiRoot = fileURLToPath(new URL('../', import.meta.url))
@@ -68,40 +68,10 @@ export default defineConfig(async () => {
 
   const moduleAlias = Object.fromEntries(registry.modules.map(m => [`@${m.name.toLowerCase()}`, m.source]))
 
-  fs.mkdirSync('.larastarterkit', { recursive: true })
-
-  const paths = {
-    '@/*': [ui('resources/ts/*')],
-    '@core/*': [ui('resources/ts/@core/*')],
-    '@core': [ui('resources/ts/@core')],
-    '@layouts/*': [ui('resources/ts/@layouts/*')],
-    '@layouts': [ui('resources/ts/@layouts')],
-    '@themeConfig': [ui('themeConfig.ts')],
-    '@images/*': [ui('resources/images/*')],
-    '@styles/*': [ui('resources/styles/*')],
-    '@app/*': [path.resolve('resources/ts/*')],
-    ...Object.fromEntries(registry.modules.map(m => [`@${m.name.toLowerCase()}/*`, [path.join(m.source, '*')]])),
-  }
-
-  fs.writeFileSync('.larastarterkit/tsconfig.json', JSON.stringify({
-    compilerOptions: {
-      target: 'ESNext',
-      module: 'ESNext',
-      moduleResolution: 'Bundler',
-      baseUrl: '..',
-      paths,
-      jsx: 'preserve',
-      resolveJsonModule: true,
-      esModuleInterop: true,
-      isolatedModules: true,
-      lib: ['ESNext', 'DOM', 'DOM.Iterable'],
-      types: ['vite/client', 'unplugin-vue-router/client', 'vite-plugin-vue-layouts/client'],
-    },
-  }, null, 2))
-
   return {
     plugins: [
       modulePlugin(registry),
+      iconsPlugin(ui('resources/ts/plugins/iconify/build-icons.ts')),
 
       // 👉 Toujours avant `vue`
       VueRouter({

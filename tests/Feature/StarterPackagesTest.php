@@ -90,7 +90,12 @@ class StarterPackagesTest extends TestCase
         File::ensureDirectoryExists($temporary.'/public/build');
         $registry = \Mockery::mock(ModuleRegistry::class);
         $registry->shouldReceive('packages')->andReturn([]);
-        $registry->shouldReceive('all')->andReturn([]);
+        File::ensureDirectoryExists($temporary.'/Modules/Demo/resources/ts');
+        File::ensureDirectoryExists($temporary.'/Modules/Escape');
+        $registry->shouldReceive('all')->andReturn([
+            'Demo' => ['path' => $temporary.'/Modules/Demo', 'package' => 'vendor/demo'],
+            'Escape' => ['path' => $temporary.'/Modules/Escape', 'package' => 'vendor/escape', 'frontend' => ['path' => '../Demo/resources/ts']],
+        ]);
         $registry->shouldReceive('statuses')->andReturn(['Auth' => true, 'Admin' => true]);
         $this->app->instance(ModuleRegistry::class, $registry);
         $this->app->setBasePath($temporary);
@@ -98,6 +103,12 @@ class StarterPackagesTest extends TestCase
         try {
             $this->artisan('larastarterkit:frontend', ['--check' => true])->assertFailed();
             $this->artisan('larastarterkit:frontend')->assertSuccessful();
+            $config = json_decode(File::get($temporary.'/.larastarterkit/tsconfig.json'), true, 512, JSON_THROW_ON_ERROR);
+            $this->assertSame('Bundler', $config['compilerOptions']['moduleResolution']);
+            $this->assertSame([$temporary.'/resources/ts/*'], $config['compilerOptions']['paths']['@app/*']);
+            $this->assertDirectoryExists(dirname($config['compilerOptions']['paths']['@/*'][0]));
+            $this->assertSame([realpath($temporary.'/Modules/Demo/resources/ts').'/*'], $config['compilerOptions']['paths']['@demo/*']);
+            $this->assertArrayNotHasKey('@escape/*', $config['compilerOptions']['paths']);
             $payload = File::get($temporary.'/.larastarterkit/frontend/package.json');
             File::put($temporary.'/public/build/larastarterkit.json', json_encode(['fingerprint' => hash('sha256', $payload)]));
             $this->artisan('larastarterkit:frontend', ['--check' => true])->assertSuccessful();

@@ -86,6 +86,9 @@ const openEditDialog = (item?: IUser) => {
   editDialog.value = true
 }
 
+// Bound to click handlers: never forward the click event as the edited item.
+const openAddDialog = () => openEditDialog()
+
 const deleteItem = async (id: number) => {
   if (await confirmDialog()) {
     loading.value = true
@@ -229,7 +232,7 @@ const emmetAction = (action: string) => {
           color="success"
           :title="t('action.add')"
           prepend-icon="mdi-plus"
-          @click="openEditDialog"
+          @click="openAddDialog"
         >
           {{ t('action.add') }}
         </VBtn>

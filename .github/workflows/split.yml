@@ -1,0 +1,101 @@
+name: Split and release packages
+
+# The monorepo (dev -> prod) is the only place where packages are developed.
+# - Every push to prod mirrors each package directory to its read-only repository (branch main).
+# - A release (manual run on prod) tags core and generator, then publishes skeleton/ to the `main`
+#   distribution branch of this repository with the same tag. One version for every package.
+on:
+  push:
+    branches: [prod]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release for every package (e.g. 1.0.0-rc.4, without "v")'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: split-and-release
+  cancel-in-progress: false
+
+env:
+  RELEASE: ${{ github.event_name == 'workflow_dispatch' }}
+  VERSION: ${{ inputs.version }}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Releases only run from prod
+        if: env.RELEASE == 'true' && github.ref_name != 'prod'
+        run: |
+          echo "Run the release workflow on the prod branch." >&2
+          exit 1
+      - name: Every package is released under the requested version
+        if: env.RELEASE == 'true'
+        run: |
+          php -r '
+            $version = getenv("VERSION");
+            if (! preg_match("/^\d+\.\d+\.\d+(-(alpha|beta|rc)\.\d+)?$/", $version)) {
+                fwrite(STDERR, "Invalid version: $version\n");
+                exit(1);
+            }
+            $composer = json_decode(file_get_contents("composer.json"), true);
+            $versions = $composer["repositories"][0]["options"]["versions"] ?? [];
+            $wrong = array_filter($versions, fn ($v) => $v !== $version);
+            if ($versions === [] || $wrong !== []) {
+                fwrite(STDERR, "Run php bin/set-version.php $version and merge into prod first. Mismatch: ".json_encode($wrong)."\n");
+                exit(1);
+            }
+          '
+
+  packages:
+    needs: verify
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - { directory: packages/core, repository: larastarterkit-core }
+          - { directory: packages/generator, repository: larastarterkit-generator }
+          # packages/documentation is not published yet: add it here with its repository when it is.
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mirror ${{ matrix.package.directory }}
+        uses: symplify/monorepo-split-github-action@v2.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.SPLIT_ACCESS_TOKEN }}
+        with:
+          package_directory: ${{ matrix.package.directory }}
+          repository_organization: baracod
+          repository_name: ${{ matrix.package.repository }}
+          branch: main
+          tag: ${{ env.RELEASE == 'true' && env.VERSION || '' }}
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+
+  skeleton:
+    # The skeleton references core and generator: publish it only after they are tagged.
+    needs: packages
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add the distribution files kept at the monorepo root
+        run: cp LICENSE THIRD_PARTY_NOTICES.md CHANGELOG.md skeleton/
+      - name: Publish skeleton/ to the main distribution branch
+        uses: symplify/monorepo-split-github-action@v2.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.SPLIT_ACCESS_TOKEN }}
+        with:
+          package_directory: skeleton
+          repository_organization: baracod
+          repository_name: larastarterkit
+          branch: main
+          tag: ${{ inputs.version }}
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com

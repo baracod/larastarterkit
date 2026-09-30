@@ -9,10 +9,19 @@ class SettingSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (['theme' => 'light', 'language' => 'fr', 'timezone' => 'UTC'] as $key => $value) {
-            Setting::query()->firstOrCreate(['type' => 'system', 'key' => $key, 'module' => null, 'user_id' => null], [
-                'value' => $value, 'value_type' => 'string', 'label' => $key, 'input_type' => 'text', 'is_public' => true,
+        $defaults = [
+            'theme' => ['light', 'Thème'],
+            'language' => ['fr', 'Langue'],
+            'timezone' => ['UTC', 'Fuseau horaire'],
+        ];
+        foreach ($defaults as $key => [$value, $label]) {
+            $setting = Setting::query()->firstOrCreate(['type' => 'system', 'key' => $key, 'module' => null, 'user_id' => null], [
+                'value' => $value, 'value_type' => 'string', 'label' => $label, 'input_type' => 'text', 'is_public' => true,
             ]);
+            // Earlier releases stored the key as label: replace it without touching customized labels.
+            if ($setting->label === $key) {
+                $setting->update(['label' => $label]);
+            }
         }
     }
 }

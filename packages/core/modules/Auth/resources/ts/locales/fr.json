@@ -43,7 +43,7 @@
       }
     },
     "action": {
-      "editRoles": "Modifier Roles",
+      "editRoles": "Modifier les rôles",
       "valide": "Valider",
       "addOrRemoveRole": "Ajouter & Supprimer un rôle",
       "suspend": "Suspendre",
@@ -411,5 +411,8 @@
     "changePassword": "Changer mon mot de passe",
     "language": "Langue de l’e-mail",
     "send": "Envoyer"
+  },
+  "assignments": {
+    "tab": "Accès aux modules"
   }
 }

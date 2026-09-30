@@ -61,6 +61,9 @@ const openEditDialog = (item?: IPermission) => {
   editDialog.value = true
 }
 
+// Bound to click handlers: never forward the click event as the edited item.
+const openAddDialog = () => openEditDialog()
+
 const openDetailDialog = (item?: IPermission) => {
   selectedItem.value = item || null
   editDialog.value = true
@@ -146,7 +149,7 @@ const searchKey = ref('')
           color="success"
           :title="t('action.add')"
           prepend-icon="mdi-plus"
-          @click="openEditDialog"
+          @click="openAddDialog"
         >
           {{ t('action.add') }}
         </VBtn>

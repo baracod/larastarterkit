@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd5ee6bd42ce3b530ae49a95bc3ce894",
+    "content-hash": "8ca6ddec8bdd21db7c8d637a19d43113",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -62,11 +62,11 @@
         },
         {
             "name": "baracod/larastarterkit-core",
-            "version": "1.0.0-rc.1",
+            "version": "1.0.0-rc.4",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "b599143b3d22d9e31e31ce839f46eee8b02acb32"
+                "reference": "6ac18184a53e2b3675afc9f664171bac337ffc61"
             },
             "require": {
                 "barryvdh/laravel-dompdf": "^3.1",
@@ -97,11 +97,7 @@
                     "modules": [
                         "modules/Auth",
                         "modules/Admin"
-                    ],
-                    "frontend": {
-                        "package": "@baracod/larastarterkit-ui",
-                        "version": "1.0.0-rc.1"
-                    }
+                    ]
                 }
             },
             "autoload": {
@@ -128,11 +124,11 @@
         },
         {
             "name": "baracod/larastarterkit-documentation",
-            "version": "1.0.0-rc.1",
+            "version": "1.0.0-rc.4",
             "dist": {
                 "type": "path",
                 "url": "packages/documentation",
-                "reference": "4c5594b867db2dbd15fd35f16021353b0a8caa28"
+                "reference": "653a46aec0b1f3235688b01f4bed8655f0d14ddc"
             },
             "require": {
                 "baracod/larastarterkit-core": "^1.0@RC",
@@ -143,11 +139,7 @@
                 "larastarterkit": {
                     "modules": [
                         "module"
-                    ],
-                    "frontend": {
-                        "package": "@baracod/larastarterkit-documentation",
-                        "version": "1.0.0-rc.1"
-                    }
+                    ]
                 }
             },
             "autoload": {
@@ -9708,11 +9700,11 @@
     "packages-dev": [
         {
             "name": "baracod/larastarterkit-generator",
-            "version": "1.0.0-rc.1",
+            "version": "1.0.0-rc.4",
             "dist": {
                 "type": "path",
                 "url": "packages/generator",
-                "reference": "1eb2c1cc567678c4bdd1840388e921066ad1706f"
+                "reference": "5f0407f96047b36d8d3b3a2e60ccb8c395c85cc5"
             },
             "require": {
                 "baracod/larastarterkit-core": "^1.0@RC",

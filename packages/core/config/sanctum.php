@@ -16,9 +16,11 @@ return [
     */
 
     'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-        '%s%s',
+        '%s%s%s',
         'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-        Sanctum::currentApplicationUrlWithPort()
+        Sanctum::currentApplicationUrlWithPort(),
+        // The SPA is served by this application: accept its own host whatever the port or APP_URL.
+        Sanctum::currentRequestHost()
     ))),
 
     /*
