@@ -19,21 +19,21 @@ class RoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id.integer' => 'Le champ id doit être un entier.',
-            'name.required' => 'Le champ name est obligatoire.',
-            'name.string' => 'Le champ name doit être une chaîne de caractères.',
-            'name.max' => 'Le champ name dépasse la longueur maximale autorisée.',
-            'display_name.required' => 'Le champ display_name est obligatoire.',
-            'display_name.string' => 'Le champ display_name doit être une chaîne de caractères.',
-            'display_name.max' => 'Le champ display_name dépasse la longueur maximale autorisée.',
-            'description.string' => 'Le champ description doit être une chaîne de caractères.',
-            'description.max' => 'Le champ description dépasse la longueur maximale autorisée.',
-            'order.integer' => 'Le champ order doit être un entier.',
-            'is_owner.boolean' => 'Le champ is_owner doit être vrai ou faux.',
-            'created_at.date_format' => 'Le champ created_at doit respecter le format requis.',
-            'created_at.before' => 'Le champ created_at doit être une date antérieure.',
-            'updated_at.date_format' => 'Le champ updated_at doit respecter le format requis.',
-            'updated_at.before' => 'Le champ updated_at doit être une date antérieure.',
+            'id.integer' => 'Le champ « identifiant » doit être un entier.',
+            'name.required' => 'Le champ « nom » est obligatoire.',
+            'name.string' => 'Le champ « nom » doit être une chaîne de caractères.',
+            'name.max' => 'Le champ « nom » dépasse la longueur maximale autorisée.',
+            'display_name.required' => 'Le champ « nom d\'affichage » est obligatoire.',
+            'display_name.string' => 'Le champ « nom d\'affichage » doit être une chaîne de caractères.',
+            'display_name.max' => 'Le champ « nom d\'affichage » dépasse la longueur maximale autorisée.',
+            'description.string' => 'Le champ « description » doit être une chaîne de caractères.',
+            'description.max' => 'Le champ « description » dépasse la longueur maximale autorisée.',
+            'order.integer' => 'Le champ « ordre » doit être un entier.',
+            'is_owner.boolean' => 'Le champ « propriétaire » doit être vrai ou faux.',
+            'created_at.date_format' => 'Le champ « date de création » doit respecter le format requis.',
+            'created_at.before' => 'Le champ « date de création » doit être une date antérieure.',
+            'updated_at.date_format' => 'Le champ « date de modification » doit respecter le format requis.',
+            'updated_at.before' => 'Le champ « date de modification » doit être une date antérieure.',
         ];
     }
 

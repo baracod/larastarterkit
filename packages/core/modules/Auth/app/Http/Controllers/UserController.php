@@ -120,12 +120,13 @@ class UserController extends Controller
 
     public function setRolesToUser(Request $request, int $id)
     {
-        try {
-            $data = $request->validate([
-                'roles' => 'required|array',
-                'roles.*' => 'exists:auth_roles,id',
-            ]);
+        // Validated outside the try block so errors return 422, and an empty list removes every role.
+        $data = $request->validate([
+            'roles' => 'present|array',
+            'roles.*' => 'exists:auth_roles,id',
+        ]);
 
+        try {
             $user = User::findOrFail($id);
             $user->roles()->sync($data['roles']);
 
@@ -138,7 +139,7 @@ class UserController extends Controller
                 'exception' => $e,
             ]);
 
-            return ApiResponse::error('An unexpected error occurred.', 500);
+            return ApiResponse::error('Une erreur inattendue est survenue.', 500);
         }
     }
 
@@ -191,7 +192,7 @@ class UserController extends Controller
                 'exception' => $e,
             ]);
 
-            return ApiResponse::error('An unexpected error occurred.', 500);
+            return ApiResponse::error('Une erreur inattendue est survenue.', 500);
         }
     }
 
@@ -216,7 +217,7 @@ class UserController extends Controller
                 'exception' => $e,
             ]);
 
-            return ApiResponse::error('An unexpected error occurred.', 500);
+            return ApiResponse::error('Une erreur inattendue est survenue.', 500);
         }
     }
 

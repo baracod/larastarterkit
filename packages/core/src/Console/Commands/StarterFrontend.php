@@ -69,8 +69,47 @@ class StarterFrontend extends Command
         }
         File::ensureDirectoryExists(dirname($file));
         File::put($file, $payload);
+        $this->writeTypeScriptConfig($registry);
         $this->info('Frontend dependency manifest generated. Run pnpm install before building.');
 
         return self::SUCCESS;
+    }
+
+    private function writeTypeScriptConfig(ModuleRegistry $registry): void
+    {
+        $frontend = realpath(dirname(__DIR__, 3).'/frontend');
+        $paths = [
+            '@/*' => [$frontend.'/resources/ts/*'],
+            '@core/*' => [$frontend.'/resources/ts/@core/*'],
+            '@core' => [$frontend.'/resources/ts/@core'],
+            '@layouts/*' => [$frontend.'/resources/ts/@layouts/*'],
+            '@layouts' => [$frontend.'/resources/ts/@layouts'],
+            '@themeConfig' => [$frontend.'/themeConfig.ts'],
+            '@images/*' => [$frontend.'/resources/images/*'],
+            '@styles/*' => [$frontend.'/resources/styles/*'],
+            '@app/*' => [base_path('resources/ts/*')],
+        ];
+        foreach ($registry->all() as $name => $module) {
+            // Same containment rule as the Vite registry: the frontend path must stay inside its module.
+            $root = realpath($module['path']);
+            $source = realpath($module['path'].'/'.($module['frontend']['path'] ?? 'resources/ts'));
+            if ($root && $source && str_starts_with($source, $root.DIRECTORY_SEPARATOR)) {
+                $paths['@'.strtolower($name).'/*'] = [$source.'/*'];
+            }
+        }
+        $config = ['compilerOptions' => [
+            'target' => 'ESNext',
+            'module' => 'ESNext',
+            'moduleResolution' => 'Bundler',
+            'baseUrl' => '..',
+            'paths' => $paths,
+            'jsx' => 'preserve',
+            'resolveJsonModule' => true,
+            'esModuleInterop' => true,
+            'isolatedModules' => true,
+            'lib' => ['ESNext', 'DOM', 'DOM.Iterable'],
+            'types' => ['vite/client', 'unplugin-vue-router/client', 'vite-plugin-vue-layouts/client'],
+        ]];
+        File::put(base_path('.larastarterkit/tsconfig.json'), json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n");
     }
 }

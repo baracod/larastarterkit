@@ -54,7 +54,7 @@ Route::middleware(['auth:sanctum', 'active', 'must_change_pass', \Baracod\Larast
     Route::get('users/{id}/notifications', 'Modules\Auth\Http\Controllers\UserNotificationController@index')->name('auth-user-notification-index')->whereNumber('id');
     Route::post('users/{id}/notifications/{notificationId}/read', 'Modules\Auth\Http\Controllers\UserNotificationController@markAsRead')->name('auth-user-notification-read')->whereNumber('id')->whereNumber('notificationId');
     Route::post('users/{id}/notifications/read-all', 'Modules\Auth\Http\Controllers\UserNotificationController@markAllAsRead')->name('auth-user-notification-read-all')->whereNumber('id');
-    Route::resource('users', 'Modules\Auth\Http\Controllers\UserController')->names('auth-user')
+    Route::apiResource('users', 'Modules\Auth\Http\Controllers\UserController')->names('auth-user')
         ->middlewareFor('index', 'ability:browse,auth_users')
         ->middlewareFor(['create', 'store'], 'ability:add,auth_users')
         ->middlewareFor(['edit', 'update'], 'ability:edit,auth_users')
@@ -79,7 +79,7 @@ Route::middleware(['auth:sanctum', 'active', 'must_change_pass', \Baracod\Larast
         ->middleware('ability:edit,auth_roles')
         ->middleware('administrator')->name('auth-role-detach-permissions');
 
-    Route::resource('roles', 'Modules\Auth\Http\Controllers\RoleController')->names('auth-role')
+    Route::apiResource('roles', 'Modules\Auth\Http\Controllers\RoleController')->names('auth-role')
         ->middlewareFor(['index', 'show'], 'ability:browse,auth_roles')
         ->middlewareFor(['create', 'store'], ['administrator', 'ability:add,auth_roles'])
         ->middlewareFor(['edit', 'update'], ['administrator', 'ability:edit,auth_roles'])
@@ -87,7 +87,7 @@ Route::middleware(['auth:sanctum', 'active', 'must_change_pass', \Baracod\Larast
 
     // permissions
     Route::delete('permissions/delete-multiple', ['Modules\Auth\Http\Controllers\PermissionController', 'destroyMultiple'])->middleware('ability:delete,auth_permissions')->middleware('administrator')->name('auth-permission-delete-multiple');
-    Route::resource('permissions', 'Modules\Auth\Http\Controllers\PermissionController')->names('auth-permission')
+    Route::apiResource('permissions', 'Modules\Auth\Http\Controllers\PermissionController')->names('auth-permission')
         ->middlewareFor(['index', 'show'], 'ability:browse,auth_permissions')
         ->middlewareFor(['create', 'store'], ['administrator', 'ability:add,auth_permissions'])
         ->middlewareFor(['edit', 'update'], ['administrator', 'ability:edit,auth_permissions'])

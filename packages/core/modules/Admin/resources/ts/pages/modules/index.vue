@@ -61,7 +61,7 @@ const handleToggle = async (module: any) => {
               size="12"
               class="me-2"
             />
-            {{ module.enabled ? 'Actif' : 'Inactif' }}
+            {{ module.enabled ? $t('Admin.modules.active') : $t('Admin.modules.inactive') }}
           </td>
           <td class="font-weight-bold">
             {{ module.name }}

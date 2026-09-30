@@ -343,7 +343,8 @@
     "invalidSettings": "Vérifiez le format et les valeurs des paramètres.",
     "moduleSettings": "Paramètres des modules",
     "moduleSettingsHelp": "Liste JSON : module, key et value (objet ou liste).",
-    "noDocumentContexts": "Aucun dossier documentaire enregistré. Consultez la documentation pour intégrer votre module."
+    "noDocumentContexts": "Aucun dossier documentaire enregistré. Consultez la documentation pour intégrer votre module.",
+    "noResults": "Aucun module ne correspond à votre recherche."
   },
   "sharedDashboard": {
     "title": "Accueil"
@@ -356,5 +357,15 @@
       "forbiddenDescription": "Vous ne disposez pas des permissions nécessaires pour accéder à cette page.",
       "backHome": "Retour à l’accueil"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "all": "Toutes",
+    "unread": "Non lues",
+    "newCount": "{count} nouvelle(s)",
+    "markAllRead": "Tout marquer comme lu",
+    "markAllUnread": "Tout marquer comme non lu",
+    "empty": "Aucune notification",
+    "remove": "Supprimer"
   }
 }

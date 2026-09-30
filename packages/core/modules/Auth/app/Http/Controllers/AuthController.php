@@ -30,6 +30,16 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
+        // Cookie authentication needs a session: Sanctum only starts one for stateful (first-party) origins.
+        if (! $request->hasSession()) {
+            Log::channel('auth')->warning('Login refused: request origin is not a Sanctum stateful domain', [
+                'origin' => $request->headers->get('origin') ?? $request->headers->get('referer'),
+                'ip' => $request->ip(),
+            ]);
+
+            return ApiResponse::error('Origine non autorisée pour la connexion. Ajoutez ce domaine à SANCTUM_STATEFUL_DOMAINS.', 419);
+        }
+
         $credentials = $request->only(['email', 'password']);
         $rememberMe = $request->boolean('remember_me', false);
 

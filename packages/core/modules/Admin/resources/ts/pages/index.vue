@@ -90,7 +90,7 @@ const stats = computed(() => [
                 :color="module.enabled ? 'success' : 'error'"
                 size="small"
               >
-                {{ module.enabled ? $t('Admin.modules.enable') : $t('Admin.modules.disable') }}
+                {{ module.enabled ? $t('Admin.modules.active') : $t('Admin.modules.inactive') }}
               </VChip>
             </template>
           </VListItem>

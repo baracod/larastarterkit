@@ -16,13 +16,13 @@ class UpdateSettingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'type.in' => 'Le champ type doit etre system, module ou user.',
-            'key.required' => 'Le champ key est obligatoire.',
-            'key.string' => 'Le champ key doit etre une chaine de caracteres.',
-            'module.required_if' => 'Le champ module est obligatoire pour un setting de type module.',
-            'user_id.required_if' => 'Le champ user_id est obligatoire pour un setting de type user.',
-            'user_id.exists' => 'Le champ user_id doit correspondre a un utilisateur existant.',
-            'value_type.in' => 'Le champ value_type est invalide.',
+            'type.in' => 'Le champ « type » doit etre system, module ou user.',
+            'key.required' => 'Le champ « clé » est obligatoire.',
+            'key.string' => 'Le champ « clé » doit etre une chaine de caracteres.',
+            'module.required_if' => 'Le champ « module » est obligatoire pour un setting de type module.',
+            'user_id.required_if' => 'Le champ « utilisateur » est obligatoire pour un setting de type user.',
+            'user_id.exists' => 'Le champ « utilisateur » doit correspondre a un utilisateur existant.',
+            'value_type.in' => 'Le champ « type de valeur » est invalide.',
         ];
     }
 

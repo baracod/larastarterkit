@@ -315,7 +315,8 @@
     "invalidSettings": "Check the settings format and values.",
     "moduleSettings": "Module settings",
     "moduleSettingsHelp": "JSON list: module, key and value (object or array).",
-    "noDocumentContexts": "No document contexts registered. See the documentation to integrate your module."
+    "noDocumentContexts": "No document contexts registered. See the documentation to integrate your module.",
+    "noResults": "No module matches your search."
   },
   "sharedDashboard": {
     "title": "Home"
@@ -328,5 +329,15 @@
       "forbiddenDescription": "You do not have permission to access this page.",
       "backHome": "Back to home"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "all": "All",
+    "unread": "Unread",
+    "newCount": "{count} new",
+    "markAllRead": "Mark all as read",
+    "markAllUnread": "Mark all as unread",
+    "empty": "No notifications",
+    "remove": "Remove"
   }
 }

@@ -198,7 +198,6 @@ function handleNavKeydown(event: KeyboardEvent) {
     font-size: 1.25rem;
     font-weight: 500;
     line-height: 1.75rem;
-    text-transform: uppercase;
   }
 }
 </style>
@@ -284,18 +283,30 @@ function handleNavKeydown(event: KeyboardEvent) {
 </style>
 
 <style lang="scss">
+// ℹ️ The button fills the circular `.header-action` exactly so the toggle stays round and centered on the nav edge.
 .layout-vertical-nav .nav-header-control {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 36px;
-  block-size: 36px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
-  color: rgb(var(--v-theme-primary));
-  background: rgb(var(--v-theme-surface));
+  background: transparent;
+  block-size: 100%;
+  color: inherit;
   cursor: pointer;
+  inline-size: 100%;
+
+  // Larger invisible hit area without changing the drawn circle.
+  &::before {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    inset: -7px;
+  }
 }
+
 .layout-vertical-nav :is(a, button):focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: -2px;

@@ -18,7 +18,9 @@
     "status": "Status",
     "actions": "Actions",
     "toggle_success": "Status updated successfully",
-    "confirm_toggle": "Are you sure you want to change this module status?"
+    "confirm_toggle": "Are you sure you want to change this module status?",
+    "active": "Active",
+    "inactive": "Inactive"
   },
   "notifications": {
     "title": "Notifications",

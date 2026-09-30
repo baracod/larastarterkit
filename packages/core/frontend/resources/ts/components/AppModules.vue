@@ -11,7 +11,8 @@ const props = withDefaults(defineProps<Props>(), {
   togglerIcon: 'bx-grid-alt',
 })
 
-const { t } = useI18n()
+const { t, te } = useI18n()
+const moduleLabel = (title: string) => te(`navigation.moduleLabels.${title}`) ? t(`navigation.moduleLabels.${title}`) : title
 </script>
 
 <template>
@@ -55,7 +56,7 @@ const { t } = useI18n()
                 :to="module.to"
                 variant="text"
                 class="h-auto pa-2 w-100 text-none"
-                :aria-label="t(`navigation.moduleLabels.${module.title}`)"
+                :aria-label="moduleLabel(module.title)"
               >
                 <div>
                   <VAvatar
@@ -70,7 +71,7 @@ const { t } = useI18n()
                   </VAvatar>
 
                   <h6 class="text-base font-weight-medium mt-3 mb-0">
-                    {{ t(`navigation.moduleLabels.${module.title}`) }}
+                    {{ moduleLabel(module.title) }}
                   </h6>
                 </div>
               </VBtn>

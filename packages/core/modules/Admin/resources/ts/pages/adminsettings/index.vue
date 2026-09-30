@@ -56,6 +56,9 @@ const openEditDialog = (item?: IAdminSetting) => {
   editDialog.value = true
 }
 
+// Bound to click handlers: never forward the click event as the edited item.
+const openAddDialog = () => openEditDialog()
+
 const openDetailDialog = (item?: IAdminSetting) => {
   selectedItem.value = item || null
   editDialog.value = true
@@ -154,7 +157,7 @@ const searchKey = ref('')
           color="success"
           :title="t('action.add')"
           icon="bx-plus"
-          @click="openEditDialog"
+          @click="openAddDialog"
         />
         <VBtn
           v-if="selectedItems.length"

@@ -47,7 +47,8 @@
     ],
     "post-create-project-cmd": [
       "@php artisan key:generate --ansi --no-interaction",
-      "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\""
+      "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+      "@php -r \"echo PHP_EOL.'Next steps:'.PHP_EOL.'  1. Configure .env (APP_URL, database)'.PHP_EOL.'  2. php artisan migrate --no-interaction'.PHP_EOL.'  3. php artisan larastarterkit:install --no-interaction'.PHP_EOL.'  4. php artisan auth:super-admin:create'.PHP_EOL.'  5. pnpm install && pnpm run build'.PHP_EOL;\""
     ]
   },
   "extra": {},

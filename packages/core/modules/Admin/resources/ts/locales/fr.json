@@ -18,7 +18,9 @@
     "status": "Statut",
     "actions": "Actions",
     "toggle_success": "Statut mis à jour avec succès",
-    "confirm_toggle": "Êtes-vous sûr de vouloir changer le statut de ce module ?"
+    "confirm_toggle": "Êtes-vous sûr de vouloir changer le statut de ce module ?",
+    "active": "Actif",
+    "inactive": "Inactif"
   },
   "notifications": {
     "title": "Notifications",
