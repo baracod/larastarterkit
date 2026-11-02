@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveRedirect } from '@/extension/runtime'
 import { themeConfig } from '@themeConfig'
 
 // Components
@@ -8,8 +9,11 @@ import UserProfile from '@auth/components/UserProfile.vue'
 import NavBarI18n from '@core/components/I18n.vue'
 import { HorizontalNavLayout } from '@layouts'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import type { IUser } from '@auth/types/entities'
 
 const navItems = useModuleMenu()
+const userData = useCookie<IUser | null>('userData')
+const homeTarget = computed(() => resolveRedirect('home', userData.value ?? null))
 </script>
 
 <template>
@@ -17,7 +21,7 @@ const navItems = useModuleMenu()
     <!-- 👉 navbar -->
     <template #navbar>
       <RouterLink
-        to="/"
+        :to="homeTarget"
         class="app-logo d-flex align-center gap-x-2"
       >
         <VNodeRenderer :nodes="themeConfig.app.logo" />
@@ -27,7 +31,9 @@ const navItems = useModuleMenu()
         </h1>
       </RouterLink>
       <ModuleNavbarExtension />
+      <StarterSlot name="navbar-start" />
       <VSpacer />
+      <StarterSlot name="navbar-end" />
 
       <NavBarI18n
         v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"

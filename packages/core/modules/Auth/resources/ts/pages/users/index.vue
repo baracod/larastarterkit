@@ -236,6 +236,7 @@ const emmetAction = (action: string) => {
         >
           {{ t('action.add') }}
         </VBtn>
+        <StarterSlot name="users-list-actions" />
 
         <!-- Menu des actions -->
         <VMenu>

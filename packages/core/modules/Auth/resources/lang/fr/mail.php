@@ -8,6 +8,7 @@ return [
         'cta' => 'Réinitialiser le mot de passe',
         'expire' => 'Ce lien est valable pendant :minutes minutes.',
         'ignore' => 'Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer ce message.',
+        'notification' => 'Lien de réinitialisation valable :minutes minutes.',
         'footer' => '© :year :app — Tous droits réservés.',
     ],
 ];

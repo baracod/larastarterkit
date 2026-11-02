@@ -2,6 +2,8 @@
 
 namespace Modules\Auth\Providers;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
+use Baracod\Larastarterkit\Core\Support\ModuleTranslations;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
 
         Gate::policy(User::class, UserPolicy::class);
+        Larastarterkit::registerUserMorphAlias();
         Gate::before(fn (User $user): ?bool => $user->hasRole('administrator') ? true : null);
     }
 
@@ -71,15 +74,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->nameLower);
-
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, $this->nameLower);
-            $this->loadJsonTranslationsFrom($langPath);
-        } else {
-            $this->loadTranslationsFrom(module_path($this->name, 'resources/lang'), $this->nameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->name, 'resources/lang'));
-        }
+        ModuleTranslations::register($this->app, $this->nameLower, module_path($this->name, 'resources/lang'), resource_path('lang/modules/'.$this->nameLower));
     }
 
     /**

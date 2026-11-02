@@ -63,7 +63,7 @@ class UpdateSettingRequest extends FormRequest
         }
 
         throw new HttpResponseException(response()->json([
-            'message' => 'Validation failed',
+            'message' => __('admin::messages.validation_failed'),
             'errors' => $errors,
         ], 422));
     }

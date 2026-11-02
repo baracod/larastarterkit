@@ -2,12 +2,12 @@
 
 namespace Modules\Auth\Console\Commands;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
-use Modules\Auth\Models\User;
 
 class SuperAdminPasswordCommand extends Command
 {
@@ -30,7 +30,7 @@ class SuperAdminPasswordCommand extends Command
             return self::FAILURE;
         }
 
-        $user = User::where('email', $email)->first();
+        $user = Larastarterkit::newUserQuery()->where('email', $email)->first();
         if (! $user || ! $user->hasRole('administrator')) {
             $this->error('Aucun super administrateur ne correspond à cet email.');
 
@@ -58,7 +58,7 @@ class SuperAdminPasswordCommand extends Command
         }
 
         DB::transaction(function () use ($user, $password): void {
-            $user = User::query()->lockForUpdate()->findOrFail($user->id);
+            $user = Larastarterkit::newUserQuery()->lockForUpdate()->findOrFail($user->id);
             // Recheck the role after acquiring the lock, before changing any credentials.
             abort_unless($user->hasRole('administrator'), 403, 'Ce compte n’est plus super administrateur.');
             $user->forceFill([

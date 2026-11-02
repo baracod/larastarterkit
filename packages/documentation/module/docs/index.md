@@ -6,6 +6,7 @@ Un socle Laravel 12 + Vue 3 + Vuetify pour construire des applications modulaire
 - [Installation](./installation)
 - [Authentification et administration](./auth-admin)
 - [Créer un module](./modules)
+- [Points d'extension](./extension)
 - [Composants réutilisables](./components)
 - [Documents et PDF](./documents)
 - [Tests](./tests)

@@ -39,7 +39,7 @@ class PermissionController
 
         $model->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('auth::messages.deleted')]);
     }
 
     public function destroyMultiple(Request $request)
@@ -50,6 +50,6 @@ class PermissionController
 
         $model->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('auth::messages.deleted')]);
     }
 }

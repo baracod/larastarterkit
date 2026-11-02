@@ -24,6 +24,8 @@ function loadStore() {
         return { stopRealtime: () => {} }
       if (name === '@auth/api/Auth')
         return { AuthAPI: { logout: async () => {} } }
+      if (name === '@/extension/runtime')
+        return { resolveRedirect: () => ({ name: 'auth-login' }) }
       throw new Error(`Unexpected import: ${name}`)
     },
     defineStore,

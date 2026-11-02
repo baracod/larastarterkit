@@ -16,7 +16,7 @@ import vuetify from 'vite-plugin-vuetify'
 import svgLoader from 'vite-svg-loader'
 
 import { iconsPlugin } from './icons'
-import { installedModules, modulePlugin } from './modules'
+import { fileOverridePlugin, installedModules, modulePlugin, pageCollisionPlugin } from './modules'
 
 const uiRoot = fileURLToPath(new URL('../', import.meta.url))
 const ui = (relative: string) => path.join(uiRoot, relative)
@@ -71,6 +71,8 @@ export default defineConfig(async () => {
   return {
     plugins: [
       modulePlugin(registry),
+      fileOverridePlugin(path.resolve('resources/ts/overrides'), [{ name: 'core', source: ui('resources/ts') }, ...registry.modules.map(m => ({ name: m.name.toLowerCase(), source: m.source }))]),
+      pageCollisionPlugin(routesFolder, process.env.LARASTARTERKIT_STRICT_PAGES === 'true'),
       iconsPlugin(ui('resources/ts/plugins/iconify/build-icons.ts')),
 
       // 👉 Toujours avant `vue`
@@ -102,6 +104,7 @@ export default defineConfig(async () => {
         ],
       }),
 
+      // Order matters: a layout of the application with the same name replaces the core one (last directory wins).
       Layouts({ layoutsDirs: [ui('resources/ts/layouts/'), 'resources/ts/layouts'] }),
 
       AutoImport({

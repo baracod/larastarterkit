@@ -4,6 +4,7 @@ import type { RouteRecordRaw } from 'vue-router/auto'
 
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { canNavigate } from '@/@layouts/plugins/casl'
+import { applyPageOverrides, resolveRedirect, withQuery } from '@/extension/runtime'
 import useNavigationStore from '@/stores'
 import { useAuthStore } from '@auth/stores'
 import type { IUser } from '@auth/types/entities'
@@ -30,8 +31,10 @@ const router = createRouter({
 
     return { top: 0 }
   },
+
+  // Page overrides from starter.ts are applied before layouts so that a layout override is honoured.
   extendRoutes: pages => [
-    ...[...pages].map(route => recursiveLayouts(route)),
+    ...applyPageOverrides([...pages]).map(route => recursiveLayouts(route)),
   ],
 })
 
@@ -40,48 +43,46 @@ router.beforeEach(async to => {
 
   await navigation.initNavigationStore()
 
+  const userData = useCookie<IUser | null>('userData')
+  const isLoggedIn = !!userData.value
+  const authStore = isLoggedIn ? useAuthStore() : null
+  const user = authStore?.user ?? userData.value ?? null
+
   const moduleName = navigation.moduleNames.find(name => name.toLowerCase() === to.path.split('/')[1])
   if (moduleName && !navigation.isEnabled(moduleName))
-    return '/'
+    return resolveRedirect('home', user)
 
   if (to.meta.public)
     return
 
-  const isLoggedIn = !!useCookie('userData').value
-
   if (to.meta.unauthenticatedOnly) {
     if (isLoggedIn)
-      return '/'
+      return resolveRedirect('home', user)
     else
       return undefined
   }
 
   // Rediriger vers la page de changement de mot de passe si requis
-  if (isLoggedIn && to.name !== 'auth-change-password') {
-    const userData = useCookie<IUser | null>('userData')
-    const authStore = useAuthStore()
-    const mustChange = authStore.user?.mustChangePassword ?? userData.value?.mustChangePassword
+  if (isLoggedIn && (authStore?.user?.mustChangePassword ?? userData.value?.mustChangePassword)) {
+    const target = router.resolve(resolveRedirect('mustChangePassword', user))
 
-    if (mustChange)
-      return { name: 'auth-change-password' }
+    if (to.path !== target.path)
+      return target
   }
 
   if (to.meta.authenticatedOnly)
-    return isLoggedIn ? undefined : { name: 'auth-login', query: { to: to.fullPath } }
+    return isLoggedIn ? undefined : withQuery(resolveRedirect('login'), { to: to.fullPath })
 
   const can = canNavigate(to)
 
   if (!can && to.matched.length) {
     if (isLoggedIn)
-      return { name: 'not-authorized' }
+      return resolveRedirect('notAuthorized', user)
 
-    return {
-      name: 'auth-login',
-      query: {
-        ...to.query,
-        to: to.fullPath !== '/' ? to.path : undefined,
-      },
-    }
+    return withQuery(resolveRedirect('login'), {
+      ...to.query as Record<string, string>,
+      to: to.fullPath !== '/' ? to.path : undefined,
+    })
   }
 })
 

@@ -5,5 +5,7 @@ definePage({ meta: { authenticatedOnly: true } })
 </script>
 
 <template>
+  <StarterSlot name="dashboard-start" />
   <Home />
+  <StarterSlot name="dashboard-end" />
 </template>

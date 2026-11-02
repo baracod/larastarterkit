@@ -8,6 +8,7 @@ import AuthPasswordField from '@auth/components/AuthPasswordField.vue'
 import { useAuthForm } from '@auth/composable/useAuthForm'
 import { useAuthStore } from '@auth/stores'
 import type { IUser } from '@auth/types/entities'
+import { resolveRedirect } from '@/extension/runtime'
 
 const emailLocale = useAuthMailLanguage()
 
@@ -20,11 +21,14 @@ const { formRef, loading, errorMessage, emailRules, required, beginSubmit, showE
 const credentials = ref({ email: '', password: '' })
 const rememberMe = ref(false)
 
-const destination = computed(() => {
+function destination(user: IUser) {
   const target = route.query.to
 
-  return typeof target === 'string' && target.startsWith('/') && !target.startsWith('//') && !target.includes('\\') && !target.startsWith('/auth/login') ? target : '/'
-})
+  // Never go back to a login page, whether the core one or the one configured in starter.ts (redirects.login).
+  const loginPaths = ['/auth/login', router.resolve(resolveRedirect('login')).path]
+
+  return typeof target === 'string' && target.startsWith('/') && !target.startsWith('//') && !target.includes('\\') && !loginPaths.some(loginPath => target === loginPath || target.startsWith(`${loginPath}?`) || target.startsWith(`${loginPath}/`)) ? target : resolveRedirect('afterLogin', user)
+}
 
 async function login() {
   if (!await beginSubmit())
@@ -48,7 +52,7 @@ async function login() {
     })
 
     await nextTick(() => {
-      router.replace(destination.value)
+      router.replace(destination(user))
     })
   }
   catch (error: any) { showError(error) }
@@ -71,6 +75,7 @@ async function login() {
     >
       {{ errorMessage }}
     </VAlert>
+    <StarterSlot name="auth-login-before-form" />
     <VForm
       ref="formRef"
       validate-on="blur"
@@ -118,6 +123,7 @@ async function login() {
         {{ t('Auth.access.loginAction') }}
       </VBtn>
     </VForm>
+    <StarterSlot name="auth-login-after-form" />
     <p class="text-caption text-medium-emphasis mt-5 mb-0">
       {{ t('Auth.access.authorizedOnly') }}
     </p>

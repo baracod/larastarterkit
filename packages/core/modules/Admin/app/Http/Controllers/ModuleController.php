@@ -62,12 +62,12 @@ class ModuleController extends Controller
     {
         $primaryModules = $this->primaryModules();
         if (in_array($name, $primaryModules)) {
-            return response()->json(['message' => "Le module '{$name}' est primaire et ne peut pas être désactivé."], 403);
+            return response()->json(['message' => __('admin::messages.module_primary', ['name' => $name])], 403);
         }
 
         $statuses = $this->readStatuses();
         if (! isset($statuses[$name])) {
-            return ApiResponse::notFound("Module '{$name}' non trouvé.");
+            return ApiResponse::notFound(__('admin::messages.module_not_found', ['name' => $name]));
         }
 
         $statuses[$name] = ! $statuses[$name];

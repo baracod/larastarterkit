@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveRedirect } from '@/extension/runtime'
 import { useAuthStore } from '@auth/stores'
 import { themeConfig } from '@themeConfig'
 
@@ -54,7 +55,9 @@ const actionArrowInitialRotation = configStore.isVerticalNavCollapsed ? '180deg'
         </IconBtn>
         <NavSearchBar class="ms-lg-n3 base-nav-search" />
         <ModuleNavbarExtension />
+        <StarterSlot name="navbar-start" />
         <VSpacer />
+        <StarterSlot name="navbar-end" />
         <NavbarThemeSwitcher />
         <NavbarI18n
           v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
@@ -69,7 +72,7 @@ const actionArrowInitialRotation = configStore.isVerticalNavCollapsed ? '180deg'
         <UserProfile v-if="isLoggedIn" />
         <VBtn
           v-else
-          :to="{ name: 'auth-login' }"
+          :to="resolveRedirect('login')"
         >
           {{ t('action.login') }}
         </VBtn>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Auth\Console\Commands;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -40,7 +41,7 @@ final class CreateSuperAdminCommand extends Command
             return self::FAILURE;
         }
 
-        $existing = User::where('email', $email)->first();
+        $existing = Larastarterkit::newUserQuery()->where('email', $email)->first();
         $name = $this->resolveName($existing !== null);
         $password = $this->resolvePassword($existing !== null);
 
@@ -141,7 +142,7 @@ final class CreateSuperAdminCommand extends Command
         $base = Str::slug(Str::before($email, '@')) ?: 'super-admin';
         $candidate = $base;
 
-        while (User::where('username', $candidate)->exists()) {
+        while (Larastarterkit::newUserQuery()->where('username', $candidate)->exists()) {
             $candidate = $base.'-'.Str::random(6);
         }
 
@@ -187,7 +188,7 @@ final class CreateSuperAdminCommand extends Command
 
     private function ensureUser(string $name, string $username, string $email, ?string $password, ?User $existing = null): User
     {
-        $user = $existing ?? new User([
+        $user = $existing ?? Larastarterkit::newUser([
             'name' => $name,
             'username' => $username,
             'email' => $email,

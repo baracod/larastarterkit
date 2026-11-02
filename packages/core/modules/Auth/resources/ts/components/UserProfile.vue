@@ -145,6 +145,11 @@ const toSettings = () => openProfileTab('settings')
             <VListItemTitle>{{ t('Auth.profile.tabs.settings') }}</VListItemTitle>
           </VListItem>
 
+          <StarterSlot
+            name="user-menu"
+            :context="{ user }"
+          />
+
           <!-- Divider -->
           <VDivider class="my-2" />
 

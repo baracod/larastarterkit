@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resolveRedirect } from '@/extension/runtime'
 import { AuthAPI } from '../api/Auth'
 import AuthAccessPanel from '../components/AuthAccessPanel.vue'
 import { useAuthForm } from '../composable/useAuthForm'
@@ -84,8 +85,9 @@ async function submit() {
         {{ t('Auth.access.sendLink') }}
       </VBtn>
     </VForm>
+    <StarterSlot name="auth-forgot-password-after-form" />
     <RouterLink
-      to="/auth/login"
+      :to="resolveRedirect('login')"
       class="mt-4"
     >
       <VIcon

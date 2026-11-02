@@ -59,7 +59,7 @@ class ResetPasswordLink extends QueuedAuthMail
         return [
             'type' => 'warning',
             'title' => $this->translate('auth::mail.reset.subject', ['app' => $appName]),
-            'message' => "Lien de réinitialisation valable {$minutes} minutes.",
+            'message' => $this->translate('auth::mail.reset.notification', ['minutes' => $minutes]),
             'data' => [
                 'action_url' => 'auth/reset-password',
                 'expires_at' => now()->addMinutes($minutes)->toIso8601String(),
