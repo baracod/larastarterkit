@@ -146,6 +146,8 @@ $this->app->bind(\Modules\Auth\Services\PasswordService::class, \App\Services\Pa
 
 Les noms de classes et méthodes publiques sont couverts par les règles de version ci-dessous ; le code interne d'une méthode ne l'est pas.
 
+Les politiques se remplacent avec `Gate::policy()` dans le `boot()` d'un provider de l'application, et les middlewares `active`, `ability`, `administrator` et `must_change_pass` sont déclarés dans `bootstrap/app.php`, qui appartient à l'application : un alias peut y pointer vers votre propre classe.
+
 ## Messages du backend
 
 Les messages renvoyés par Auth et Admin passent par les traductions `auth::messages` et `admin::messages` (français et anglais), dans la langue `APP_LOCALE`. Pour en redéfinir un, créez `lang/vendor/auth/fr/messages.php` dans l'application avec seulement les clés à changer. Un dossier historique `resources/lang/modules/auth` est aussi pris en compte : ses clés remplacent celles du module une par une, sans masquer les autres.

@@ -8,7 +8,13 @@ vendor/bin/phpunit
 pnpm run lint
 pnpm run typecheck
 pnpm run build
-pnpm --dir Modules/Documentation run docs:build
 ```
 
-Les tests couvrent installation, seeding idempotent, Auth/Admin, documents et activation des modules. Vérifiez également les pages avec un administrateur et un utilisateur sans permissions.
+Utilisez `vendor/bin/phpunit` plutôt que `php artisan test`, qui transmet des options globales non prises en charge.
+
+## Tester ses modules
+
+- Placez les tests d'un module dans `Modules/<Nom>/tests/Feature` et `tests/Unit` ; ajoutez ces dossiers aux suites de `phpunit.xml` de l'application s'ils n'y figurent pas.
+- Le générateur produit un test d'API par CRUD : authentification, permissions, création, validation et suppression groupée.
+- Vérifiez chaque écran avec un administrateur et avec un utilisateur sans permission : l'API doit refuser, pas seulement l'interface.
+- Une surcharge (`pages`, `resources/ts/overrides`, liaison de classe) se teste comme le reste de l'application ; relancez ces tests après chaque mise à jour du kit.
