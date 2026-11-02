@@ -3,6 +3,7 @@
 namespace Baracod\Larastarterkit\Core\Http\Middleware;
 
 use Baracod\Larastarterkit\Core\Helpers\CaseConvert;
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +39,7 @@ class ProtectPrivilegedAccounts
             abort_unless(is_scalar($id) && ctype_digit((string) $id), 422);
         }
 
-        $targetsAdministrator = \Modules\Auth\Models\User::query()
+        $targetsAdministrator = Larastarterkit::newUserQuery()
             ->whereKey($ids)
             ->whereHas('roles', fn ($query) => $query->where('name', 'administrator'))
             ->exists();

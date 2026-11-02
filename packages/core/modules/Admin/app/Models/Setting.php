@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Models;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,7 +46,7 @@ class Setting extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Larastarterkit::userModel());
     }
 
     /**

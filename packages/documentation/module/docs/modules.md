@@ -1,11 +1,91 @@
 # Créer un module
 
-Utilisez les commandes `module:make` et les stubs existants ; `php artisan help module:make --no-interaction` décrit les options installées. Le générateur produit un CRUD complet (migration, modèle, validation, contrôleur, routes protégées, permissions, factory, test, écrans et traductions) : `larastarterkit:definition` décrit l'entité (liste de champs, table existante ou description confiée à l'IA), `larastarterkit:crud` génère, `larastarterkit` propose le menu interactif, `larastarterkit:module` crée un module. L'assistance IA (Laravel AI SDK) est facultative : `php artisan larastarterkit:ai` affiche son état. Guide complet : `vendor/baracod/larastarterkit-generator/docs/USAGE.md`.
+Un module regroupe une fonctionnalité : backend, frontend, permissions et traductions. Le plus simple est de le créer avec le [générateur](./generateur) :
 
-Un module contient son manifeste `module.json`, son provider, ses routes, migrations, composants, pages et traductions. Les espaces de noms PHP suivent `Modules\Nom\` vers `Modules/Nom/app/`. Enregistrez cet autoload dans Composer, puis lancez `composer dump-autoload`.
+```sh
+php artisan larastarterkit:module Shop --description="Boutique"
+composer dump-autoload
+```
 
-Les pages de `resources/ts/pages` du module sont routées sous son nom en minuscules. Les alias Vite utilisent `@nom`. Les bibliothèques Vue, Pinia et i18n sont auto-importées. Utilisez ofetch, les composants Core et `t()` pour les textes visibles.
+## Structure
 
-Renseignez `modules_statuses.json`, `Modules/modules.json` et le menu du module. Auth et Admin constituent le socle obligatoire. Un module optionnel doit vérifier son activation côté API avec `EnsureModuleEnabled` et ne pas être importé directement par le socle obligatoire.
+```
+Modules/Shop/
+├── module.json                 ← manifeste
+├── composer.json
+├── app/                        ← namespace Modules\Shop\
+│   ├── Http/Controllers/
+│   ├── Models/
+│   └── Providers/ShopServiceProvider.php
+├── routes/api.php
+├── database/migrations/, seeders/, factories/
+├── lang/ ou resources/lang/
+├── tests/Feature/
+└── resources/ts/
+    ├── pages/                  ← routées sous /shop/…
+    ├── components/             ← auto-importés
+    ├── composable/             ← auto-importés
+    ├── api/, types/
+    ├── locales/fr.json, en.json
+    └── menuItems.json          ← menu du module
+```
 
-Le frontend charge la disponibilité des modules via `/api/v1/modules`. Ajouter ou retirer physiquement un module nécessite de reconstruire le frontend, de régénérer l'autoload et de redémarrer les workers. Une désactivation conserve les données. Videz les caches de routes lors d'un changement de déploiement.
+L'espace de noms PHP `Modules\Shop\` pointe vers `Modules/Shop/app/`. Enregistrez cet autoload dans le `composer.json` de l'application (le générateur le fait), puis `composer dump-autoload`.
+
+## Le manifeste `module.json`
+
+```json
+{
+  "name": "Shop",
+  "alias": "shop",
+  "description": "Boutique",
+  "priority": 0,
+  "providers": ["Modules\\Shop\\Providers\\ShopServiceProvider"],
+  "requires": ["Catalog"],
+  "frontend": { "path": "resources/ts" },
+  "upgradeSeeders": ["Modules\\Shop\\Database\\Seeders\\GeneratedPermissionSeeder"],
+  "navigation": {
+    "title": "Boutique", "icon": "mdi-store", "module": "Shop",
+    "action": "browse", "subject": "shop", "to": { "name": "shop" }
+  }
+}
+```
+
+| Clé | Rôle |
+| --- | --- |
+| `providers` | Providers Laravel chargés quand le module est actif |
+| `requires` | Modules nécessaires |
+| `frontend.path` | Dossier des sources frontend (doit rester dans le module) |
+| `upgradeSeeders` | Seeders idempotents relancés par `larastarterkit:upgrade` (permissions, réglages par défaut) |
+| `navigation` | Entrée du module dans le catalogue et la navigation |
+| `models` | Définitions utilisées par le générateur CRUD |
+
+Les noms de modules sont uniques, y compris entre modules locaux et paquets Composer.
+
+## Frontend du module
+
+- Les pages de `resources/ts/pages` sont routées sous le nom du module en minuscules : `pages/products/index.vue` devient `/shop/products`, nommée `shop-products`.
+- L'alias `@shop` désigne `resources/ts` du module.
+- Les composants de `components/` et les composables de `composable/` sont auto-importés, comme Vue, Pinia et vue-i18n.
+- Les textes visibles passent par `t()` et les fichiers `locales/*.json` ; les appels HTTP par le client `$api` (ofetch) ; les dates par dayjs.
+- `menuItems.json` décrit le menu ; chaque entrée porte `action` et `subject` pour n'apparaître qu'aux utilisateurs autorisés.
+
+## Activer, désactiver
+
+Auth et Admin sont toujours actifs. Les autres modules s'activent dans Admin → Modules ou par `php artisan module:enable Shop --no-interaction`. L'état est stocké dans `modules_statuses.json`. Côté API, protégez les routes d'un module optionnel avec le middleware `EnsureModuleEnabled` ; le frontend lit la disponibilité des modules par `/api/v1/modules`. La désactivation conserve les données.
+
+## Règles
+
+- Un module optionnel ne doit pas être importé directement par Auth, Admin ou le socle.
+- Entre modules, préférez un contrat (interface PHP liée par défaut avec `bindIf`) à un import direct : le module consommateur fonctionne même si l'autre est absent.
+- Ajouter ou retirer **physiquement** un module impose de régénérer l'autoload, de reconstruire le frontend et de redémarrer les workers.
+
+## Distribuer un module
+
+Un module peut devenir un paquet Composer réutilisable :
+
+```sh
+php artisan larastarterkit:package Shop mon-organisation/shop --no-interaction
+```
+
+Le paquet déclare ses modules dans `extra.larastarterkit.modules` de son `composer.json` et porte ses dépendances JavaScript dans un `package.json` privé. Voir [Mettre à jour](./distribution).

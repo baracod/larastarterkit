@@ -245,7 +245,7 @@ class PortalBuilder
         ];
         $frontmatter['hero']['image'] = ['src' => $manifest['site']['hero_image'] ?? '/documentation.svg', 'alt' => $site['title']];
         $manifest['site']['logo_image'] ??= '/documentation.svg';
-        File::put($workspace.'/index.md', "---\n".json_encode($frontmatter, JSON_THROW_ON_ERROR | JSON_HEX_TAG)."\n---\n\n<div v-pre class=\"cms-catalogue\" id=\"catalogue\">\n".$home."\n</div>\n");
+        File::put($workspace.'/index.md', "---\n".json_encode($frontmatter, JSON_THROW_ON_ERROR | JSON_HEX_TAG)."\n---\n\n<div v-pre class=\"cms-catalogue\" id=\"catalogue\">\n".$this->withoutBlankLines($home)."\n</div>\n");
         File::put($workspace.'/.vitepress/portal.json', json_encode($manifest, JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP));
     }
 
@@ -287,7 +287,17 @@ class PortalBuilder
     {
         File::ensureDirectoryExists(dirname($file));
         $heading = preg_match('/^<h1[ >]/', ltrim($html)) ? '' : '<h1>'.e($title).'</h1>';
-        File::put($file, "---\ntitle: ".json_encode($title, JSON_THROW_ON_ERROR)."\n---\n\n<div v-pre>\n".$heading."\n".$html."\n</div>\n");
+        File::put($file, "---\ntitle: ".json_encode($title, JSON_THROW_ON_ERROR)."\n---\n\n<div v-pre>\n".$this->withoutBlankLines($heading."\n".$html)."\n</div>\n");
+    }
+
+    /**
+     * VitePress reads the exported page as Markdown, where a blank line ends an HTML block: the rest of a code block
+     * would then be parsed as Markdown and break the HTML. Blank lines inside <pre> become &#10; (same rendering),
+     * the others are dropped.
+     */
+    private function withoutBlankLines(string $html): string
+    {
+        return trim(preg_replace_callback('/(<pre\b.*?<\/pre>)|\n[ \t]*(?=\n)/s', fn ($match) => ($match[1] ?? '') !== '' ? preg_replace('/\n(?=[ \t]*\n)/', '&#10;', $match[1]) : '', $html));
     }
 
     private function navigation(array $pages, ?int $parent, string $prefix): array

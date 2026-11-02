@@ -2,9 +2,9 @@
 
 namespace Modules\Admin\Models;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Auth\Models\User;
 
 class Notification extends Model
 {
@@ -28,7 +28,7 @@ class Notification extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Larastarterkit::userModel());
     }
 
     public function scopeUnread($query)

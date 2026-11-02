@@ -8,6 +8,7 @@ return [
         'cta' => 'Reset Password',
         'expire' => 'This link will expire in :minutes minutes.',
         'ignore' => 'If you did not request a password reset, no further action is required.',
+        'notification' => 'Reset link valid for :minutes minutes.',
         'footer' => '© :year :app — All rights reserved.',
     ],
 ];

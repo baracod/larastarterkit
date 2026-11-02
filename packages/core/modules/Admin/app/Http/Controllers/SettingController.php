@@ -134,7 +134,7 @@ class SettingController extends Controller
         $setting = $this->settingService->find($id);
 
         if (! $setting) {
-            return ApiResponse::error('Paramètre non trouvé.', 404);
+            return ApiResponse::error(__('admin::messages.setting_not_found'), 404);
         }
 
         $data = $request->validated();
@@ -171,7 +171,7 @@ class SettingController extends Controller
             return ApiResponse::success(null, 'Paramètre supprimé avec succès.');
         }
 
-        return ApiResponse::error('Impossible de supprimer le paramètre.', 400);
+        return ApiResponse::error(__('admin::messages.setting_delete_failed'), 400);
     }
 
     /**

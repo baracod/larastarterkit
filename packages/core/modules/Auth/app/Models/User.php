@@ -20,6 +20,14 @@ class User extends Authenticatable
 
     protected $table = 'auth_users';
 
+    /**
+     * Keep `user_id` when an application extends this model (AUTH_MODEL): the default would derive it from the subclass name.
+     */
+    public function getForeignKey(): string
+    {
+        return 'user_id';
+    }
+
     public function receivesBroadcastNotificationsOn(): string
     {
         return 'user.'.$this->getKey();

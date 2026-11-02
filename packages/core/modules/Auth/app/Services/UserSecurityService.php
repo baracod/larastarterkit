@@ -2,6 +2,7 @@
 
 namespace Modules\Auth\Services;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Models\User;
@@ -17,7 +18,7 @@ class UserSecurityService
             throw new AuthorizationException('Vous n\'etes pas autorise a modifier ce mot de passe.');
         }
 
-        $targetUser = User::query()->findOrFail($targetUserId);
+        $targetUser = Larastarterkit::newUserQuery()->findOrFail($targetUserId);
 
         if (! Hash::check($currentPassword, (string) $targetUser->password)) {
             return false;

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resolveRedirect } from '@/extension/runtime'
 import { UserAPI } from '../api/User'
 import AuthAccessPanel from '../components/AuthAccessPanel.vue'
 import AuthPasswordField from '../components/AuthPasswordField.vue'
@@ -116,13 +117,13 @@ async function submit() {
       v-if="done"
       color="primary"
       block
-      @click="router.replace('/')"
+      @click="router.replace(resolveRedirect('home', authStore.user))"
     >
       {{ t('Auth.access.continue') }}
     </VBtn>
     <RouterLink
       v-else-if="!isForced"
-      to="/"
+      :to="resolveRedirect('home', authStore.user)"
       class="mt-4"
     >
       <VIcon

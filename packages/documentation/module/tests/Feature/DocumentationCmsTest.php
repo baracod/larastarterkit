@@ -306,6 +306,43 @@ class DocumentationCmsTest extends TestCase
         $this->assertSame(0, Publication::count());
     }
 
+    public function test_exported_pages_keep_code_blocks_with_blank_lines_in_one_html_block(): void
+    {
+        $html = app(MarkdownService::class)->render("# Code\n\n```ts\nconst a = 1\n\nconst b = 2\n```\n\nFin.", []);
+        $file = sys_get_temp_dir().'/lsk-export-'.uniqid().'.md';
+        $write = new \ReflectionMethod(PortalBuilder::class, 'writePage');
+        $write->invoke(app(PortalBuilder::class), $file, 'Code', $html);
+        $exported = File::get($file);
+        File::delete($file);
+
+        $body = substr($exported, strpos($exported, '<div v-pre>'));
+        $this->assertDoesNotMatchRegularExpression('/\n[ \t]*\n/', $body);
+        $this->assertStringContainsString('const a = 1&#10;', $body);
+        $this->assertStringContainsString('const b = 2', $body);
+    }
+
+    public function test_import_into_a_named_documentation_follows_the_sidebar_sections(): void
+    {
+        $options = ['--collection' => 'larastarterkit', '--title' => 'Larastarterkit', '--description' => 'Guide', '--no-interaction' => true];
+        $this->artisan('documentation:import', $options)->assertSuccessful();
+
+        $collection = Collection::where('slug', 'larastarterkit')->firstOrFail();
+        $this->assertSame('Larastarterkit', $collection->title);
+        $pages = Page::with('revision')->whereHas('edition', fn ($query) => $query->where('collection_id', $collection->id))->get()->keyBy(fn ($page) => $page->revision->path);
+        $section = $pages->get('utiliser-le-starter');
+        $this->assertNotNull($section);
+        $this->assertNull($section->revision->parent_id);
+        $this->assertSame($section->id, $pages->get('concepts')->revision->parent_id);
+        $this->assertSame($pages->get('maintenir-le-starter')->id, $pages->get('maintenir-depot')->revision->parent_id);
+        $this->assertNull($pages->get('introduction')->revision->parent_id);
+        $this->assertStringContainsString('](concepts.html)', $section->revision->markdown);
+
+        $count = Page::count();
+        $this->artisan('documentation:import', $options)->assertSuccessful();
+        $this->assertSame($count, Page::count());
+        $this->assertSame(0, Publication::count());
+    }
+
     public function test_site_settings_require_edit_permission_validate_links_and_reject_stale_updates(): void
     {
         $this->getJson('/api/v1/documentation/site-settings')->assertUnauthorized();

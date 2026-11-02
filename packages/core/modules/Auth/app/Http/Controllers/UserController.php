@@ -5,6 +5,7 @@ namespace Modules\Auth\Http\Controllers;
 use Baracod\Larastarterkit\Core\Helpers\ApiResponse;
 use Baracod\Larastarterkit\Core\Http\Controllers\Controller;
 use Baracod\Larastarterkit\Core\Http\Middleware\ConvertRequestToSnakeCase;
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return User::with('roles')->get();
+        return Larastarterkit::newUserQuery()->with('roles')->get();
     }
 
     public function show($id)
@@ -37,11 +38,11 @@ class UserController extends Controller
         // Soit c'est son propre profil, soit il a le rôle admin
         if ($authUser->id != $id && ! $authUser->hasRole('administrator')) {
             return response()->json([
-                'message' => 'Vous n\'êtes pas autorisé à accéder à ce profil.',
+                'message' => __('auth::messages.profile_view_forbidden'),
             ], 403);
         }
 
-        $user = User::with('roles')->findOrFail($id);
+        $user = Larastarterkit::newUserQuery()->with('roles')->findOrFail($id);
         $user->setAttribute('modules', ['settings' => $user->moduleSettings()->get(['module', 'key', 'value'])]);
 
         return $user;
@@ -51,13 +52,13 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
-        if (User::where('email', $validated['email'])->exists()) {
-            return ApiResponse::error('Email already exists', 422);
+        if (Larastarterkit::newUserQuery()->where('email', $validated['email'])->exists()) {
+            return ApiResponse::error(__('auth::messages.email_exists'), 422);
         }
 
         $emailLocale = $validated['email_locale'] ?? null;
         unset($validated['email_locale']);
-        $user = User::create($validated);
+        $user = Larastarterkit::newUserQuery()->create($validated);
         $user->notify(new LoginInstructions($emailLocale));
 
         return $user;
@@ -66,7 +67,7 @@ class UserController extends Controller
     public function sendLoginInstructions(Request $request, int $id)
     {
         abort_unless(auth()->user()->hasRole('administrator'), 403);
-        $user = User::findOrFail($id);
+        $user = Larastarterkit::newUserQuery()->findOrFail($id);
         $data = $request->validate(['email_locale' => 'sometimes|string|in:fr,en']);
         $user->notify(new LoginInstructions($data['email_locale'] ?? null));
 
@@ -87,22 +88,22 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $model = User::findOrFail($id);
+        $model = Larastarterkit::newUserQuery()->findOrFail($id);
 
         $model->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('auth::messages.deleted')]);
     }
 
     public function destroyMultiple(Request $request)
     {
         $ids = $request->all();
 
-        $model = User::whereIn('id', $ids);
+        $model = Larastarterkit::newUserQuery()->whereIn('id', $ids);
 
         $model->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('auth::messages.deleted')]);
     }
 
     public function changePassword(Request $request)
@@ -127,19 +128,19 @@ class UserController extends Controller
         ]);
 
         try {
-            $user = User::findOrFail($id);
+            $user = Larastarterkit::newUserQuery()->findOrFail($id);
             $user->roles()->sync($data['roles']);
 
             return ApiResponse::success($user, 'Roles updated successfully.');
         } catch (ModelNotFoundException $e) {
-            return ApiResponse::notFound('User not found.');
+            return ApiResponse::notFound(__('auth::messages.user_not_found'));
         } catch (\Exception $e) {
             Log::error('Failed to assign roles to user.', [
                 'user_id' => $id,
                 'exception' => $e,
             ]);
 
-            return ApiResponse::error('Une erreur inattendue est survenue.', 500);
+            return ApiResponse::error(__('auth::messages.unexpected_error'), 500);
         }
     }
 
@@ -152,11 +153,11 @@ class UserController extends Controller
             // Soit c'est son propre profil, soit il a le rôle admin
             if ($authUser->id != $id && ! $authUser->hasRole('administrator')) {
                 return response()->json([
-                    'message' => 'Vous n\'êtes pas autorisé à modifier ce profil.',
+                    'message' => __('auth::messages.profile_update_forbidden'),
                 ], 403);
             }
 
-            $user = User::findOrFail($id);
+            $user = Larastarterkit::newUserQuery()->findOrFail($id);
             // Ne contient que les champs validés (déjà filtrés par ton FormRequest)
             $data = $request->validated();
 
@@ -185,21 +186,21 @@ class UserController extends Controller
                 return ApiResponse::success($user->fresh()->toArray(), 'Profile updated successfully.');
             });
         } catch (ModelNotFoundException $e) {
-            return ApiResponse::notFound('User not found.');
+            return ApiResponse::notFound(__('auth::messages.user_not_found'));
         } catch (\Throwable $e) {
             Log::error('Failed to update user profile.', [
                 'user_id' => $id,
                 'exception' => $e,
             ]);
 
-            return ApiResponse::error('Une erreur inattendue est survenue.', 500);
+            return ApiResponse::error(__('auth::messages.unexpected_error'), 500);
         }
     }
 
     public function suspendOrActive($id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = Larastarterkit::newUserQuery()->findOrFail($id);
             $user->active = ! $user->active; // Toggle active status
             if (! $user->active) {
                 $user->tokens()->delete();
@@ -210,14 +211,14 @@ class UserController extends Controller
 
             return ApiResponse::success($user, "User has been {$status} successfully.");
         } catch (ModelNotFoundException $e) {
-            return ApiResponse::notFound('User not found.');
+            return ApiResponse::notFound(__('auth::messages.user_not_found'));
         } catch (\Exception $e) {
             Log::error('Failed to change user active status.', [
                 'user_id' => $id,
                 'exception' => $e,
             ]);
 
-            return ApiResponse::error('Une erreur inattendue est survenue.', 500);
+            return ApiResponse::error(__('auth::messages.unexpected_error'), 500);
         }
     }
 
@@ -228,7 +229,7 @@ class UserController extends Controller
             'user_ids.*' => 'exists:auth_users,id',
         ]);
 
-        $users = User::whereIn('id', $request->input('user_ids'))->get();
+        $users = Larastarterkit::newUserQuery()->whereIn('id', $request->input('user_ids'))->get();
 
         foreach ($users as $user) {
             $user->active = false;
@@ -246,7 +247,7 @@ class UserController extends Controller
             'user_ids.*' => 'exists:auth_users,id',
         ]);
 
-        $users = User::whereIn('id', $request->input('user_ids'))->get();
+        $users = Larastarterkit::newUserQuery()->whereIn('id', $request->input('user_ids'))->get();
 
         foreach ($users as $user) {
             $user->active = true;

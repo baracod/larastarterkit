@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
+import type { StarterSlotName, StarterSlots } from '@/extension/define'
+import { resolveSlot } from '@/extension/runtime'
 
-const props = defineProps<{ name: string }>()
-const slots = inject<Record<string, Component>>('larastarterkit:slots', {})
+const props = withDefaults(defineProps<{ name: StarterSlotName; context?: Record<string, unknown> }>(), { context: () => ({}) })
+const slots = inject<StarterSlots>('larastarterkit:slots', {})
+const resolved = computed(() => resolveSlot(slots[props.name], props.context))
 </script>
 
 <template>
   <Component
-    :is="slots[props.name]"
-    v-if="slots[props.name]"
+    :is="resolved.replacement"
+    v-if="resolved.replacement"
   />
-  <slot v-else />
+  <template v-else>
+    <slot />
+    <Component
+      :is="contribution.component"
+      v-for="contribution in resolved.contributions"
+      :key="contribution.key"
+      v-bind="contribution.props"
+    />
+  </template>
 </template>

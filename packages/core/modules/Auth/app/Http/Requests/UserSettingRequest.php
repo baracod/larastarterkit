@@ -48,7 +48,7 @@ class UserSettingRequest extends FormRequest
         }
 
         throw new HttpResponseException(response()->json([
-            'message' => 'Validation failed',
+            'message' => __('auth::messages.validation_failed'),
             'errors' => $errors,
         ], 422));
     }

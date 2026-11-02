@@ -17,7 +17,7 @@ class UserSettingController extends Controller
         $authUser = auth()->user();
 
         if ($authUser->id !== $id && ! $authUser->hasRole('administrator')) {
-            return ApiResponse::forbidden('Vous n\'etes pas autorise a acceder a ces parametres.');
+            return ApiResponse::forbidden(__('auth::messages.settings_view_forbidden'));
         }
 
         $settings = $this->settingService->getUserSettings($id);
@@ -30,7 +30,7 @@ class UserSettingController extends Controller
         $authUser = auth()->user();
 
         if ($authUser->id !== $id && ! $authUser->hasRole('administrator')) {
-            return ApiResponse::forbidden('Vous n\'etes pas autorise a modifier ces parametres.');
+            return ApiResponse::forbidden(__('auth::messages.settings_update_forbidden'));
         }
 
         $data = $request->validated();

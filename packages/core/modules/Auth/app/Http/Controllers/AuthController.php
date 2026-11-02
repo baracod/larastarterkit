@@ -37,7 +37,7 @@ class AuthController extends Controller
                 'ip' => $request->ip(),
             ]);
 
-            return ApiResponse::error('Origine non autorisée pour la connexion. Ajoutez ce domaine à SANCTUM_STATEFUL_DOMAINS.', 419);
+            return ApiResponse::error(__('auth::messages.origin_not_allowed'), 419);
         }
 
         $credentials = $request->only(['email', 'password']);
@@ -50,7 +50,7 @@ class AuthController extends Controller
                 'user_agent' => $request->userAgent(),
             ]);
 
-            return ApiResponse::unauthorized('Identifiants invalides');
+            return ApiResponse::unauthorized(__('auth::messages.invalid_credentials'));
         }
 
         $user = Auth::guard('web')->user()->load('roles');
@@ -66,7 +66,7 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return ApiResponse::locked('Votre compte est désactivé. Contactez l\'administrateur.');
+            return ApiResponse::locked(__('auth::messages.account_disabled'));
         }
 
         $request->session()->regenerate();

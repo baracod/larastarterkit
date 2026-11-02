@@ -35,7 +35,7 @@ class EnsureUserIsActive
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Account suspended.',
+                    'message' => __('auth::messages.account_suspended'),
                     'code' => 'ACCOUNT_SUSPENDED',
                 ], 423); // 423 Locked
             }

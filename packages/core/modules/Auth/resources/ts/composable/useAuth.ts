@@ -1,3 +1,5 @@
+import { resolveRedirect } from '@/extension/runtime'
+
 export function useAuth() {
   const userData = useCookie('userData')
   const ability = useAbility()
@@ -11,7 +13,7 @@ export function useAuth() {
     userData.value = null
     useCookie('accessToken').value = null
     await nextTick(() => {
-      router.replace({ name: 'auth-login' })
+      router.replace(resolveRedirect('afterLogout'))
     })
     useAbility().update([])
     storedUserAbilityRules.value = null

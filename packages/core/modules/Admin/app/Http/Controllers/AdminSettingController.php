@@ -41,7 +41,7 @@ class AdminSettingController
 
         $record->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('admin::messages.deleted')]);
     }
 
     public function destroyMultiple(Request $request): JsonResponse
@@ -54,6 +54,6 @@ class AdminSettingController
 
         $record->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('admin::messages.deleted')]);
     }
 }

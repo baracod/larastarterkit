@@ -1,3 +1,4 @@
+import { resolveRedirect } from '@/extension/runtime'
 import { stopRealtime } from '@/utils/realtime'
 import { AuthAPI } from '@auth/api/Auth'
 import type { IPermission, IRole, IUser } from '@auth/types/entities'
@@ -123,7 +124,7 @@ export const useAuthStore = defineStore('auth/user',
         unauthorized.value = false
         logoutInProgress = false
         await nextTick()
-        await router.replace({ name: 'auth-login' })
+        await router.replace(resolveRedirect('afterLogout'))
       }
     }
 

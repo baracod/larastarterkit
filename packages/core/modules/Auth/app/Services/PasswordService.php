@@ -2,6 +2,7 @@
 
 namespace Modules\Auth\Services;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +24,7 @@ class PasswordService
     {
         $email = $data['email'];
 
-        $user = User::query()->where('email', $email)->first();
+        $user = Larastarterkit::newUserQuery()->where('email', $email)->first();
 
         if ($user === null) {
             return;
@@ -70,7 +71,7 @@ class PasswordService
             throw new RuntimeException('Token expiré. Veuillez demander un nouveau lien.', 400);
         }
 
-        $user = User::query()->where('email', $data['email'])->firstOrFail();
+        $user = Larastarterkit::newUserQuery()->where('email', $data['email'])->firstOrFail();
 
         $user->update([
             'password' => Hash::make($data['new_password']),
@@ -110,7 +111,7 @@ class PasswordService
     public function requestPasswordReset(User $admin, array $data): User
     {
         return DB::transaction(function () use ($admin, $data) {
-            $target = User::query()->lockForUpdate()->findOrFail($data['user_id']);
+            $target = Larastarterkit::newUserQuery()->lockForUpdate()->findOrFail($data['user_id']);
             $target->update(['must_change_password' => true]);
             $target->tokens()->delete();
             $this->sendResetLink([
@@ -133,7 +134,7 @@ class PasswordService
      */
     public function forceChangePassword(User $admin, array $data): User
     {
-        $target = User::query()->findOrFail($data['user_id']);
+        $target = Larastarterkit::newUserQuery()->findOrFail($data['user_id']);
 
         $mustChange = (bool) ($data['must_change_password'] ?? false);
 

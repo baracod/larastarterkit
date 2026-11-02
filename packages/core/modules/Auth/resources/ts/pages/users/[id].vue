@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resolveRedirect } from '@/extension/runtime'
 import AuthModuleFrame from '../../components/AuthModuleFrame.vue'
 import { useUser } from '../../composable/useUser'
 import { useAuthStore } from '../../stores'
@@ -46,7 +47,7 @@ const canAccessProfile = computed(() => {
 watchEffect(() => {
   if (!canAccessProfile.value) {
     console.warn('Unauthorized access attempt to user profile:', userId.value)
-    router.replace({ name: 'not-authorized' })
+    router.replace(resolveRedirect('notAuthorized', authStore.user))
   }
 })
 
@@ -197,6 +198,10 @@ const { userData, isLoading: isLoadingProfile, error, fetchUser } = useUser(user
             <UserTabSecurity :user="userData" />
           </VWindowItem>
         </VWindow>
+        <StarterSlot
+          name="profile-end"
+          :context="{ user: userData }"
+        />
       </VCol>
     </VRow>
   </AuthModuleFrame>

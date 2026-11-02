@@ -60,7 +60,7 @@ Chaque `module.json` peut déclarer `navigation`, `frontend: {"path":"resources/
 
 Les ressources frontend du module comprennent `pages/`, `components/`, `menuItems.json`, `locales/*.json`, et éventuellement `components/ModuleNavbar.vue`. Les contributions utilisent les mêmes permissions action/subject que le backend. Après installation ou suppression physique : régénérer l'autoload, synchroniser pnpm, reconstruire et redémarrer les workers.
 
-Le fichier applicatif `resources/ts/starter.ts` exporte `menus`, `catalog`, `slots` et `configure(app)`. Il peut contribuer à la navigation, injecter des composants (slot `navbar-start`) et enregistrer des services/événements via `app.provide` ou `app.use`. Les pages locales restent dans `resources/ts/pages`. Utiliser `@app` pour les sources applicatives et `@` pour l'interface commune. La marque se configure avec `APP_NAME` et `APP_LOGO`.
+Le fichier applicatif `resources/ts/starter.ts` exporte, via `defineStarter`, `menus`, `catalog`, `slots`, `redirects`, `pages` et `configure(app)`. Il peut contribuer à la navigation, ajouter des composants dans les slots des écrans du socle, changer les redirections, remplacer une page et enregistrer des services/événements via `app.provide` ou `app.use`. Voir [Points d'extension](./extension). Les pages locales restent dans `resources/ts/pages`. Utiliser `@app` pour les sources applicatives et `@` pour l'interface commune. La marque se configure avec `APP_NAME` et `APP_LOGO`.
 
 ## Documentation facultative
 

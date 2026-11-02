@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Providers;
 
+use Baracod\Larastarterkit\Core\Support\ModuleTranslations;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -62,15 +63,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->nameLower);
-
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, $this->nameLower);
-            $this->loadJsonTranslationsFrom($langPath);
-        } else {
-            $this->loadTranslationsFrom(module_path($this->name, 'lang'), $this->nameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->name, 'lang'));
-        }
+        ModuleTranslations::register($this->app, $this->nameLower, module_path($this->name, 'lang'), resource_path('lang/modules/'.$this->nameLower));
     }
 
     /**

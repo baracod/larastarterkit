@@ -2,6 +2,7 @@
 
 namespace Modules\Auth\Models;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,7 +29,7 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'auth_user_roles', 'role_id', 'user_id');
+        return $this->belongsToMany(Larastarterkit::userModel(), 'auth_user_roles', 'role_id', 'user_id');
     }
 
     // public function getNbrUserAttribute()

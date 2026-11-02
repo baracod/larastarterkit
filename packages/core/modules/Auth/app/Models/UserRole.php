@@ -2,6 +2,7 @@
 
 namespace Modules\Auth\Models;
 
+use Baracod\Larastarterkit\Core\Larastarterkit;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -33,7 +34,7 @@ class UserRole extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Larastarterkit::userModel());
     }
 
     protected static $logAttributes = true;

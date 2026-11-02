@@ -18,7 +18,7 @@ class UserSecurityController extends Controller
     public function changePassword(ChangeUserPasswordRequest $request, int $id): JsonResponse
     {
         if ($request->user()->id !== $id) {
-            return ApiResponse::forbidden('Vous n\'êtes pas autorisé à modifier ce mot de passe.');
+            return ApiResponse::forbidden(__('auth::messages.password_update_forbidden'));
         }
 
         try {

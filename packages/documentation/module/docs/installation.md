@@ -4,6 +4,34 @@ Prérequis : PHP 8.4 et extensions Composer, Composer 2, Node LTS, pnpm 9.12.2. 
 
 Cette distribution vise une base vierge. Ne lancez pas ces migrations sur une base d'une autre application.
 
+## Créer une application
+
+```sh
+composer create-project baracod/larastarterkit mon_application "1.0.*"
+cd mon_application
+# Configurer .env : SQLite par défaut, ou une nouvelle base MySQL/MariaDB.
+pnpm install
+php artisan larastarterkit:install --no-interaction
+php artisan auth:super-admin:create --email=admin@example.test --name=Administrator
+pnpm run dev
+```
+
+`larastarterkit:install` applique les migrations et les seeders idempotents ; aucun mot de passe n'est prédéfini. Ouvrez ensuite l'application avec `php artisan serve` (ou votre serveur web) et connectez-vous avec le compte créé. Pour une version candidate, utilisez sa version exacte à la place de `1.0.*`.
+
+L'application obtenue contient :
+
+| Fichier ou dossier | Rôle |
+| --- | --- |
+| `resources/ts/starter.ts` | Extension frontend de l'application ([Points d'extension](./extension)) |
+| `resources/ts/main.ts` | Point d'entrée : charge celui du socle, ne pas modifier |
+| `Modules/` | Vos modules locaux |
+| `config/`, `.env` | Configuration ([Configuration](./configuration)) |
+| `modules_statuses.json` | Activation des modules optionnels |
+
+## Installation manuelle
+
+Les étapes suivantes détaillent ce que fait l'installation, par exemple pour un dépôt cloné :
+
 ```sh
 cp .env.example .env
 composer install

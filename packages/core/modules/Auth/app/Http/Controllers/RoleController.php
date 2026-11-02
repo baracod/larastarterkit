@@ -44,7 +44,7 @@ class RoleController
 
         $model->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('auth::messages.deleted')]);
     }
 
     public function destroyMultiple(Request $request)
@@ -55,7 +55,7 @@ class RoleController
 
         $model->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => __('auth::messages.deleted')]);
     }
 
     public function getPermissions(int $id, Request $request)
@@ -93,7 +93,7 @@ class RoleController
         $user = $request->user();
 
         if (! $user || ! $user->can('attach', 'auth_permissions')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => __('auth::messages.unauthorized')], 403);
         }
 
         // 2) Parsing des rôles (CSV → array unique, int)
@@ -104,13 +104,13 @@ class RoleController
             ->values();
 
         if ($roleIds->isEmpty()) {
-            return response()->json(['message' => 'Aucun rôle valide fourni.'], 422);
+            return response()->json(['message' => __('auth::messages.no_valid_role')], 422);
         }
 
         // 3) Récupération des rôles existants
         $roles = Role::query()->whereIn('id', $roleIds)->get();
         if ($roles->isEmpty()) {
-            return response()->json(['message' => 'Aucun rôle trouvé.'], 404);
+            return response()->json(['message' => __('auth::messages.role_not_found')], 404);
         }
 
         // 4) Permissions (IDs uniques)
@@ -182,7 +182,7 @@ class RoleController
         $user = $request->user();
 
         if (! $user || ! $user->can('attach', 'auth_permissions')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => __('auth::messages.unauthorized')], 403);
         }
 
         // 2) Parsing des rôles (CSV → array unique, int)
@@ -193,13 +193,13 @@ class RoleController
             ->values();
 
         if ($roleIds->isEmpty()) {
-            return response()->json(['message' => 'Aucun rôle valide fourni.'], 422);
+            return response()->json(['message' => __('auth::messages.no_valid_role')], 422);
         }
 
         // 3) Récupération des rôles existants
         $roles = Role::query()->whereIn('id', $roleIds)->get();
         if ($roles->isEmpty()) {
-            return response()->json(['message' => 'Aucun rôle trouvé.'], 404);
+            return response()->json(['message' => __('auth::messages.role_not_found')], 404);
         }
 
         // 4) Permissions (IDs uniques)
