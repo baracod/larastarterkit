@@ -1,6 +1,6 @@
 # Changelog
 
-## Non publié
+## 1.0.0-rc.5
 
 ### Points d'extension
 
@@ -12,6 +12,17 @@
 - Surcharge de fichiers frontend : `resources/ts/overrides/<core|module>/<chemin>` remplace un composant, un composable ou un store du cœur ou d'un module ; la surcharge peut importer l'original.
 - Modèle utilisateur : `Larastarterkit::userModel()` remplace les références directes au modèle dans le cœur ; un `App\Models\User` qui étend `Modules\Auth\Models\User` peut être déclaré par `AUTH_MODEL`. La clé étrangère reste `user_id` pour les sous-classes.
 - Documentation : page « Points d'extension ».
+
+### Corrections
+
+- Traductions Auth et Admin : un dossier `resources/lang/modules/<module>` de l'application remplace les clés du module une par une au lieu de masquer les autres.
+- Modèle utilisateur de l'application : le type polymorphe `Modules\Auth\Models\User` est conservé (notifications et journal d'activité existants restent rattachés).
+- Module Documentation : une ligne vide dans un bloc de code ne fait plus échouer la publication VitePress.
+
+### Documentation
+
+- Documentation réorganisée en deux parcours : utiliser le starter (concepts, configuration, générateur, commandes, dépannage…) et le maintenir (dépôt, architecture interne, API publique, qualité, publication, feuille de route).
+- `documentation:import` : options `--collection`, `--title`, `--description` et `--edition` ; les groupes de la barre latérale deviennent des sections du CMS.
 
 ## 1.0.0-rc.4
 
