@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.0.0-rc.5
+
+### Points d'extension
+
+- `defineStarter` (`@/extension`) type `resources/ts/starter.ts` : un nom de slot, de redirection ou de route inexistant est signalé par `pnpm run typecheck`.
+- `redirects` : accueil, après connexion, après déconnexion, connexion, accès refusé et changement de mot de passe configurables ; les valeurs par défaut sont inchangées.
+- `pages` : remplacement d'une page du socle (et de son layout) en conservant nom, métadonnées et gardes. Les collisions de pages sont signalées au build (`LARASTARTERKIT_STRICT_PAGES=true` pour échouer).
+- Slots dans la barre de navigation, le menu utilisateur, le pied de page, la connexion, l'inscription, le mot de passe oublié, le tableau de bord, le profil et la liste des utilisateurs ; plusieurs contributions ordonnées par slot (`order`, `when`, `props`). Un composant seul remplace toujours le contenu par défaut.
+- Messages des API Auth et Admin traduits (`auth::messages`, `admin::messages`, français et anglais) et redéfinissables par `lang/vendor/{auth,admin}/{locale}/messages.php`. Les messages suivent désormais `APP_LOCALE` : certains textes auparavant en anglais (« Deleted successfully », « Validation failed »…) sont en français quand la langue est `fr`.
+- Surcharge de fichiers frontend : `resources/ts/overrides/<core|module>/<chemin>` remplace un composant, un composable ou un store du cœur ou d'un module ; la surcharge peut importer l'original.
+- Modèle utilisateur : `Larastarterkit::userModel()` remplace les références directes au modèle dans le cœur ; un `App\Models\User` qui étend `Modules\Auth\Models\User` peut être déclaré par `AUTH_MODEL`. La clé étrangère reste `user_id` pour les sous-classes.
+- Documentation : page « Points d'extension ».
+
+### Corrections
+
+- Traductions Auth et Admin : un dossier `resources/lang/modules/<module>` de l'application remplace les clés du module une par une au lieu de masquer les autres.
+- Modèle utilisateur de l'application : le type polymorphe `Modules\Auth\Models\User` est conservé (notifications et journal d'activité existants restent rattachés).
+- Module Documentation : une ligne vide dans un bloc de code ne fait plus échouer la publication VitePress.
+
+### Documentation
+
+- Documentation réorganisée en deux parcours : utiliser le starter (concepts, configuration, générateur, commandes, dépannage…) et le maintenir (dépôt, architecture interne, API publique, qualité, publication, feuille de route).
+- `documentation:import` : options `--collection`, `--title`, `--description` et `--edition` ; les groupes de la barre latérale deviennent des sections du CMS.
+
 ## 1.0.0-rc.4
 
 Version unique pour tous les packages : core, generator et squelette sont désormais publiés ensemble depuis le monorepo.
